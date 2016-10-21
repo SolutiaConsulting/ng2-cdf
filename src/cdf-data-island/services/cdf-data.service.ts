@@ -9,7 +9,7 @@ import {
 	Response} 					from '@angular/http';
 
 import { CacheService }			from '../storage/cache.service';
-import { CdfSettings }			from '../cdf-settings'; 
+import { CdfSettings }			from '../settings/cdf-settings'; 
 import { cdfRequestModel }		from '../models/cdf-model-request';
 import { cdfPostModel } 		from '../models/cdf-model-post';
 
