@@ -1,15 +1,18 @@
 {
     "compilerOptions": {
-        "noImplicitAny": false,
-        "module": "commonjs",
         "target": "ES5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "sourceMap": true,
+        "removeComments": false,
+        "noImplicitAny": false,        
         "declaration": true
     },
     "files": [
-        "ng2-cdf.ts"
+        "ng2-cdf.ts",
+        "node_modules/typescript/lib/lib.es6.d.ts"
     ],
     "exclude": [
         "node_modules"
