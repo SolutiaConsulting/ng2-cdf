@@ -1,0 +1,79 @@
+@import (less) "./variables.less";
+
+:host
+{
+	cdf-media
+	{
+		@{deep}
+		{
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;	
+		}
+	}	
+}
+
+.cdf-media-pane-container
+{
+	cursor: pointer;
+	height: 40vh;
+	margin: 0;
+	max-height: 300px;
+	padding: 0;
+
+	&__title
+	{
+		color: @colorBlack;
+		font-size: 3.25rem;
+		margin: auto;
+		transform: rotate(3deg);
+	}	
+
+	&:nth-child(2n)
+	{
+		.feature-list-container__item__title
+		{
+			transform: rotate(-3deg);
+		}							
+	}						
+
+	&__type
+	{
+		color: @colorWhite;
+		left: 0.75rem;
+		padding: 0.25rem 0.5rem;
+		position: absolute;
+		top: 0.75rem;	
+		z-index: 100;	
+	}	
+}
+
+.cdf-info-pane-container
+{
+	padding: 2.75rem 1rem 1rem 1rem;
+	overflow: hidden;
+	z-index: 100;
+
+	&__wrapper
+	{
+		z-index: 0;
+	}
+
+	&__title
+	{
+		margin: 0 0 1rem 0;
+	}
+
+	&__date
+	{
+		font-size: 1rem;
+		margin: 0 0 1rem 0;
+	}
+
+	&__button
+	{
+
+	}
+}
