@@ -30,6 +30,8 @@ import
 	[
 		//CDF-DATA-ISLAND
 		CdfDataIslandComponent,
+		CdfPostModel,
+		CdfRequestModel,
 
 	
 		//CDF-MEDIA

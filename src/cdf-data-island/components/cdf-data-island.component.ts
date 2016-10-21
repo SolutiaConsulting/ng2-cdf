@@ -3,11 +3,11 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	OnInit } 					from '@angular/core';
-import { Observable } 			from 'rxjs/Rx';
+	OnInit } 						from '@angular/core';
+import { Observable } 				from 'rxjs/Rx';
 
-import { CdfDataIslandService }	from '../services/cdf-data.service';
-import { CdfRequestModel }			from '../models/cdf-model-request';
+import { CdfDataIslandService }		from '../services/index';
+import { CdfRequestModel }			from '../models/index';
 
 @Component({
 	selector: 'cdf-data-island',
