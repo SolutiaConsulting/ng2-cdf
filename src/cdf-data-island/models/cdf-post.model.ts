@@ -1,4 +1,4 @@
-export class cdfPostModel
+export class CdfPostModel
 {
 	URL: string;
 	Body: Object;

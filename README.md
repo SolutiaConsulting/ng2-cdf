@@ -19,13 +19,13 @@ The purpose of cdf-data-island component is to surface JSON data to the caller.
 
 
 ___
-## **_cdfRequestModel_**:
-cdfRequestModel is the class used for gathering the GETs and POSTs http requests that will be called as a single Observable block
+## **_CdfRequestModel_**:
+CdfRequestModel is the class used for gathering the GETs and POSTs http requests that will be called as a single Observable block
 ``` javascript
-export class cdfRequestModel
+export class CdfRequestModel
 {
 	GetList: string[]; 
-	PostList: cdfPostModel[];
+	PostList: CdfPostModel[];
 
 	constructor()
 	{
@@ -37,10 +37,10 @@ export class cdfRequestModel
 * *PostList* is an array of POST models
 
 
-## **_cdfPostModel_**:
-cdfPostModel is the class describing the data elements needed for a proper POST
+## **_CdfPostModel_**:
+CdfPostModel is the class describing the data elements needed for a proper POST
 ``` javascript
-export class cdfPostModel
+export class CdfPostModel
 {
 	URL: string;
 	Body: Object;
@@ -62,7 +62,7 @@ ___
 ## IMPLEMENTATION EXAMPLES:
 ``` javascript
 	import { Component, OnInit } 				from '@angular/core';
-	import { cdfPostModel, cdfRequestModel } 	from '../../../cdf-data-island/index';	
+	import { CdfPostModel, CdfRequestModel } 	from '../../../cdf-data-island/index';	
 
 	@Component({
 		selector: 'some-cool-custom-tag',
@@ -72,7 +72,7 @@ ___
 	})
 	export class SomeCoolCustomComponent implements OnInit
 	{
-		RequestModel = new cdfRequestModel();
+		RequestModel = new CdfRequestModel();
 
 		ngOnInit() 
 		{		
@@ -90,7 +90,7 @@ ___
 			//POST FOR DATA ISLAND
 			this.RequestModel.PostList = 
 			[
-				new cdfPostModel
+				new CdfPostModel
 				(
 					//POST URL:
 					'http://your-domain.com/something/something/5?limit=3&metadata=false&full=true',

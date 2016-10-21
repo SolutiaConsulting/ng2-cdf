@@ -6,20 +6,20 @@ import {
 	OnInit } 					from '@angular/core';
 import { Observable } 			from 'rxjs/Rx';
 
-import { DataIslandService }	from '../services/cdf-data.service';
-import { cdfRequestModel }			from '../models/cdf-model-request';
+import { CdfDataIslandService }	from '../services/cdf-data.service';
+import { CdfRequestModel }			from '../models/cdf-model-request';
 
 @Component({
 	selector: 'cdf-data-island',
 	template: ''
 })
-export class DataIslandComponent implements OnInit 
+export class CdfDataIslandComponent implements OnInit 
 {
-	@Input() RequestData: cdfRequestModel;
+	@Input() RequestData: CdfRequestModel;
 	@Output() onContentReceived = new EventEmitter<any>();
 	
 	constructor(
-		private dataIslandService: DataIslandService
+		private dataIslandService: CdfDataIslandService
 	)
 	{
 
@@ -57,14 +57,14 @@ export class DataIslandComponent implements OnInit
 				//SUCCESS - SEND RAW JSON BACK TO PARENT VIA EVENT EMITTER
 				rawJson =>
 				{
-					//console.log('********** DataIslandComponent SUCCESS:', rawJson);
+					//console.log('********** CdfDataIslandComponent SUCCESS:', rawJson);
 					this.onContentReceived.emit(rawJson);
 				},
 
 				//ERROR
 				err => 					
 				{
-					//console.log('********** DataIslandComponent ERROR:', err.message);					
+					//console.log('********** CdfDataIslandComponent ERROR:', err.message);					
 				},
 
 				//ON COMPLETE

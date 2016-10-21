@@ -6,8 +6,10 @@ import
 	//CDF-DATA-ISLAND
 	CacheService,
 	CdfSettings,
-	DataIslandComponent,
-	DataIslandService,
+	CdfDataIslandComponent,
+	CdfDataIslandService,
+	CdfPostModel,
+	CdfRequestModel,
 
 	
 	//CDF-MEDIA
@@ -27,7 +29,7 @@ import
 	declarations:
 	[
 		//CDF-DATA-ISLAND
-		DataIslandComponent,
+		CdfDataIslandComponent,
 
 	
 		//CDF-MEDIA
@@ -41,13 +43,15 @@ import
 	exports:
 	[
 		//CDF-DATA-ISLAND
-		DataIslandComponent,
+		CdfDataIslandComponent,
+		CdfPostModel,
+		CdfRequestModel,
 
 	
 		//CDF-MEDIA
 		CdfImageComponent,
 		CdfMediaComponent,
-		CdfVideoComponent,
+		CdfVideoComponent,		
 		CdfMediaImageModel,
 		CdfMediaVideoModel,
 		CdfMediaModel
@@ -56,7 +60,7 @@ import
 	[
 		CacheService,
 		CdfSettings,
-		DataIslandService		
+		CdfDataIslandService		
 	]
 })
 export class CdfModule {}

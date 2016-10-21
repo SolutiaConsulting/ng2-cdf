@@ -10,11 +10,14 @@ import {
 
 import { CacheService }			from '../storage/cache.service';
 import { CdfSettings }			from '../settings/cdf-settings'; 
-import { cdfRequestModel }		from '../models/cdf-model-request';
-import { cdfPostModel } 		from '../models/cdf-model-post';
+import
+{
+	CdfRequestModel,
+	CdfPostModel
+} 								from '../models/index';
 
 @Injectable()
-export class DataIslandService
+export class CdfDataIslandService
 {
 	tokenName: string = 'cdf-token';
 
@@ -25,7 +28,7 @@ export class DataIslandService
 	{ 
 	}
 
-	requestData(requestModel: cdfRequestModel, options?: RequestOptionsArgs): Observable<any> 
+	requestData(requestModel: CdfRequestModel, options?: RequestOptionsArgs): Observable<any> 
 	{
 		let cacheKey = (requestModel.CacheKey) ? requestModel.CacheKey : undefined;
 
@@ -303,7 +306,7 @@ export class DataIslandService
 	};	
 
 	//PHYSICAL HTTP POST CALL TO CLOUD CMS FOR CONTENT...
-	private HttpPost(postModel: cdfPostModel): Observable<any>
+	private HttpPost(postModel: CdfPostModel): Observable<any>
 	{ 
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
         let options = new RequestOptions({ headers: headers });		
@@ -321,7 +324,7 @@ export class DataIslandService
 	};	
 
 
-	private GetFirstUrl(requestModel: cdfRequestModel) : string
+	private GetFirstUrl(requestModel: CdfRequestModel) : string
 	{ 
 		if (requestModel.GetList && requestModel.GetList.length > 0)
 		{
