@@ -1,6 +1,6 @@
 {
   "name": "ng2-cdf",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "ISC",
   "description": "Angular2 Content Delivery Framework (CDF)",
   "scripts": 
@@ -22,6 +22,7 @@
   "bugs": {
     "url": "https://github.com/SolutiaConsulting/ng2-cdf/issues"
   },
+  "main":"index.js",
   "homepage": "https://github.com/SolutiaConsulting/ng2-cdf#readme",
   "dependencies": {
     "@angular/common": "~2.0.0",
