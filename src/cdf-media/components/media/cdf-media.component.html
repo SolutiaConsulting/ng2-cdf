@@ -1,19 +1,20 @@
 <!--IMAGE-->
-<cdf-image *ngIf="(media.IsImage)" 
+<cdf-image *ngIf="(media.HasImage && !media.HasVideo)" 
 			[imageModel]="media" 
 			(click)="doImageClick()">
 </cdf-image>
 
 
 <!--VIDEO-->
-<cdf-video *ngIf="(media.IsVideo)" 
+<cdf-video *ngIf="(media.HasVideo)" 
 			[videoModel]="media" 
 			(onVideoBeforePlay)="doVideoBeforePlay()">
 </cdf-video>
 
 
 <!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
-<h2 class="cdf-media-title-only" *ngIf="(!media.IsImage && !media.IsVideo)">{{media.Title}}</h2>
+<h2 class="cdf-media-title-only" *ngIf="(!media.HasImage && !media.HasVideo)">{{media.Title}}</h2>
 
+<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{media.Type | lowercase}}">{{media.Type}}</span>
 
 <ng-content></ng-content>

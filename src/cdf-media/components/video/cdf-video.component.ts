@@ -9,19 +9,31 @@ import
 	Input
 } 										from '@angular/core';
 
-import { CdfMediaVideoModel }			from '../../models/index';
+import { CdfMediaModel }				from '../../models/index';
 
-const jwPlayer = require('./assets/lib/jwplayer-7.6.1/jwplayer.js');
+const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 
 @Component({
 	selector: 'cdf-video',
-	templateUrl: './cdf-video.component.html',
-	styleUrls: []
+	template: `
+	<div [id]="VideoPlayerId"></div>
+	<ng-content></ng-content>	
+	`,
+	styles: [ `
+	:host /deep/ .jw-error .jw-preview, 
+	:host /deep/ .jw-stretch-uniform .jw-preview, 
+	:host /deep/ .jwplayer .jw-preview,
+	:host /deep/ .jw-preview
+	{
+		background-position: top center !important;
+		background-size: cover !important;
+	}	
+	`]
 })
 export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
 {
 	private videoJWPlayer: any;
-	private youTubeUrl: string = 'https://www.youtube.com/watch?v=';
+	private youTubeUrl: string = 'http://www.youtube.com/watch?v=';
 	
 	VideoPlayerId: string;
 
@@ -29,7 +41,7 @@ export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
 	jwPlayerKey: string;
 
 	@Input()
-	videoModel: CdfMediaVideoModel;	
+	videoModel: CdfMediaModel;	
 
 	@Input()
 	isBackground: boolean = false;
@@ -128,8 +140,7 @@ export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
 	stop()
 	{ 
 		this.videoJWPlayer.stop();
-
-		console.log('STOP DAS PLAYER...', this.videoModel.Title);
+		//console.log('STOP DAS PLAYER...', this.videoModel.Title);
 	};
 
 

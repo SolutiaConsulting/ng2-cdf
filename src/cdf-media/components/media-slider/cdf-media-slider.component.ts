@@ -2,10 +2,12 @@ import
 {
 	Component,
 	OnInit,
-	AfterViewInit,
 	Input,
+	Output,
+	AfterViewInit,
+	EventEmitter,
 	NgZone,
-	ViewChildren,
+	ViewChild,
 	QueryList,
 	trigger,
 	transition,
@@ -17,14 +19,102 @@ import
 } 								from '@angular/core';
 import { Observable } 			from 'rxjs/Rx';
 
-//import { MatchMediaService } 	from '../../services/utilities/match-media.service';
-import { CdfMediaModel } 		from '../../models/index';
 import { CdfMediaComponent } 	from '../media/index';
+import { CdfMediaModel } 		from '../../models/index';
+import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 
 @Component({
 	selector: 'cdf-media-slider',
-	templateUrl: './cdf-media-slider.component.html',
-	styleUrls: [ './cdf-media-slider.component.less' ],
+	template: `
+	<!--MEDIA PANE-->
+	<section class="cdf-media-pane-container" [@mediaStateTrigger]="mediaModel.mediaPaneState">
+		
+		<!--MEDIA: IMAGE OR VIDEO-->
+		<cdf-media [media]="mediaModel"
+					[showType]="showType"
+					(onImageClick)="onMediaClick()"
+					(onVideoBeforePlay)="onVideoBeforePlay()"></cdf-media>				
+
+	</section>
+
+
+	<!--INFO PANE-->
+	<section class="cdf-info-pane-container" *ngIf="mediaModel.IsInfoPaneExpanded" [@infoPaneSlideTrigger]="mediaModel.infoPaneExpandedState">
+		<section class="cdf-info-pane-container__wrapper">
+
+			<!--CLOSE BUTTON-->
+			<a class="close-button" (click)="onStopVideoClick()">×</a>
+
+			<ng-content></ng-content>
+
+		</section>
+	</section>	
+	`,
+	styles: [ `
+	.cdf-media-pane-container
+	{
+		cursor: pointer;
+		margin: 0;
+		max-height: 100%;
+		min-height: 100%;
+		padding: 0;
+		z-index: 10;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;	
+	}
+		.cdf-media-pane-container__title
+		{
+			color: #000;
+			font-size: 3.25rem;
+			margin: auto;
+			transform: rotate(3deg);
+		}	
+
+		.cdf-media-pane-container:nth-child(2n)
+		{
+			.feature-list-container__item__title
+			{
+				transform: rotate(-3deg);
+			}							
+		}			
+
+
+	.cdf-info-pane-container
+	{
+		background-color: #fff;
+		border: solid 2px #becbd2;
+		bottom: 0;
+		height: 100%;
+		left: 0;	
+		overflow: hidden;
+		padding: 2.75rem 1rem 1rem 1rem;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 100%;
+		z-index: 100;
+	}	
+
+		.cdf-info-pane-container__wrapper
+		{
+			z-index: 0;
+		}
+
+		.cdf-info-pane-container__title
+		{
+			margin: 0 0 1rem 0;
+		}
+
+		.cdf-info-pane-container__date
+		{
+			font-size: 1rem;
+			margin: 0 0 1rem 0;
+		}
+	` ],
 	providers: [],
 	animations:
 	[
@@ -34,293 +124,189 @@ import { CdfMediaComponent } 	from '../media/index';
 				state(
 					'inactive',
 					style({
-							opacity: 0.25
-							//transform: 'scale(1) translateX(0)'
+							zIndex: 10
 						})
 					),
 				//STATE WHEN VIDEO IS PLAYING
 				state(
 					'active',
 					style({
-							opacity: 1
-							//transform: 'scale(1.25) translateX(100px)',
-							//zIndex: 10000
+							zIndex: 1000
 						})
-					),	
-				//STATE WHEN ALL VIDEOS ARE STOPPED
-				state(
-					'none',
-					style({
-							opacity: 1
-						})
-					),	
-				transition('* => inactive',
-					[
-						style({
-							//transform: 'translateX(80px)'
-						}),							
-						animate('500ms ease-out')
-					]),
-				transition('* => active',
-					[
-						style({
-							//transform: 'translateX(40px)'
-						}),						
-						animate('500ms ease-in')
-					]),
-				transition('inactive => none, active => none',
-					[
-						style({
-							//transform: 'translateX(80px)'
-						}),							
-						animate('500ms 100ms ease-out')
-					])				
+					)
 			]
 		),
-		trigger('panelWidthTrigger',
+		trigger('infoPaneSlideTrigger',
 			[
-				state('expanded', style({ opacity: 1 })),
-				state('expandedNoRemainder', style({ opacity: 1 })),
-				state('collapsed', style({ opacity: 0 })),
-				transition('void => expanded',
+				state('expandToTop', 	style({ zIndex: 100, top: '-100%' })),
+				state('expandToRight', 	style({ zIndex: 100, left: '100%' })),
+				state('expandToBottom', style({ zIndex: 100, top: '100%' })),
+				state('expandToLeft',   style({ zIndex: 100, left: '-100%' })),
+				
+				//EXPANDING TO TOP DIRECTION
+				transition('void => expandToTop',
 					[
-						animate('800ms ease-in', keyframes([
-							style({ opacity: 0, transform: 'translateX(-150px)', offset: 0 }),
-							style({opacity: 0.5, transform: 'translateX(-80px)', offset: 0.25}),
-							style({opacity: 0.8, transform: 'translateX(-15px)', offset: 0.7}),
-							style({opacity: 1, transform: 'translateX(0)',  offset: 1.0})
+						animate('500ms 350ms ease-in', keyframes([
+							style({ top: '0', offset: 0 }),
+							style({ top: '-25%', offset: 0.25 }),
+							style({ top: '-50%', offset: 0.5 }),
+							style({ top: '-75%', offset: 0.75 }),
+							style({ top: '-100%',  offset: 1.0 })
+						]))						
+					]	
+				),	
+				transition('expandToTop => *',
+					[
+						animate('500ms ease-out', keyframes([
+							style({ top: '-100%', offset: 0 }),
+							style({ top: '-75%', offset: 0.25 }),
+							style({ top: '-50%', offset: 0.5 }),
+							style({ top: '-25%', offset: 0.75 }),
+							style({ top: '0',  offset: 1.0 })
 						]))						
 					]	
 				),
-				transition('void => expandedNoRemainder',
+
+
+				//EXPANDING TO RIGHT DIRECTION
+				transition('void => expandToRight',
 					[
-						animate('800ms ease-in', keyframes([
-							style({ opacity: 0, transform: 'translateX(150px)', offset: 0 }),
-							style({opacity: 0.5, transform: 'translateX(80px)', offset: 0.25}),
-							style({opacity: 0.8, transform: 'translateX(15px)', offset: 0.7}),
-							style({opacity: 1, transform: 'translateX(0)',  offset: 1.0})
+						animate('500ms 250ms ease-in', keyframes([
+							style({ left: '0', offset: 0 }),
+							style({ left: '25%', offset: 0.25 }),
+							style({ left: '50%', offset: 0.5 }),
+							style({ left: '75%', offset: 0.75 }),
+							style({ left: '100%',  offset: 1.0 })
+						]))						
+					]	
+				),	
+				transition('expandToRight => *',
+					[
+						animate('500ms ease-out', keyframes([
+							style({ left: '100%', offset: 0 }),
+							style({ left: '75%', offset: 0.25 }),
+							style({ left: '50%', offset: 0.5 }),
+							style({ left: '25%', offset: 0.75 }),
+							style({ left: '0',  offset: 1.0 })
+						]))						
+					]	
+				),
+
+
+				//EXPANDING TO BOTTOM DIRECTION
+				transition('void => expandToBottom',
+					[
+						animate('500ms 350ms ease-in', keyframes([
+							style({ top: '0', offset: 0 }),
+							style({ top: '25%', offset: 0.25 }),
+							style({ top: '50%', offset: 0.5 }),
+							style({ top: '75%', offset: 0.75 }),
+							style({ top: '100%',  offset: 1.0 })
+						]))						
+					]	
+				),	
+				transition('expandToBottom => *',
+					[
+						animate('500ms ease-out', keyframes([
+							style({ top: '100%', offset: 0 }),
+							style({ top: '75%', offset: 0.25 }),
+							style({ top: '50%', offset: 0.5 }),
+							style({ top: '25%', offset: 0.75 }),
+							style({ top: '0',  offset: 1.0 })
 						]))						
 					]	
 				),				
-				transition('expanded => collapsed',
+
+				//EXPANDING TO LEFT DIRECTION
+				transition('void => expandToLeft',
 					[
-						animate('600ms ease-out', keyframes([
-							style({ opacity: 1, transform: 'translateX(0)', offset: 0 }),
-							style({opacity: 0.8, transform: 'translateX(-15px)', offset: 0.25}),
-							style({opacity: 0.5, transform: 'translateX(-80px)', offset: 0.7}),
-							style({opacity: 0, transform: 'translateX(-150px)',  offset: 1.0})
-						]))
-					]
-				),				
-				transition('expandedNoRemainder => collapsed',
+						animate('500ms 350ms ease-in', keyframes([
+							style({ left: '0', offset: 0 }),
+							style({ left: '-25%', offset: 0.25 }),
+							style({ left: '-50%', offset: 0.5 }),
+							style({ left: '-75%', offset: 0.75 }),
+							style({ left: '-100%',  offset: 1.0 })
+						]))						
+					]	
+				),	
+				transition('expandToLeft => *',
 					[
-						animate('600ms ease-out', keyframes([
-							style({ opacity: 1, transform: 'translateX(0)', offset: 0 }),
-							style({opacity: 0.8, transform: 'translateX(15px)', offset: 0.25}),
-							style({opacity: 0.5, transform: 'translateX(80px)', offset: 0.7}),
-							style({opacity: 0, transform: 'translateX(150px)',  offset: 1.0})
-						]))
-					]
-				)				
+						animate('500ms ease-out', keyframes([
+							style({ left: '-100%', offset: 0 }),
+							style({ left: '-75%', offset: 0.25 }),
+							style({ left: '-50%', offset: 0.5 }),
+							style({ left: '-25%', offset: 0.75 }),
+							style({ left: '0',  offset: 1.0 })
+						]))						
+					]	
+				)
 			]
 		)
-
 	]
 })
-export class CdfMediaGridComponent implements OnInit, AfterViewInit 
+export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 {
-	rules =
-	{
-		//27.9375rem = 447px
-		singleColumn: 'only screen and (max-width : 27.9375rem)',
-
-		//28rem = 448px		40rem = 640px
-		twoColumn: 'only screen and (min-width : 28rem) and (max-width : 40rem)',
-
-		//40.0625rem = 641px
-		threeColumn: 'only screen and (min-width : 40.0625rem)'
-	};
-
-	@Input()
-	mediaList: CdfMediaModel[] = [];
-
-	@Input()
-	showType: boolean = false;
-
-	activeMediaModel: CdfMediaModel;	
-	isVideoPlaying: boolean = false;	
-	isOneColumn: boolean = false;
-	isTwoColumns: boolean = false;
-	isThreeColumns: boolean = true;
-
-	@ViewChildren(CdfMediaComponent) mediaComponentsList: QueryList<CdfMediaComponent>;
+	@Input() mediaModel: CdfMediaModel;
+	@Input() showType: boolean = false;
+	@Output() onMediaSliderOpen = new EventEmitter<any>();
+	@Output() onMediaSliderClose = new EventEmitter<any>();
+	@ViewChild(CdfMediaComponent) mediaComponent: CdfMediaComponent;
+	
+	isMediaPlaying: boolean = false;
 
 	constructor(
-		//private matchMediaService: MatchMediaService,
 		private zone: NgZone)
 	{
 	};
 
 
 	ngOnInit()
-	{
-		// this.isOneColumn = this.matchMediaService.IsCustomMatch(this.rules.singleColumn);
-		// this.isTwoColumns = this.matchMediaService.IsCustomMatch(this.rules.twoColumn);
-		// this.isThreeColumns = this.matchMediaService.IsCustomMatch(this.rules.threeColumn);
-
-		let that = this;
-
-		// this.matchMediaService.OnCustomMatch(this.rules.singleColumn, function (mql: MediaQueryList)
-		// {
-		// 	//console.log('is singleColumn', mql.matches);
-
-		// 	if (mql.matches)
-		// 	{
-		// 		that.zone.run(() =>
-		// 		{ // Change the property within the zone, CD will run after
-		// 			that.isOneColumn = true;
-		// 			that.isTwoColumns = false;
-		// 			that.isThreeColumns = false;
-		// 		});
-		// 	}
-		// });
-
-		// this.matchMediaService.OnCustomMatch(this.rules.twoColumn, function (mql: MediaQueryList)
-		// {
-		// 	//console.log('is twoColumn', mql.matches);
-
-		// 	if (mql.matches)
-		// 	{
-		// 		that.zone.run(() =>
-		// 		{ // Change the property within the zone, CD will run after
-		// 			that.isOneColumn = false;
-		// 			that.isTwoColumns = true;
-		// 			that.isThreeColumns = false;
-		// 		});
-		// 	}
-		// });
-
-		// this.matchMediaService.OnCustomMatch(this.rules.threeColumn, function (mql: MediaQueryList)
-		// {
-		// 	//console.log('is three column', mql.matches);
-
-		// 	if (mql.matches)
-		// 	{
-		// 		that.zone.run(() =>
-		// 		{ // Change the property within the zone, CD will run after
-		// 			that.isOneColumn = false;
-		// 			that.isTwoColumns = false;
-		// 			that.isThreeColumns = true;
-		// 		});
-		// 	}
-		// });
-
-		for (var mediaIndex in this.mediaList)
-		{
-			this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-1';
-			this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-1';			
-		}		
+	{		
+		//console.log('MEDIA SLIDER:', this.mediaModel);
 	};	
 
 	ngAfterViewInit()
 	{ 	
-	};
+	};	
 
-	onMediaClick(item: CdfMediaModel)
+	onMediaClick()
 	{
-		item.OnClick();
+		console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
+		this.mediaModel.OnClick();
 	};
 
-	onVideoBeforePlay(index:number, mediaModel:CdfMediaModel)
+	onVideoBeforePlay()
 	{ 
-		if (!this.isVideoPlaying)
+		if (!this.isMediaPlaying)
 		{
-			this.isVideoPlaying = true;
-			this.activeMediaModel = mediaModel;
+			//console.log('cdf-media-slider onVideoBeforePlay', this.mediaModel);
 
-			this.prepareAllPanesForVideoPlay();
+			this.isMediaPlaying = true;
 
-			let remainder = this.getRemainder(index);
+			//LET PARENT KNOW SLIDER IS OPEN...
+			this.onMediaSliderOpen.emit();
 
-			// console.log('remainder', remainder);
-			// console.log('index', index);
-			// console.log('mediaModel', mediaModel);			
-			
-			//infoPanelExpandedState depends on if mediaModel is last one in row
-			mediaModel[ 'infoPanelExpandedState' ] = (remainder === 0) ? 'expandedNoRemainder' : 'expanded';
-			mediaModel[ 'mediaPaneState' ] = 'active';
-			mediaModel[ 'IsInfoPaneExpanded' ] = true;
-			
-			//IF INTERACTING WITH LAST ELEMENT IN ROW, THEN MANIPULATE SO INFO AND VIDEO PANES ARE TOGETHER
-			if (remainder === 0)
-			{
-				let previousIndex = index - 1;
-
-				//HIDE PREVIOUS VIDEO PANE SO VIDEO PANE AND INFO PANE OF LAST ITEM IN ROW ARE TOGETHER
-				this.mediaList[ previousIndex ][ 'IsMediaPaneHidden' ] = true;
-							
-				/*
-				IF INTERACTING WITH LAST ITEM IN ROW, THEN SWAP IT
-				WITH INFO PANE (order-2).  EVERYTHING AFTER LAST ITEM IN ROW
-				ORDER IS CHANGED TO A HIGHER ORDER (order-3) SO THEY
-				STAY IN THE SAME ORDER.
-
-				EVERYTHING BEFORE LAST ITEM IN ROW REMAINS SAME (order-1)
-				*/
-				for (var mediaIndex in this.mediaList)
-				{
-					if (parseInt(mediaIndex) < index)
-					{
-						this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-1';
-						this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-1';
-					}
-					else if (parseInt(mediaIndex) === index)
-					{
-						this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-1';
-						this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-2';
-					}
-					else if (parseInt(mediaIndex) > index)
-					{
-						this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-3';
-						this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-3';
-					}
-				}
-			}
+			this.mediaModel[ 'mediaPaneState' ] = 'active';
+			this.mediaModel[ 'infoPaneExpandedState' ] = this.GetSliderDirection();
+			this.mediaModel[ 'IsInfoPaneExpanded' ] = true;
 		}
-		else
-		{ 
-			if (mediaModel.YouTubeId != this.activeMediaModel.YouTubeId)
-			{
-				//console.log('A VIDEO IS CURRENTLY PLAYING:', mediaModel.Title);
-
-				this.doStopPlayingVideo(this.activeMediaModel).subscribe(
-					//SUCCESS
-					data =>
-					{
-						//START PLAYING THE NEW ONE...
-						this.onVideoBeforePlay(index, mediaModel);
-					},
-
-					//ERROR
-					err =>
-					{ 
-					},
-
-					//COMPLETE
-					() =>
-					{ 
-					}				
-				);
-			}	
-		}	
 	};
 
-	onStopVideoCLick(mediaModel:CdfMediaModel)
+	resetPanes()
 	{ 
-		this.doStopPlayingVideo(mediaModel).subscribe(
+		this.mediaModel[ 'mediaPaneState' ] = 'inactive';
+		this.mediaModel[ 'infoPaneExpandedState' ] = 'collapsed';
+		this.mediaModel[ 'IsInfoPaneExpanded' ] = false;
+		this.isMediaPlaying = false;
+	};	
+
+	onStopVideoClick()
+	{ 
+		this.stopPlayingVideo().subscribe(
 			//SUCCESS
 			data =>
 			{
+				this.isMediaPlaying = false;
 			},
 
 			//ERROR
@@ -334,85 +320,28 @@ export class CdfMediaGridComponent implements OnInit, AfterViewInit
 			}				
 		);		
 	};
-
-	prepareAllPanesForVideoPlay()
-	{ 
-		for (var mediaIndex in this.mediaList)
-		{
-			this.mediaList[ mediaIndex ][ 'mediaPaneState' ] = 'inactive';
-
-			this.mediaList[ mediaIndex ][ 'IsInfoPaneExpanded' ] = false;
-			this.mediaList[ mediaIndex ][ 'IsMediaPaneHidden' ] = false;
-
-			this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-1';
-			this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-1';			
-		}
-	};
-
-	resetAllPanes()
-	{ 
-		for (var mediaIndex in this.mediaList)
-		{
-			this.mediaList[ mediaIndex ][ 'infoPanelExpandedState' ] = 'collapsed';
-			this.mediaList[ mediaIndex ][ 'mediaPaneState' ] = 'none';
-
-			this.mediaList[ mediaIndex ][ 'IsInfoPaneExpanded' ] = false;
-			this.mediaList[ mediaIndex ][ 'IsMediaPaneHidden' ] = false;
-
-			this.mediaList[ mediaIndex ][ 'InfoClass' ] = 'order-1';
-			this.mediaList[ mediaIndex ][ 'MediaClass' ] = 'order-1';			
-		}
-	};	
-
-	private getRemainder(index:number) : number
-	{ 
-		let columnCount: number =
-			(this.isOneColumn) ? 1
-				: (this.isTwoColumns) ? 2
-					: 3;
-
-		let remainder = (index + 1) % columnCount;
-		
-		return remainder;
-	}
-
-	private doStopPlayingVideo(mediaModel:CdfMediaModel)
+	
+	stopPlayingVideo()
 	{ 
 		return Observable.create(observer => 
 		{
-			this.isVideoPlaying = false;
-			this.activeMediaModel = undefined;
+			// console.log('mediaModel video to stop:', this.mediaModel.Title);
+			// console.log('mediaComponent:', this.mediaComponent);		
 
-			let youTubeId = mediaModel.YouTubeId;
-			let mediaComponent: CdfMediaComponent;
-			let mediaComponentArray = this.mediaComponentsList.toArray();
-
-			//console.log('mediaComponentArray:', mediaComponentArray);		
-
-			for (var componentIndex in mediaComponentArray)
+			if (this.mediaComponent)
 			{
-				if (mediaComponentArray[ componentIndex ].media.YouTubeId === youTubeId)
-				{
-					mediaComponent = mediaComponentArray[ componentIndex ];
-					break;
-				}
-			}
+				this.mediaComponent.stop();
 
-			// console.log('mediaModel video to stop:', mediaModel.Title);
-			// console.log('iterative mediaComponent:', mediaComponent);
-
-			if (mediaComponent)
-			{
-				mediaComponent.stop();
-
-				mediaModel[ 'infoPanelExpandedState' ] = 'collapsed';
-				mediaModel[ 'mediaPaneState' ] = 'inactive';
-			
+				this.mediaModel[ 'infoPaneExpandedState' ] = 'collapsed';			
+				
+				//PAUSE WHILE TRIGGER ANIMATION FIRES THEN EMIT MEDIA SLIDER CLOSED...
 				setTimeout(() => 
 				{
-					mediaModel[ 'IsVideoPlaying' ] = false;
-					this.resetAllPanes();
+					this.resetPanes();
 
+					//LET PARENT KNOW SLIDER IS CLOSED...
+					this.onMediaSliderClose.emit(this.mediaModel);
+					
 					observer.next();
 					observer.complete();
 				}, 400);
@@ -424,4 +353,35 @@ export class CdfMediaGridComponent implements OnInit, AfterViewInit
 			}
 		});	
 	}
+
+	private GetSliderDirection(): string
+	{ 
+		let sliderDirection: string = 'expandToLeft';
+
+		switch (this.mediaModel['SliderDirection'])
+		{ 
+			case SliderDirectionEnum.Left:
+				{ 
+					sliderDirection = 'expandToLeft';
+					break;
+				}	
+			case SliderDirectionEnum.Right:
+				{ 
+					sliderDirection = 'expandToRight';
+					break;
+				}
+			case SliderDirectionEnum.Top:
+				{ 
+					sliderDirection = 'expandToTop';
+					break;
+				}									
+			case SliderDirectionEnum.Bottom:
+				{ 
+					sliderDirection = 'expandToBottom';
+					break;
+				}					
+		}
+
+		return sliderDirection;
+	};
 }

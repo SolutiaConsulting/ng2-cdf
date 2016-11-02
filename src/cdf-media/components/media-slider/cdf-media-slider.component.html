@@ -1,34 +1,23 @@
-<section class="grid-block" [class.small-up-1]="isOneColumn" [class.small-up-2]="isTwoColumns" [class.medium-up-3]="isThreeColumns">
+<!--MEDIA PANE-->
+<section class="cdf-media-pane-container" [@mediaStateTrigger]="mediaModel.mediaPaneState">
+	
+	<!--MEDIA: IMAGE OR VIDEO-->
+	<cdf-media [media]="mediaModel"
+				[showType]="showType"
+				(onImageClick)="onMediaClick()"
+				(onVideoBeforePlay)="onVideoBeforePlay()"></cdf-media>				
 
-	<template ngFor let-media [ngForOf]="mediaList" [ngForTrackBy]="trackByMedia" let-i="index">
-
-			<!--MEDIA PANE-->
-			<section class="grid-block cdf-media-pane-container" [ngClass]="media.MediaClass" *ngIf="!media.IsMediaPaneHidden" [@mediaStateTrigger]="media.mediaPaneState">
-				
-				<!--MEDIA: IMAGE OR VIDEO-->
-				<cdf-media *ngIf="(media.IsImage || media.IsVideo)"
-							[media]="media"
-							(onImageClick)="onMediaClick(media)"
-							(onVideoBeforePlay)="onVideoBeforePlay(i, media)">					
-					<span *ngIf="(showType)" class="cdf-media-pane-container__type cdf-media-pane-container__type__{{media.Type | lowercase}}">{{media.Type}}</span>
-				</cdf-media>				
-
-			</section>
+</section>
 
 
-			<!--INFO PANE-->
-			<section class="grid-block cdf-info-pane-container" [ngClass]="media.InfoClass" *ngIf="media.IsInfoPaneExpanded">
-				<section class="cdf-info-pane-container__wrapper"  [@panelWidthTrigger]="media.infoPanelExpandedState">
+<!--INFO PANE-->
+<section class="cdf-info-pane-container" *ngIf="mediaModel.IsInfoPaneExpanded" [@infoPaneSlideTrigger]="mediaModel.infoPaneExpandedState">
+	<section class="cdf-info-pane-container__wrapper">
 
-					<!--CLOSE BUTTON-->
-					<a class="close-button" (click)="onStopVideoCLick(media)">×</a>
+		<!--CLOSE BUTTON-->
+		<a class="close-button" (click)="onStopVideoClick()">×</a>
 
-					<h4>CDF MEDIA INFO PANE CONTENT (ng-content)....</h4>
-					<ng-content select="cdf-info-pane-content"></ng-content>
+		<ng-content></ng-content>
 
-				</section>
-			</section>				
-
-	</template>
-
+	</section>
 </section>

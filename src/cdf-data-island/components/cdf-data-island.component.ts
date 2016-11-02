@@ -3,11 +3,11 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	OnInit } 						from '@angular/core';
-import { Observable } 				from 'rxjs/Rx';
+	OnInit } 					from '@angular/core';
+import { Observable } 			from 'rxjs/Rx';
 
-import { CdfDataIslandService }		from '../services/index';
-import { CdfRequestModel }			from '../models/index';
+import { CdfDataHelperService }	from '../services/index';
+import { CdfRequestModel }		from '../models/index';
 
 @Component({
 	selector: 'cdf-data-island',
@@ -17,9 +17,10 @@ export class CdfDataIslandComponent implements OnInit
 {
 	@Input() RequestData: CdfRequestModel;
 	@Output() onContentReceived = new EventEmitter<any>();
+	@Output() onContentError = new EventEmitter<any>();
 	
 	constructor(
-		private dataIslandService: CdfDataIslandService
+		private cdfDataHelperService: CdfDataHelperService
 	)
 	{
 
@@ -27,31 +28,9 @@ export class CdfDataIslandComponent implements OnInit
 
 	ngOnInit()
 	{
-		this.MakeRequest();
-	}
-
-	private MakeRequest()
-	{ 
 		//console.log('RequestData INPUT:', this.RequestData);
 
-		this.dataIslandService.requestData(this.RequestData)
-			//	IF AN ERROR HAPPENS, RETRY 3 TIMES - An incrememntal back-off strategy for handling errors:
-			//
-			// 	*********************************************************************************** 
-			// 	** THIS WILL RETRY THE OBSERVABLE RETURNED BY 'this.dataIslandService.get' ABOVE
-			//	** 3 times before giving up
-			// 	***********************************************************************************
-			//
-			//	SEE https://xgrommx.github.io/rx-book/content/observable/observable_instance_methods/retrywhen.html	
-			//
-			.retryWhen(function (attempts) 
-			{
-				return Observable.range(1, 3).zip(attempts, function (i) { return i; }).flatMap(function (i) 
-				{
-					//console.log("delay retry by: " + i + " second(s)");
-					return Observable.timer(i * 1000);
-				});
-			})	
+		this.cdfDataHelperService.requestData(this.RequestData)
 			.subscribe
 			(
 				//SUCCESS - SEND RAW JSON BACK TO PARENT VIA EVENT EMITTER
@@ -64,11 +43,12 @@ export class CdfDataIslandComponent implements OnInit
 				//ERROR
 				err => 					
 				{
-					//console.log('********** CdfDataIslandComponent ERROR:', err.message);					
+					//console.log('********** CdfDataIslandComponent ERROR:', err.message);	
+					this.onContentError.emit(err.message);
 				},
 
 				//ON COMPLETE
 				() => null
 			)
-	}	
+	}
 }

@@ -1,0 +1,106 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+
+//Editor
+
+    // Insert spaces when pressing Tab.
+    "editor.insertSpaces": false,   
+
+    // Controls after how many characters the editor will wrap to the next line. Setting this to 0 turns on viewport width wrapping (word wrapping). Setting this to -1 forces the editor to never wrap.
+    "editor.wrappingColumn": -1,    
+
+	// Controls the indentation of wrapped lines. Can be one of 'none', 'same' or 'indent'.
+	"editor.wrappingIndent": "indent",
+
+    // Controls if the editor should automatically format the line after typing
+    "editor.formatOnType": true,    
+
+	// Insert snippets when their prefix matches. Works best when 'quickSuggestions' aren't enabled.
+	"editor.tabCompletion": false,
+	
+    // Indent <head> and <body> sections.
+    "html.format.indentInnerHtml": true,
+
+
+	"typescript.tsdk": "node_modules\\typescript\\lib",
+
+
+// Workbench
+
+	// Controls if opened editors show as preview. Preview editors are reused until they are kept (e.g. via double click or editing).
+	"workbench.editor.enablePreview": false,
+
+	// Controls if opened editors from quick open show as preview. Preview editors are reused until they are kept (e.g. via double click or editing).
+	"workbench.editor.enablePreviewFromQuickOpen": false,
+
+	// Controls where editors open. Select 'left' or 'right' to open editors to the left or right of the current active one. Select 'first' or 'last' to open editors independently from the currently active one.
+	"workbench.editor.openPositioning": "left",
+
+
+
+// Search
+    // Configure glob patterns for excluding files and folders in searches. Inherits all glob patterns from the files.exclude setting.
+	"search.exclude": 
+    {
+		"**/_builds": true,
+		"**/dist": true,
+		"**/app/js": true,
+		"**/OBSOLETE": true,
+		"**/node_modules": true,        
+		"**/bower_components": true
+	},
+
+
+//HTML
+	// Format and indent {{#foo}} and {{/foo}}.
+	"html.format.indentHandlebars": true,
+
+	// End with a newline.
+	"html.format.endWithNewline": true,
+
+
+// TypeScript
+	// Defines space handling after opening and before closing non empty brackets
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+
+	// Defines whether an open brace is put onto a new line for functions or not
+	"typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+
+    // Defines whether an open brace is put onto a new line for control blocks or not
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+
+
+// JavaScript
+	// Defines space handling after opening and before closing non empty brackets
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+
+    // Defines whether an open brace is put onto a new line for functions or not
+    "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+
+    // Defines whether an open brace is put onto a new line for control blocks or not
+    "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+
+
+//MINIFY
+	"minify.minifyExistingOnSave": true,
+
+//MINIFY CSS
+	"minify.css": 
+	{
+		"advanced": true,
+		"aggressiveMerging": true,
+		"compatibility": "*",
+		"inliner": {},
+		"keepBreaks": false,
+		"keepSpecialComments": "*",
+		"mediaMerging": true,
+		"processImport": true,
+		"processImportFrom": ["all"],
+		"rebase": true,
+		"restructuring": true,
+		"root": "${workspaceRoot}",
+		"roundingPrecision": 2,
+		"semanticMerging": false,
+		"shorthandCompacting": true
+	}
+}

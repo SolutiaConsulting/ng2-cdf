@@ -1,25 +1,27 @@
-import { NgModule }						from '@angular/core';
-import { CommonModule }					from '@angular/common';
+import { NgModule, ModuleWithProviders }	from '@angular/core';
+import { CommonModule }						from '@angular/common';
 
 import
 {
 	//CDF-DATA-ISLAND
 	CacheService,
-	CdfSettings,
+	CdfConfigModel,
+	CdfDataHelperService,
 	CdfDataIslandComponent,
-	CdfDataIslandService,
-	CdfPostModel,
-	CdfRequestModel,
+	CdfDataService,
+	CdfSettingsService,
 
-	
 	//CDF-MEDIA
 	CdfImageComponent,
 	CdfMediaComponent,
-	CdfVideoComponent,
-	CdfMediaImageModel,
-	CdfMediaVideoModel,
-	CdfMediaModel	
-} 										from './index';
+	CdfMediaSliderComponent,
+	CdfVideoComponent
+} 											from './index';
+
+
+//CREATE AN INSTANCE OF THE SETTINGS SERVICE BY CONSUMING A PROVIDED CONFIGURATION
+import { provideSettingsService } 			from './cdf-data-island/services/cdf-settings.service';
+
 
 @NgModule({
 	imports:
@@ -30,39 +32,40 @@ import
 	[
 		//CDF-DATA-ISLAND
 		CdfDataIslandComponent,
-		CdfPostModel,
-		CdfRequestModel,
-
 	
-		//CDF-MEDIA
+		// //CDF-MEDIA
 		CdfImageComponent,
 		CdfMediaComponent,
-		CdfVideoComponent,
-		CdfMediaImageModel,
-		CdfMediaVideoModel,
-		CdfMediaModel
+		CdfMediaSliderComponent,
+		CdfVideoComponent
 	],
 	exports:
 	[
-		//CDF-DATA-ISLAND
+		// //CDF-DATA-ISLAND
 		CdfDataIslandComponent,
-		CdfPostModel,
-		CdfRequestModel,
-
 	
-		//CDF-MEDIA
-		CdfImageComponent,
+		// //CDF-MEDIA
 		CdfMediaComponent,
-		CdfVideoComponent,		
-		CdfMediaImageModel,
-		CdfMediaVideoModel,
-		CdfMediaModel
+		CdfMediaSliderComponent
 	],
 	providers:
 	[
 		CacheService,
-		CdfSettings,
-		CdfDataIslandService		
+		CdfDataHelperService,
+		CdfDataService,
+		CdfSettingsService
 	]
 })
-export class CdfModule {}
+export class CdfModule 
+{
+	static forRoot(config: CdfConfigModel[]): ModuleWithProviders
+	{
+		return {
+			ngModule: CdfModule,
+			providers:
+			[ 
+				[provideSettingsService(config)]
+			]
+		};
+	}	
+}

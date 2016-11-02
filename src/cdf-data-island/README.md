@@ -1,6 +1,4 @@
-# ng2-cdf - WHO DAT
-
-# Angular2 Content Delivery Framework (CDF)
+# CONTENT DELIVERY FRAMEWORK (CDF)
 
 The purpose of cdf-data-island component is to surface JSON data to the caller.
 
@@ -174,13 +172,15 @@ You can register domain credentials in cdf-settings.ts
 	 */
 	public static DOMAIN_CREDENTIALS =
 	{
-		"domain": "api.cloudcms.com",
-		"baseURL": "https://api.cloudcms.com",
-		"application": "application key value",
-		"clientKey": "client key value",
-		"clientSecret": "client secret",
-		"username": "username",
-		"password": "hashed password"
+		"api.cloudcms.com":
+		{
+			"baseURL": "https://api.cloudcms.com",
+			"application": "application key value",
+			"clientKey": "client key value",
+			"clientSecret": "client secret",
+			"username": "username",
+			"password": "hashed password"
+		}
 	};
 ```
 

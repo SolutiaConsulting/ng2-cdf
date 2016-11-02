@@ -6,20 +6,21 @@
         "target": "es5",
         "sourceMap": true,
         "inlineSources": false,
-        "declaration": false,
+        "declaration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "removeComments": false,
         "noImplicitAny": false,
         "outDir": "./lib",
-        "removeComments": false,
-        "rootDir": ".",
         "stripInternal": true,
         "skipLibCheck": true,
-        "types": ["node"]
+        "types": ["node"]             
     },
-    "files": [],
+    "files": [
+        "./src/index.ts",
+        "node_modules/typescript/lib/lib.es6.d.ts"
+    ],
     "exclude": [
-        "node_modules",
-        "**/index.ts"
+        "node_modules"
     ]
 }

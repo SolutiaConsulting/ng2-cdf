@@ -1,0 +1,12 @@
+/**
+ * @license
+ * Copyright Tom Schreck All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ */
+
+/**
+ * Created by Tom Schreck on 11/01/2016.
+ */
+
+export * from './src/index';

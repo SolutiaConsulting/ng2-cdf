@@ -14,18 +14,46 @@ import { CdfVideoComponent } 			from '../video/index';
 
 @Component({
 	selector: 'cdf-media',
-	templateUrl: './cdf-media.component.html'
+	template: `
+	<!--IMAGE-->
+	<cdf-image *ngIf="(media.HasImage && !media.HasVideo)" 
+				[imageModel]="media" 
+				(click)="doImageClick()">
+	</cdf-image>
+
+
+	<!--VIDEO-->
+	<cdf-video *ngIf="(media.HasVideo)" 
+				[videoModel]="media" 
+				(onVideoBeforePlay)="doVideoBeforePlay()">
+	</cdf-video>
+
+
+	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
+	<h2 class="cdf-media-title-only" *ngIf="(!media.HasImage && !media.HasVideo)">{{media.Title}}</h2>
+
+	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{media.Type | lowercase}}">{{media.Type}}</span>
+
+	<ng-content></ng-content>	
+	`,
+	styles: [ `
+	.cdf-media-type
+	{
+		color: #fff;
+		left: 0.75rem;
+		padding: 0.25rem 0.5rem;
+		position: absolute;
+		top: 0.75rem;	
+		z-index: 100;
+	}	
+	` ],
 })
 export class CdfMediaComponent implements OnInit 
 {
-	@Input()
-	media: CdfMediaModel;	
-
-	@Output()
-	onImageClick: EventEmitter<any> = new EventEmitter<any>();
-
-	@Output()
-	onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
+	@Input() media: CdfMediaModel;	
+	@Input() showType: boolean = false;
+	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
+	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
 
 	@ViewChild(CdfVideoComponent) videoComponent: CdfVideoComponent;
 

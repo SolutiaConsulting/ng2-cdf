@@ -9,21 +9,22 @@ import {
 	Response} 					from '@angular/http';
 
 import { CacheService }			from '../storage/cache.service';
-import { CdfSettings }			from '../settings/cdf-settings'; 
-import
-{
-	CdfRequestModel,
-	CdfPostModel
-} 								from '../models/index';
+import 
+{ 
+	CdfPostModel,
+	CdfRequestModel 
+}								from '../models/index';
+import { CdfSettingsService }	from './cdf-settings.service'; 
 
 @Injectable()
-export class CdfDataIslandService
+export class CdfDataService
 {
 	tokenName: string = 'cdf-token';
 
 	constructor(
 		private http: Http,
-		private cacheService: CacheService
+		private cacheService: CacheService,
+		private cdfSettingsService: CdfSettingsService
 	)
 	{ 
 	}
@@ -219,43 +220,49 @@ export class CdfDataIslandService
 			else
 			{
 				//RETRIEVE A NEW TOKEN
-				var CONNECTION_CREDENTIALS = CdfSettings.DOMAIN_CREDENTIALS[errorDomain];
-				var authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.clientKey + ':' + CONNECTION_CREDENTIALS.clientSecret);
-				var url = CONNECTION_CREDENTIALS.baseURL + '/oauth/token?grant_type=password&scope=api&username=' + CONNECTION_CREDENTIALS.username + '&password=' + CONNECTION_CREDENTIALS.password;
-				var body = '';
-				var headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+				let cdfConfigModel = this.cdfSettingsService.GetConfigModelByDomainName(errorDomain);
 
-				let newTokenSubscription = this.http.post(url, body, { headers })
-					.map(res => res.json())
-					.subscribe (
-						//SUCCESS
-						data =>
-						{
-							//console.log('NEW TOKEN YO YO', data);
+				if(cdfConfigModel && cdfConfigModel.Settings)
+				{
+					let CONNECTION_CREDENTIALS = cdfConfigModel.Settings;
 
-							//SET TOKEN RECEIVED FROM API
-							this.SetToken(data);
+					let authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.ClientKey + ':' + CONNECTION_CREDENTIALS.ClientSecret);
+					let url = CONNECTION_CREDENTIALS.BaseURL + '/oauth/token?grant_type=password&scope=api&username=' + CONNECTION_CREDENTIALS.Username + '&password=' + CONNECTION_CREDENTIALS.Password;
+					let body = '';
+					let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
 
-							//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
-							observer.next(data);
-							observer.complete();
-						},
+					let newTokenSubscription = this.http.post(url, body, { headers })
+						.map(res => res.json())
+						.subscribe (
+							//SUCCESS
+							data =>
+							{
+								//console.log('NEW TOKEN YO YO', data);
 
-						//ERROR
-						err =>
-						{ 
-							//console.log('authenticateObservable error smalls:', err);
-						},
+								//SET TOKEN RECEIVED FROM API
+								this.SetToken(data);
 
-						//COMPLETE
-						() =>
-						{ 
-							if (newTokenSubscription)
+								//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
+								observer.next(data);
+								observer.complete();
+							},
+
+							//ERROR
+							err =>
 							{ 
-								newTokenSubscription.unsubscribe();
-							}							
-						}
-					)
+								//console.log('authenticateObservable error smalls:', err);
+							},
+
+							//COMPLETE
+							() =>
+							{ 
+								if (newTokenSubscription)
+								{ 
+									newTokenSubscription.unsubscribe();
+								}							
+							}
+						)
+				}
 			}
         });
 	};

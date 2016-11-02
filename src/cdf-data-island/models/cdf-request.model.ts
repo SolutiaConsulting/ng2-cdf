@@ -1,4 +1,4 @@
-import { CdfPostModel } 	from './index';
+import { CdfPostModel } 			from './cdf-post.model';
 
 export class CdfRequestModel
 {
