@@ -1,4 +1,4 @@
-# ng2-cdf - WHO DAT
+# ng2-cdf
 
 # Angular2 Content Delivery Framework (CDF)
 
@@ -160,32 +160,148 @@ CDF supports multiple domains in combining requests into a single Observable blo
 
 CDF sees content as the results of making HTTP requests.  It does not care where you get your data for your app.  CDF cares about REST.
 
-You can combine requests to different domains in a given CDF Observable block.  You configure your different domains in cdf-settings.ts
+You can combine requests to different domains in a given CDF Observable block.
 
 Fork Join Observable is successful if *ALL* requests are successful.  If one of the requests receives a 401 unauthorized response, CDF will attempt to recreate a valid token 3 times before quiting.  
-
-You can register domain credentials in cdf-settings.ts
-
-``` javascript
-	/*
-	LIST OF CREDENTIALS BY DOMAIN NAME
-
-	AFFORDS ABILITY TO SUPPORT MULTIPLE DOMAINS...
-	 */
-	public static DOMAIN_CREDENTIALS =
-	{
-		"domain": "api.cloudcms.com",
-		"baseURL": "https://api.cloudcms.com",
-		"application": "application key value",
-		"clientKey": "client key value",
-		"clientSecret": "client secret",
-		"username": "username",
-		"password": "hashed password"
-	};
-```
 
 So, in the event a call fails, CDF will take the domain from the URL that failed and lookup the corresponding credentials and attempt to re-establish a valid authentication token.  
 
 If a successful token can be established, then CDF will attept to resubmit each URL in the request.
 
 CDF will attempt the resubmission three times before giving up.
+
+
+___
+## CONFIGURING CDF
+cdf-settings.service (/src/cdf-data-island/services/cdf-settings.service.ts) is how you configure ng2-cdf.  It's constructor accepts an array of CdfConfigModel (one for each domain that will be supported).
+
+CdfConfigModel contains the following data elements.  When a request is made to a REST service, CDF uses the domain of the REST request and looks through the CdfConfigModel array based on Domain name to retrieve the credentials necessary to maintain a connection.
+``` javascript
+	export class CdfConfigModel
+	{
+		Domain: string;
+		ClientKey: string;
+		ClientSecret: string;
+		Username: string;
+		Password: string;
+		BaseURL: string;
+		Application: string;
+	}
+```
+
+cdf-settings.service's constructor accepts an array of CdfConfigModel.  The calling application must provide the configuration for cdf-settings.service when the calling app is loaded.  Here's an example:
+
+ ``` javascript
+		//ENVIRONMENTAL SETTINGS IN ANGULAR2 (environment.ts)
+		export const environment =
+		{
+			production: false,
+			cachePrefix: 'win-dev',	
+			name: 'WinStar - Development',
+			version: '2.2.0',
+			Domain_Credentials:
+			[
+				{
+					"domain": "api.cloudcms.com",
+					"clientKey": "XXXXXXXXXXXXXXXXXXXXX",
+					"clientSecret": "XXXXXXXXXXXXXXXXXXXXX",
+					"username": "XXXXXXXXXXXXXXXXXXXXX",
+					"password": "XXXXXXXXXXXXXXXXXXXXX",
+					"baseURL": "https://api.cloudcms.com",
+					"application": "XXXXXXXXXXXXXXXXXXXXX"
+				}
+			]	
+		};	 
+
+
+		-------------------------------  config.service.ts:
+
+		import
+		{
+			CdfConfigModel,
+			CdfOAuth2Model
+		} 								from 'ng2-cdf/lib';
+
+		@Injectable()
+		export class ConfigService 
+		{		
+			/*
+			CREATE PROPER CONFIGURATION FOR CONTENT DELIVERY FRAMEWORK (CDF)
+			BASED ON REGISTERED DOMAIN'S IN ENVIRONMENT'S Domain_Credentials NODE
+			*/
+			public static GetDomainCredentials() : CdfConfigModel[]
+			{ 
+				let configArray: CdfConfigModel[] = [];
+
+				//FIND CONFIG IN LIST WITH SAME DOMAIN NAME
+				for (let entry of environment.Domain_Credentials) 
+				{
+					let domainName = (entry.domain) ? entry.domain : undefined;
+
+					if (domainName)
+					{ 
+						let domainModel = new CdfOAuth2Model();
+						domainModel.ClientKey = (entry.clientKey) ? entry.clientKey : undefined;
+						domainModel.ClientSecret = (entry.clientSecret) ? entry.clientSecret : undefined;
+						domainModel.Username = (entry.username) ? entry.username : undefined;
+						domainModel.Password = (entry.password) ? entry.password : undefined;
+						domainModel.BaseURL = (entry.baseURL) ? entry.baseURL : undefined;
+						domainModel.Application = (entry.application) ? entry.application : undefined;
+
+						configArray.push(new CdfConfigModel(domainName, domainModel));
+					}	
+				}
+
+				//console.log('configArray:', configArray);
+				
+				return configArray;
+			}
+		}
+
+		-------------------------------  shared.module.ts:
+
+		//3RD PARTY...
+		import { CdfModule } 				from 'ng2-cdf/lib';
+		
+		//BUILD DOMAIN CONFIGURATION ARRAY NEEDED FOR CDF MODULE...
+		let configArray = ConfigService.GetDomainCredentials();
+
+		@NgModule({
+			imports:
+			[
+				CommonModule,
+				RouterModule,
+
+				//CONFIGURE CONTENT DELIVERY FRAMEWORK (CDF) WITH CREDENTIALS FOR DIFFERENT REST SOURCES		
+				CdfModule.forRoot(configArray)
+			],
+			declarations:
+			[
+				//COMPONENTS
+			],
+			exports:
+			[		
+				//COMPONENTS
+
+				//MODULES
+
+				//APPLICATION MODULES
+
+				//3RD PARTY...
+				CdfModule		
+			]
+		})
+		export class SharedModule
+		{
+			static forRoot(): ModuleWithProviders
+			{
+				return {
+					ngModule: SharedModule,
+					providers:
+					[
+						.... 
+					]
+				};
+			}
+		} 
+ ```

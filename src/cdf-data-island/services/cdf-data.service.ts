@@ -220,12 +220,10 @@ export class CdfDataService
 			else
 			{
 				//RETRIEVE A NEW TOKEN
-				let cdfConfigModel = this.cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+				let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName(errorDomain);
 
-				if(cdfConfigModel && cdfConfigModel.Settings)
+				if(CONNECTION_CREDENTIALS)
 				{
-					let CONNECTION_CREDENTIALS = cdfConfigModel.Settings;
-
 					let authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.ClientKey + ':' + CONNECTION_CREDENTIALS.ClientSecret);
 					let url = CONNECTION_CREDENTIALS.BaseURL + '/oauth/token?grant_type=password&scope=api&username=' + CONNECTION_CREDENTIALS.Username + '&password=' + CONNECTION_CREDENTIALS.Password;
 					let body = '';
