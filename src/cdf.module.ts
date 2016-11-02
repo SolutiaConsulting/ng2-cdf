@@ -20,6 +20,7 @@ import
 
 
 //CREATE AN INSTANCE OF THE SETTINGS SERVICE BY CONSUMING A PROVIDED CONFIGURATION
+// http://blog.rangle.io/configurable-services-in-angular-2/
 import { provideSettingsService } 			from './cdf-data-island/services/cdf-settings.service';
 
 

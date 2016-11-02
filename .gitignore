@@ -1,7 +1,7 @@
 # Node generated files
 node_modules
 npm-debug.log
-
+lib
 
 # OS generated files
 Thumbs.db
