@@ -218,8 +218,7 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 
 		import
 		{
-			CdfConfigModel,
-			CdfOAuth2Model
+			CdfConfigModel
 		} 								from 'ng2-cdf/lib';
 
 		@Injectable()
@@ -240,7 +239,8 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 
 					if (domainName)
 					{ 
-						let domainModel = new CdfOAuth2Model();
+						let domainModel = new CdfConfigModel();
+						domainModel.Domain = domainName;
 						domainModel.ClientKey = (entry.clientKey) ? entry.clientKey : undefined;
 						domainModel.ClientSecret = (entry.clientSecret) ? entry.clientSecret : undefined;
 						domainModel.Username = (entry.username) ? entry.username : undefined;
@@ -248,7 +248,7 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 						domainModel.BaseURL = (entry.baseURL) ? entry.baseURL : undefined;
 						domainModel.Application = (entry.application) ? entry.application : undefined;
 
-						configArray.push(new CdfConfigModel(domainName, domainModel));
+						configArray.push(domainModel);
 					}	
 				}
 
