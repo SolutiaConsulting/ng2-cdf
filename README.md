@@ -116,7 +116,9 @@ ___
 
 ```html
 	/* some-cool-custom-tag.component.html: */
-	<cdf-data-island [RequestData]="RequestModel" (onContentReceived)="onContentReceived($event)"></cdf-data-island>
+	<cdf-data-island [RequestData]="RequestModel" 
+				(onContentReceived)="onContentReceived($event)"
+				(onContentError)="onContentError($event)"></cdf-data-island>
 
 	<section>
 		/* DISPLAY HTML HERE CONSUMING JSON RESULTS FROM CDF-DATA-ISLAND */
@@ -126,6 +128,7 @@ ___
 CDF-DATA-ISLAND ATTRIBUTES:
 * *RequestData* is RequestModel data type (see below) containing GETs and POSTs that are called as a single Observable block
 * *(onContentReceived)* is the event binding that is called when results are returned for each call in Observable block 	
+* *(onContentError)* is the event binding that is called when an error happens
 
 
 ___
@@ -196,8 +199,8 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 		export const environment =
 		{
 			production: false,
-			cachePrefix: 'win-dev',	
-			name: 'WinStar - Development',
+			cachePrefix: 'my-site-dev',	
+			name: 'My Site - Development',
 			version: '2.2.0',
 			Domain_Credentials:
 			[
@@ -209,7 +212,16 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 					"password": "XXXXXXXXXXXXXXXXXXXXX",
 					"baseURL": "https://api.cloudcms.com",
 					"application": "XXXXXXXXXXXXXXXXXXXXX"
-				}
+				},
+				{
+					"domain": "api.somesite.com",
+					"clientKey": "XXXXXXXXXXXXXXXXXXXXX",
+					"clientSecret": "XXXXXXXXXXXXXXXXXXXXX",
+					"username": "XXXXXXXXXXXXXXXXXXXXX",
+					"password": "XXXXXXXXXXXXXXXXXXXXX",
+					"baseURL": "https://api.somesite.com",
+					"application": "XXXXXXXXXXXXXXXXXXXXX"
+				}				
 			]	
 		};	 
 
