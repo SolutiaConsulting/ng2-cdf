@@ -10,7 +10,7 @@ export class CdfMediaModel
 	HasImage: boolean;
 	HasVideo: boolean;
 
-	constructor(rawJson: any, type: string)
+	constructor(rawJson?: any, type?: string)
 	{
 		this.Type = type;
 		
@@ -59,6 +59,42 @@ export class CdfMediaModel
 				this.HasImage = true;
 			}
 		}	
+	}	
+
+	static ProcessJsonIntoImage(rawJson: any) : CdfMediaModel
+	{ 
+		if (rawJson)
+		{ 
+			//ImageId - VERSION 1
+			if (rawJson && rawJson.media && rawJson.media.image && rawJson.media.image.id)
+			{
+				let cdfMediaModel = new CdfMediaModel();
+				cdfMediaModel.ImageId = rawJson.media.image.id;
+				cdfMediaModel.HasImage = true;
+
+				return cdfMediaModel;
+			}
+			//ImageId - VERSION 2
+			else if (rawJson && rawJson.image && rawJson.image.id)
+			{
+				let cdfMediaModel = new CdfMediaModel();
+				cdfMediaModel.ImageId = rawJson.image.id;
+				cdfMediaModel.HasImage = true;
+
+				return cdfMediaModel;
+			}
+			//ImageId - VERSION 3
+			else if (rawJson && rawJson.id)
+			{
+				let cdfMediaModel = new CdfMediaModel();
+				cdfMediaModel.ImageId = rawJson.id;
+				cdfMediaModel.HasImage = true;
+
+				return cdfMediaModel;
+			}			
+		}			
+
+		return undefined;
 	}	
 
 	OnClick()
