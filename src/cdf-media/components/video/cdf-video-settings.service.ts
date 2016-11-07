@@ -1,10 +1,5 @@
 import { Injectable } 		from '@angular/core';
 
-import
-{
-	CdfConfigModel
-} 							from '../models/index';
-
 /*
 THIS SERVICE IS HOW NG2-CDF GETS CONFIGURED.  THE CLIENT CONSUMING CDF MUST PROVIDE 
 CONFIGURATION WHEN BOOTSTRAPPING APPLICATION:
@@ -44,38 +39,17 @@ http://blog.rangle.io/configurable-services-in-angular-2/
  */
 
 @Injectable()
-export class CdfSettingsService 
-{	
+export class CdfVideoSettingsService 
+{
+	JwPlayerKey: string;
 
-	ConfigList : CdfConfigModel[] = [];
-
-	constructor(
-		private configList: CdfConfigModel[]
-	)
+	constructor( jwPlayerKey: string )
 	{ 
-		this.ConfigList = configList;
+		this.JwPlayerKey = jwPlayerKey;
 	}
-
-
-	GetConfigModelByDomainName(domainName: string) : CdfConfigModel
-	{
-		let configModel : CdfConfigModel;
-
-		//FIND CONFIG IN LIST WITH SAME DOMAIN NAME
-		for (let entry of this.ConfigList) 
-		{
-			if(entry.Domain.toUpperCase() === domainName.toUpperCase())
-			{
-				configModel = entry;
-				break;
-			}
-		}
-
-		return configModel;
-	};
 }
 
-export function provideCdfSettingsService(configList:CdfConfigModel[]) 
+export function provideCdfVideoSettingsService( jwPlayerKey: string ) 
 {
-	return { provide: CdfSettingsService, useFactory: () => new CdfSettingsService(configList) }
+	return { provide: CdfVideoSettingsService, useFactory: () => new CdfVideoSettingsService(jwPlayerKey) }
 }

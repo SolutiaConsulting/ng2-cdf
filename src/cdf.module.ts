@@ -15,13 +15,15 @@ import
 	CdfImageComponent,
 	CdfMediaComponent,
 	CdfMediaSliderComponent,
-	CdfVideoComponent
+	CdfVideoBackgroundComponent,
+	CdfVideoYouTubeComponent
 } 											from './index';
 
 
 //CREATE AN INSTANCE OF THE SETTINGS SERVICE BY CONSUMING A PROVIDED CONFIGURATION
 // http://blog.rangle.io/configurable-services-in-angular-2/
-import { provideSettingsService } 			from './cdf-data-island/services/cdf-settings.service';
+import { provideCdfSettingsService } 		from './cdf-data-island/services/cdf-settings.service';
+import { provideCdfVideoSettingsService } 	from './cdf-media/components/video/cdf-video-settings.service';
 
 
 @NgModule({
@@ -38,14 +40,16 @@ import { provideSettingsService } 			from './cdf-data-island/services/cdf-settin
 		CdfImageComponent,
 		CdfMediaComponent,
 		CdfMediaSliderComponent,
-		CdfVideoComponent
+		CdfVideoBackgroundComponent,
+		CdfVideoYouTubeComponent
 	],
 	exports:
 	[
-		// //CDF-DATA-ISLAND
+		// CDF-DATA-ISLAND
 		CdfDataIslandComponent,
 	
-		// //CDF-MEDIA
+		// CDF-MEDIA COMPONENTS TO BE USED IN CLIENT APPS...
+		CdfVideoBackgroundComponent,
 		CdfMediaComponent,
 		CdfMediaSliderComponent
 	],
@@ -59,13 +63,14 @@ import { provideSettingsService } 			from './cdf-data-island/services/cdf-settin
 })
 export class CdfModule 
 {
-	static forRoot(config: CdfConfigModel[]): ModuleWithProviders
+	static forRoot(cdfConfigModel: CdfConfigModel[], jwPlayerKey: string): ModuleWithProviders
 	{
 		return {
 			ngModule: CdfModule,
 			providers:
 			[ 
-				[provideSettingsService(config)]
+				[provideCdfSettingsService(cdfConfigModel)],
+				[provideCdfVideoSettingsService(jwPlayerKey)]
 			]
 		};
 	}	

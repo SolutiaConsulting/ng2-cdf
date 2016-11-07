@@ -3,18 +3,18 @@ import
 	AfterViewInit,
 	Component,
 	EventEmitter,
-	OnDestroy,
 	OnInit,
 	Output,
 	Input
 } 										from '@angular/core';
 
 import { CdfMediaModel }				from '../../models/index';
+import { CdfVideoSettingsService }		from './cdf-video-settings.service';
 
 const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 
 @Component({
-	selector: 'cdf-video',
+	selector: 'cdf-video-youtube',
 	template: `
 	<div [id]="VideoPlayerId"></div>
 	<ng-content></ng-content>	
@@ -30,47 +30,36 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 	}	
 	`]
 })
-export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
+export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 {
 	private videoJWPlayer: any;
+	private jwPlayerKey: string;
 	private youTubeUrl: string = 'http://www.youtube.com/watch?v=';
 	
 	VideoPlayerId: string;
 
-	@Input()
-	jwPlayerKey: string;
+	@Input() videoModel: CdfMediaModel;	
+	@Input() isBackground: boolean = false;
+	@Input() showControls: boolean = true;
+	@Input() autoPlay: boolean = false;
+	@Input() isMute: boolean = false;
+	@Input() loopVideo: boolean = false;
 
-	@Input()
-	videoModel: CdfMediaModel;	
+	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
+	@Output() onVideoStopPlay: EventEmitter<any> = new EventEmitter<any>();
 
-	@Input()
-	isBackground: boolean = false;
-
-	@Input()
-	showControls: boolean = true;
-
-	@Input()
-	autoPlay: boolean = false;
-
-	@Input()
-	isMute: boolean = false;
-
-	@Input()
-	loopVideo: boolean = false;
-
-	@Input()
-	height: string = '900';
-
-	@Output()
-	onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
-
-	constructor()
+	constructor(
+		private cdfVideoSettingsService: CdfVideoSettingsService
+	)
 	{
+		this.jwPlayerKey = cdfVideoSettingsService.JwPlayerKey;
 	}
 
 	ngOnInit()
 	{
 		jwPlayer.key = this.jwPlayerKey;
+
+		//console.log('****************** IS BACKGROUND: ', this.isBackground);
 
 		this.VideoPlayerId = 'jwp_' + this.guid();
 
@@ -93,18 +82,21 @@ export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
 		//VIDEO URL
 		if (this.videoModel.YouTubeId)
 		{ 
-			// console.log(' *********** posterImageUri:', posterImageUri);
-			// console.log(' *********** playListSourceArray:', playListSourceArray);
-			// console.log(' *********** mediaid *********** ', this.video.Id);
+			//console.log(' *********** videoModel.ImageUri:', this.videoModel.ImageUri);
 
 			let that = this;
-			
+			let videoUri = this.youTubeUrl + '' + this.videoModel.YouTubeId
+
 			this.videoJWPlayer.setup
 				({
-					file: this.youTubeUrl + '' + this.videoModel.YouTubeId,
+					file: videoUri,
 					image: this.videoModel.ImageUri,
+					controls: this.showControls,
 					autostart: this.autoPlay,
+					mute: this.isMute,
+					repeat: this.loopVideo,
 					mediaid: this.guid(),
+					stretching: "fill",
 					height: "100%",
 					width: "100%"
 				});	
@@ -127,14 +119,28 @@ export class CdfVideoComponent implements OnInit, OnDestroy, AfterViewInit
 				{ 
 					that.onVideoBeforePlay.emit();
 				}					
-			});			
-		}	
-	}
+			});
+			
+			this.videoJWPlayer.on('pause', function (e) 
+			{
+				console.log('videoJWPlayer pause...');
 
-	ngOnDestroy() 
-	{
-		//console.log('Deinit - Destroyed Component', this.videoJWPlayer);
-		//this.videoJWPlayer.destroy();
+				if (that.onVideoStopPlay)
+				{ 
+					that.onVideoStopPlay.emit();
+				}					
+			});
+
+			this.videoJWPlayer.on('beforeComplete', function (e) 
+			{
+				console.log('videoJWPlayer stop...');
+
+				if (that.onVideoStopPlay)
+				{ 
+					that.onVideoStopPlay.emit();
+				}					
+			});						
+		}	
 	}
 
 	stop()

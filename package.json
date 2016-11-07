@@ -1,6 +1,6 @@
 {
 	"name": "ng2-cdf",
-	"version": "0.2.4",
+	"version": "0.2.17",
 	"description": "Angular2 Content Delivery Framework (CDF)",
 	"main": "./src/index.ts",
 	"scripts": 
