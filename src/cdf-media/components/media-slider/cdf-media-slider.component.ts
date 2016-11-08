@@ -32,8 +32,9 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 		<cdf-media [media]="mediaModel"
 					[showType]="showType"
 					(onImageClick)="onMediaClick()"
-					(onVideoBeforePlay)="onVideoBeforePlay()"></cdf-media>				
-
+					(onVideoBeforePlay)="onVideoBeforePlay()">
+			<ng-content select=".cdf-media-slider-title"></ng-content>			
+		</cdf-media>		
 	</section>
 
 
@@ -270,7 +271,7 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 
 	onMediaClick()
 	{
-		console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
+		//console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
 		this.mediaModel.OnClick();
 	};
 

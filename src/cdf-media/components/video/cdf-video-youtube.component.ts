@@ -143,12 +143,23 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 		}	
 	}
 
-	stop()
+	play()
 	{ 
-		this.videoJWPlayer.stop();
-		//console.log('STOP DAS PLAYER...', this.videoModel.Title);
+		if(this.videoJWPlayer)
+		{
+			this.videoJWPlayer.play();
+			//console.log('PLAY DAS PLAYER...', this.videoModel.Title);
+		}		
 	};
 
+	stop()
+	{ 
+		if(this.videoJWPlayer)
+		{
+			this.videoJWPlayer.stop();
+			//console.log('STOP DAS PLAYER...', this.videoModel.Title);
+		}
+	};
 
 	private guid() 
 	{

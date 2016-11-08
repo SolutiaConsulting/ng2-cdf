@@ -7,9 +7,9 @@ import { CdfMediaModel }				from '../../models/index';
 	template: `
 	<section *ngIf="(imageModel)" 
 		class="cdf-background-image" 
-		[ngStyle]="{'background-image': 'url(' + imageModel.ImageUri + ')'}">
-		<ng-content></ng-content>
-	</section>`,
+		[ngStyle]="{'background-image': 'url(' + imageModel.ImageUri + ')'}">		
+	</section>
+	<ng-content></ng-content>`,
 	styles: [`
 	:host 
 	{
