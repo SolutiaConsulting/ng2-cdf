@@ -25,7 +25,8 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	<!--VIDEO-->
 	<cdf-video-youtube *ngIf="(media.HasVideo)" 
 				[videoModel]="media"
-				(onVideoBeforePlay)="doVideoBeforePlay()">
+				(onVideoBeforePlay)="doOnVideoBeforePlay()"
+				(onVideoStopPlay)="doOnVideoStopPlay()">
 	</cdf-video-youtube>
 
 
@@ -54,6 +55,7 @@ export class CdfMediaComponent implements OnInit
 	@Input() showType: boolean = false;
 	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
+	@Output() onVideoStopPlay: EventEmitter<any> = new EventEmitter<any>();
 
 	@ViewChild(CdfVideoYouTubeComponent) videoComponent: CdfVideoYouTubeComponent;
 
@@ -73,11 +75,19 @@ export class CdfMediaComponent implements OnInit
 		}			
 	}
 
-	doVideoBeforePlay()
+	doOnVideoBeforePlay()
 	{ 
 		if (this.onVideoBeforePlay)
 		{ 
 			this.onVideoBeforePlay.emit();
+		}			
+	}
+
+	doOnVideoStopPlay()
+	{ 
+		if (this.onVideoStopPlay)
+		{ 
+			this.onVideoStopPlay.emit();
 		}			
 	}
 

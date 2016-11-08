@@ -14,8 +14,7 @@ import
 	keyframes,
 	animate,
 	state,
-	style,
-
+	style
 } 								from '@angular/core';
 import { Observable } 			from 'rxjs/Rx';
 
