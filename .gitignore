@@ -1,9 +1,9 @@
-# Node generated files
-node_modules
-npm-debug.log
+.vscode
 aot
 lib
 lib-temp
+node_modules
+npm-debug.log
 
 # OS generated files
 Thumbs.db
