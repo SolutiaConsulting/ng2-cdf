@@ -1,6 +1,9 @@
 {
   "name": "ng2-cdf",
-  "version": "0.3.3",
+  "version": "0.3.5",
+  "author": "Tom Schreck <tom_schreck@solutiaconsulting.com> (http://solutiaconsulting.com)",
+  "homepage": "https://github.com/SolutiaConsulting/ng2-cdf#readme",  
+  "license": "MIT",  
   "description": "Angular2 Content Delivery Framework (CDF)",
   "main": "./src/index.ts",
   "scripts": {
@@ -29,14 +32,14 @@
     "Angular2",
     "REST"
   ],
-  "author": "Tom Schreck <tom_schreck@solutiaconsulting.com> (http://solutiaconsulting.com)",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/SolutiaConsulting/ng2-cdf/issues"
   },
-  "homepage": "https://github.com/SolutiaConsulting/ng2-cdf#readme",
   "typings": "./lib/index.d.ts",
-  "dependencies": {
+  "dependencies": 
+  {
+  },
+  "devDependencies": {
     "@angular/common": "^2.1.2",
     "@angular/compiler": "^2.1.2",
     "@angular/compiler-cli": "^2.1.2",
@@ -49,10 +52,8 @@
     "@angular/router": "^3.1.2",
     "core-js": "^2.4.1",
     "rxjs": "^5.0.0-rc.1",
+    "zone.js": "^0.6.23",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.23"
-  },
-  "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/jasmine": "^2.2.30",
     "@types/node": "^6.0.46",
