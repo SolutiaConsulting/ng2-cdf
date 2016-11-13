@@ -1,14 +1,15 @@
 # Node generated files
 node_modules
 npm-debug.log
+aot
 lib
+lib-temp
 
 # OS generated files
 Thumbs.db
 .DS_Store
 
-
 # Ignored files
-*.js
+#*.js
 *.map
 *.d.ts
