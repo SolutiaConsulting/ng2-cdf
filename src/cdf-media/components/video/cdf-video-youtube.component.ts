@@ -156,8 +156,14 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 	{ 
 		if(this.videoJWPlayer)
 		{
-			this.videoJWPlayer.stop();
 			//console.log('STOP DAS PLAYER...', this.videoModel.Title);
+			
+			this.videoJWPlayer.stop();
+
+            if (this.onVideoStopPlay)
+            { 
+                this.onVideoStopPlay.emit();
+            }			
 		}
 	};
 

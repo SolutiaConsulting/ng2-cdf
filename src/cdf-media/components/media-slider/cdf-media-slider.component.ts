@@ -30,6 +30,7 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 		
 		<!--MEDIA: IMAGE OR VIDEO-->
 		<cdf-media [media]="mediaModel"
+					[showTitle]="showTitle"
 					[showType]="showType"
 					(onImageClick)="onMediaClick()"
 					(onVideoBeforePlay)="onVideoBeforePlay()">
@@ -247,6 +248,7 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 {
 	@Input() mediaModel: CdfMediaModel;
+	@Input() showTitle: boolean = false;
 	@Input() showType: boolean = false;
 	@Output() onMediaSliderOpen = new EventEmitter<any>();
 	@Output() onMediaSliderClose = new EventEmitter<any>();

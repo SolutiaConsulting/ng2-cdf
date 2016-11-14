@@ -33,7 +33,7 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 				(onVideoBeforePlay)="doOnVideoBeforePlay()"
 				(onVideoStopPlay)="doOnVideoStopPlay()"></cdf-video-youtube>
 
-	<div (click)="hideChildContent()" *ngIf="isTitleVisible">
+	<div (click)="hideChildContent()" *ngIf="(showTitle)">
 		<ng-content></ng-content>
 	</div>
 
@@ -58,6 +58,7 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 export class CdfMediaComponent implements OnInit 
 {
 	@Input() media: CdfMediaModel;	
+	@Input() showTitle: boolean = true;
 	@Input() showType: boolean = false;
 	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
@@ -66,7 +67,7 @@ export class CdfMediaComponent implements OnInit
 	@ViewChild(CdfVideoYouTubeComponent) videoComponent: CdfVideoYouTubeComponent;
 	@ViewChild(CdfImageComponent) imageComponent: CdfImageComponent;
 
-	isTitleVisible: boolean = true;
+	showTitleOriginal: boolean = false;
 
 	constructor()
 	{
@@ -74,6 +75,7 @@ export class CdfMediaComponent implements OnInit
 
 	ngOnInit()
 	{
+		this.showTitleOriginal = (this.showTitle) ? true : false;
 	}
 
 	doImageClick()
@@ -86,6 +88,8 @@ export class CdfMediaComponent implements OnInit
 
 	doOnVideoBeforePlay()
 	{ 
+		this.showTitle = false;
+
 		if (this.onVideoBeforePlay)
 		{ 
 			this.onVideoBeforePlay.emit();
@@ -94,16 +98,16 @@ export class CdfMediaComponent implements OnInit
 
 	doOnVideoStopPlay()
 	{ 
+		this.showTitle = this.showTitleOriginal;
+		
 		if (this.onVideoStopPlay)
 		{ 
-			this.isTitleVisible = true;
 			this.onVideoStopPlay.emit();
 		}			
 	}
 
 	stop()
-	{ 
-		this.isTitleVisible = true;
+	{		
 		this.videoComponent.stop();
 		//console.log('STOP DAS PLAYER...', this.media.Title);
 	};		
@@ -112,7 +116,6 @@ export class CdfMediaComponent implements OnInit
 	{
 		if(this.videoComponent)
 		{
-			this.isTitleVisible = false;
 			this.videoComponent.play();			
 		}
 
