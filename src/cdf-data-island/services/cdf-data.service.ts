@@ -225,8 +225,8 @@ export class CdfDataService
 				if(CONNECTION_CREDENTIALS)
 				{
 					let authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.ClientKey + ':' + CONNECTION_CREDENTIALS.ClientSecret);
-					let url = CONNECTION_CREDENTIALS.BaseURL + '/oauth/token?grant_type=password&scope=api&username=' + CONNECTION_CREDENTIALS.Username + '&password=' + CONNECTION_CREDENTIALS.Password;
-					let body = '';
+					let url = CONNECTION_CREDENTIALS.OAuthURL;
+					let body = CONNECTION_CREDENTIALS.Body;
 					let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
 
 					let newTokenSubscription = this.http.post(url, body, { headers })
