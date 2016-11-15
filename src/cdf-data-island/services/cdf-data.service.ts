@@ -224,7 +224,7 @@ export class CdfDataService
 
 				if(CONNECTION_CREDENTIALS)
 				{
-					let authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.ClientKey + ':' + CONNECTION_CREDENTIALS.ClientSecret);
+					let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
 					let url = CONNECTION_CREDENTIALS.OAuthURL;
 					let body = CONNECTION_CREDENTIALS.Body;
 					let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
