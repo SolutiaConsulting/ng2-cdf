@@ -224,42 +224,95 @@ export class CdfDataService
 
 				if(CONNECTION_CREDENTIALS)
 				{
-					let authorization = 'Basic ' + btoa(CONNECTION_CREDENTIALS.ClientKey + ':' + CONNECTION_CREDENTIALS.ClientSecret);
-					let url = CONNECTION_CREDENTIALS.BaseURL + '/oauth/token?grant_type=password&scope=api&username=' + CONNECTION_CREDENTIALS.Username + '&password=' + CONNECTION_CREDENTIALS.Password;
-					let body = '';
-					let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+					let isTwitter = isTwitterRequest(CONNECTION_CREDENTIALS.OAuthURL);
 
-					let newTokenSubscription = this.http.post(url, body, { headers })
-						.map(res => res.json())
-						.subscribe (
-							//SUCCESS
-							data =>
-							{
-								//console.log('NEW TOKEN YO YO', data);
+					if(isTwitter)
+					{
+						// let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
+						// let url = CONNECTION_CREDENTIALS.OAuthURL;
+						// let body = CONNECTION_CREDENTIALS.Body;
+						// let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
 
-								//SET TOKEN RECEIVED FROM API
-								this.SetToken(data);
+						let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+						let options = new RequestOptions({ headers: headers });		
+													
+						//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+						let requestModel = 
+						{
+							"EncodedCredentials" : CONNECTION_CREDENTIALS.EncodedCredentials
+						};						
 
-								//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
-								observer.next(data);
-								observer.complete();
-							},
+						let newTokenSubscription = this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/authenticate', JSON.stringify(requestModel), options)
+							.map(res => res.json())
+							.subscribe (
+								//SUCCESS
+								data =>
+								{
+									//console.log('NEW TOKEN YO YO', data);
 
-							//ERROR
-							err =>
-							{ 
-								//console.log('authenticateObservable error smalls:', err);
-							},
+									//SET TOKEN RECEIVED FROM API
+									this.SetToken(data);
 
-							//COMPLETE
-							() =>
-							{ 
-								if (newTokenSubscription)
+									//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
+									observer.next(data);
+									observer.complete();
+								},
+
+								//ERROR
+								err =>
 								{ 
-									newTokenSubscription.unsubscribe();
-								}							
-							}
-						)
+									//console.log('authenticateObservable error smalls:', err);
+								},
+
+								//COMPLETE
+								() =>
+								{ 
+									if (newTokenSubscription)
+									{ 
+										newTokenSubscription.unsubscribe();
+									}							
+								}
+							)						
+					}
+					else
+					{
+						let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
+						let url = CONNECTION_CREDENTIALS.OAuthURL;
+						let body = CONNECTION_CREDENTIALS.Body;
+						let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+
+						let newTokenSubscription = this.http.post(url, body, { headers })
+							.map(res => res.json())
+							.subscribe (
+								//SUCCESS
+								data =>
+								{
+									//console.log('NEW TOKEN YO YO', data);
+
+									//SET TOKEN RECEIVED FROM API
+									this.SetToken(data);
+
+									//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
+									observer.next(data);
+									observer.complete();
+								},
+
+								//ERROR
+								err =>
+								{ 
+									//console.log('authenticateObservable error smalls:', err);
+								},
+
+								//COMPLETE
+								() =>
+								{ 
+									if (newTokenSubscription)
+									{ 
+										newTokenSubscription.unsubscribe();
+									}							
+								}
+							)						
+					}
 				}
 			}
         });
@@ -292,22 +345,43 @@ export class CdfDataService
 	};	
 
 
+
 	//PHYSICAL HTTP GET CALL TO CLOUD CMS FOR CONTENT...	
 	private HttpGet(url: string): Observable<any>
 	{
-        let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-        let options = new RequestOptions({ headers: headers }); 			// Create a request option
-		
-		//APPEND TO HEADER: Authorization : Bearer [token]
-		if (this.HasToken())
+		let isTwitter = isTwitterRequest(url);
+
+		if(isTwitter)
 		{
-			options.headers.append('Authorization', 'Bearer ' + this.GetToken());
-			options.headers.append('Access-Control-Allow-Origin', '*');
+			let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+			let options = new RequestOptions({ headers: headers });		
+			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+										
+			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+			let requestModel = 
+			{
+				"UrlFragment" : urlFragment,
+				"BearerToken" : this.GetToken()
+			};
+
+			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
 		}
-				
-		options.body = '';
-		
-		return this.http.get(url, options).map((res: Response) => res.json());
+		else
+		{
+			let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+			let options = new RequestOptions({ headers: headers }); 			// Create a request option
+			
+			//APPEND TO HEADER: Authorization : Bearer [token]
+			if (this.HasToken())
+			{
+				options.headers.append('Authorization', 'Bearer ' + this.GetToken());
+				options.headers.append('Access-Control-Allow-Origin', '*');
+			}
+					
+			options.body = '';
+			
+			return this.http.get(url, options).map((res: Response) => res.json());
+		}
 	};	
 
 	//PHYSICAL HTTP POST CALL TO CLOUD CMS FOR CONTENT...
@@ -328,7 +402,6 @@ export class CdfDataService
 		return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options).map((res: Response) => res.json());
 	};	
 
-
 	private GetFirstUrl(requestModel: CdfRequestModel) : string
 	{ 
 		if (requestModel.GetList && requestModel.GetList.length > 0)
@@ -341,5 +414,13 @@ export class CdfDataService
 		}
 		
 		return undefined;
+	};	
+
+	private isTwitterRequest(url: string) : boolean
+	{
+		let twitterIndex = url.indexOf("api.twitter.com");
+		let isTwitter = (twitterIndex > -1);
+
+		return isTwitter;	
 	};	
 }

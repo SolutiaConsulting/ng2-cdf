@@ -183,12 +183,9 @@ CdfConfigModel contains the following data elements.  When a request is made to 
 	export class CdfConfigModel
 	{
 		Domain: string;
-		ClientKey: string;
-		ClientSecret: string;
-		Username: string;
-		Password: string;
-		BaseURL: string;
-		Application: string;
+		EncodedCredentials: string;
+		OAuthURL: string;
+		Body: string
 	}
 ```
 
@@ -206,21 +203,15 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 			[
 				{
 					"domain": "api.cloudcms.com",
-					"clientKey": "XXXXXXXXXXXXXXXXXXXXX",
-					"clientSecret": "XXXXXXXXXXXXXXXXXXXXX",
-					"username": "XXXXXXXXXXXXXXXXXXXXX",
-					"password": "XXXXXXXXXXXXXXXXXXXXX",
-					"baseURL": "https://api.cloudcms.com",
-					"application": "XXXXXXXXXXXXXXXXXXXXX"
+					"encodedCredentials": "XXXXXXXXXXXXXXXXXXXXX",
+					"oAuthURL": "https://api.cloudcms.com/oauth/token/oauth/token",
+					"body": "grant_type=password&scope=api&username=XXXXXXXXXXXXXXXXXXXXX&password=XXXXXXXXXXXXXXXXXXXXX"
 				},
 				{
-					"domain": "api.somesite.com",
-					"clientKey": "XXXXXXXXXXXXXXXXXXXXX",
-					"clientSecret": "XXXXXXXXXXXXXXXXXXXXX",
-					"username": "XXXXXXXXXXXXXXXXXXXXX",
-					"password": "XXXXXXXXXXXXXXXXXXXXX",
-					"baseURL": "https://api.somesite.com",
-					"application": "XXXXXXXXXXXXXXXXXXXXX"
+					"domain": "api.twitter.com",
+					"encodedCredentials": "XXXXXXXXXXXXXXXXXXXXX",
+					"oAuthURL": "https://api.twitter.com/oauth2/token",
+					"body": "grant_type=client_credentials"
 				}				
 			]	
 		};	 
@@ -253,12 +244,9 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 					{ 
 						let domainModel = new CdfConfigModel();
 						domainModel.Domain = domainName;
-						domainModel.ClientKey = (entry.clientKey) ? entry.clientKey : undefined;
-						domainModel.ClientSecret = (entry.clientSecret) ? entry.clientSecret : undefined;
-						domainModel.Username = (entry.username) ? entry.username : undefined;
-						domainModel.Password = (entry.password) ? entry.password : undefined;
-						domainModel.BaseURL = (entry.baseURL) ? entry.baseURL : undefined;
-						domainModel.Application = (entry.application) ? entry.application : undefined;
+						domainModel.EncodedCredentials = (entry.encodedCredentials) ? entry.encodedCredentials : undefined;
+						domainModel.OAuthURL = (entry.oAuthURL) ? entry.oAuthURL : undefined;
+						domainModel.Body = (entry.body) ? entry.body : undefined;
 
 						configArray.push(domainModel);
 					}	
