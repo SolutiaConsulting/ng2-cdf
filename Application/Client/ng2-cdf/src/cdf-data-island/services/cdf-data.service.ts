@@ -20,7 +20,7 @@ import { CdfSettingsService }	from './cdf-settings.service';
 export class CdfDataService
 {
 	readonly CDF_DOMAIN = 'webapi.solutiaconsulting.com';
-	readonly CDF_WEBAPI_BASE_URL = 'http://ng2cdf.local.webapi.solutiaconsulting.com/api';
+	readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 	readonly TWITTER_DOMAIN = 'api.twitter.com';
 	readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
 
