@@ -219,20 +219,14 @@ export class CdfDataService
 			}
 			else
 			{
-				//RETRIEVE A NEW TOKEN
-				let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+				let isTwitter = this.isTwitterRequest(errorDomain);
 
-				if(CONNECTION_CREDENTIALS)
+				if(isTwitter)
 				{
-					let isTwitter = isTwitterRequest(CONNECTION_CREDENTIALS.OAuthURL);
+					let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName("api.twitter.com");
 
-					if(isTwitter)
+					if(CONNECTION_CREDENTIALS)
 					{
-						// let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
-						// let url = CONNECTION_CREDENTIALS.OAuthURL;
-						// let body = CONNECTION_CREDENTIALS.Body;
-						// let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
-
 						let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
 						let options = new RequestOptions({ headers: headers });		
 													
@@ -272,9 +266,14 @@ export class CdfDataService
 										newTokenSubscription.unsubscribe();
 									}							
 								}
-							)						
-					}
-					else
+							)							
+					}					
+				}
+				else
+				{
+					let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+
+					if(CONNECTION_CREDENTIALS)
 					{
 						let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
 						let url = CONNECTION_CREDENTIALS.OAuthURL;
@@ -311,7 +310,7 @@ export class CdfDataService
 										newTokenSubscription.unsubscribe();
 									}							
 								}
-							)						
+							)									
 					}
 				}
 			}
@@ -349,7 +348,7 @@ export class CdfDataService
 	//PHYSICAL HTTP GET CALL TO CLOUD CMS FOR CONTENT...	
 	private HttpGet(url: string): Observable<any>
 	{
-		let isTwitter = isTwitterRequest(url);
+		let isTwitter = this.isTwitterRequest(url);
 
 		if(isTwitter)
 		{
@@ -419,7 +418,8 @@ export class CdfDataService
 	private isTwitterRequest(url: string) : boolean
 	{
 		let twitterIndex = url.indexOf("api.twitter.com");
-		let isTwitter = (twitterIndex > -1);
+		let ng2cdfIndex = url.indexOf("webapi.solutiaconsulting.com");
+		let isTwitter = ((twitterIndex > -1) || (ng2cdfIndex > -1));
 
 		return isTwitter;	
 	};	

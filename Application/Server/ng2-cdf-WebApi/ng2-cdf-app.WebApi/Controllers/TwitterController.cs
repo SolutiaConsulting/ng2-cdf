@@ -85,12 +85,32 @@ namespace Ng2CdfApp.WebApi.Controllers
 
 			if (ModelState.IsValid)
 			{
+				//IF BEARER TOKEN IS MISSING, THEN BOOT
+				if (String.IsNullOrEmpty(requestModel.BearerToken))
+				{
+					throw new HttpResponseException(HttpStatusCode.Unauthorized);
+				}
+
 				try
 				{
 					var webRequest = GenerateWebRequest(requestModel.UrlFragment, requestModel.BearerToken);
 					var response = GetResponseStreamReader<object>(webRequest);
 
 					return Request.CreateResponse(HttpStatusCode.OK, response);
+				}
+				catch (WebException ex)
+				{
+					var errorIndex = ex.Message.IndexOf("401", StringComparison.Ordinal);
+					var is401Error = (errorIndex > -1);
+
+					if (is401Error)
+					{
+						throw new HttpResponseException(HttpStatusCode.Unauthorized);
+					}
+					else
+					{
+						throw ThrowIfError(ERROR_REQUEST, HttpStatusCode.BadRequest, errors, ex.Message);
+					}					
 				}
 				catch (Exception ex)
 				{
