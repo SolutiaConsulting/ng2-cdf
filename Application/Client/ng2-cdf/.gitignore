@@ -1,7 +1,7 @@
 .vscode
 aot
-lib
-lib-temp
+/lib
+/lib-temp
 node_modules
 npm-debug.log
 
