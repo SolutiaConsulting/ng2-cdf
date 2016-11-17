@@ -2,9 +2,9 @@
 
 namespace Ng2CdfApp.DataContracts.Interfaces
 {
-	public interface ITwitterRequestModel
+	public interface ITwitterGetRequestModel
 	{
-		String UrlFragment { get; set; }
 		String BearerToken { get; set; }
+		String UrlFragment { get; set; }
 	}
 }

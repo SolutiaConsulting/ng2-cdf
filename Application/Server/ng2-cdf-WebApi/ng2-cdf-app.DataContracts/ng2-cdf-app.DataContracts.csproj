@@ -50,10 +50,12 @@
   <ItemGroup>
     <Compile Include="Implementations\AuthenticationDataContract.cs" />
     <Compile Include="Implementations\TwitterAuthenticationRequestModel.cs" />
-    <Compile Include="Implementations\TwitterRequestModel.cs" />
+    <Compile Include="Implementations\TwitterPostRequestModel.cs" />
+    <Compile Include="Implementations\TwitterGetRequestModel.cs" />
     <Compile Include="Interfaces\IAuthenticationDataContract.cs" />
     <Compile Include="Interfaces\ITwitterAuthenticationRequestModel.cs" />
-    <Compile Include="Interfaces\ITwitterRequestModel.cs" />
+    <Compile Include="Interfaces\ITwitterPostRequestModel.cs" />
+    <Compile Include="Interfaces\ITwitterGetRequestModel.cs" />
     <Compile Include="Interfaces\IBaseDataContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Registry.cs" />

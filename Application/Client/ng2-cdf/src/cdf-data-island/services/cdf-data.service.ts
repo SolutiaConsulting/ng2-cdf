@@ -19,8 +19,6 @@ import { CdfSettingsService }	from './cdf-settings.service';
 @Injectable()
 export class CdfDataService
 {
-	tokenName: string = 'cdf-token';
-
 	constructor(
 		private http: Http,
 		private cacheService: CacheService,
@@ -57,18 +55,18 @@ export class CdfDataService
 				//ADD OBSERVABLE FOR AN ARRAY OF GET REQUESTS				
 				if (requestModel.GetList)
 				{
-					for (let item in requestModel.GetList) 
-					{
-						observableBatch.push(this.HttpGet(requestModel.GetList[ item ]));
+					for (let url in requestModel.GetList) 
+					{						
+						observableBatch.push(this.HttpGet(requestModel.GetList[ url ]));
 					}
 				}	
 																
 				//ADD OBSERVABLE FOR AN ARRAY OF POST REQUESTS
 				if (requestModel.PostList)
 				{
-					for (let item in requestModel.PostList) 
+					for (let url in requestModel.PostList) 
 					{
-						observableBatch.push(this.HttpPost(requestModel.PostList[ item ]));
+						observableBatch.push(this.HttpPost(requestModel.PostList[ url ]));
 					}					
 				}	
 
@@ -143,13 +141,12 @@ export class CdfDataService
 								if (errorUrl)
 								{
 									//RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
-									let matches = errorUrl.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
-									let domain: string = matches && matches[ 1 ];
-
+									let domain = this.GetDomainFromUrl(errorUrl);
+									
 									//console.log('error domain:', domain);
 
 									//DELETE TOKEN
-									this.DeleteToken();
+									this.DeleteToken(domain);
 									
 									//RETRY AUTHENTICATE OBSERVABLE FOR A NEW TOKEN		
 									let authenticateObservableSubscription = this.authenticateObservable(domain)
@@ -209,7 +206,7 @@ export class CdfDataService
 	{
 		return Observable.create(observer => 
 		{
-			var authToken = this.GetToken();		
+			var authToken = this.GetToken(errorDomain);		
 			
 			if (authToken)
 			{
@@ -219,7 +216,7 @@ export class CdfDataService
 			}
 			else
 			{
-				let isTwitter = this.isTwitterRequest(errorDomain);
+				let isTwitter = this.IsTwitterRequest(errorDomain);
 
 				if(isTwitter)
 				{
@@ -245,7 +242,7 @@ export class CdfDataService
 									//console.log('NEW TOKEN YO YO', data);
 
 									//SET TOKEN RECEIVED FROM API
-									this.SetToken(data);
+									this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
 									//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
 									observer.next(data);
@@ -289,7 +286,7 @@ export class CdfDataService
 									//console.log('NEW TOKEN YO YO', data);
 
 									//SET TOKEN RECEIVED FROM API
-									this.SetToken(data);
+									this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
 									//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
 									observer.next(data);
@@ -317,88 +314,36 @@ export class CdfDataService
         });
 	};
 	
-	private HasToken(): boolean
+	private HasToken(domain:string): boolean
 	{
-		return (this.GetToken() != undefined);
+		return (this.GetToken(domain) != undefined);
 	};
 	
-	private GetToken(): string
+	private GetToken(domain:string): string
 	{
+		console.log('GET TOKEN DOMAIN:', domain);
+
 		//return '9360b7c4-c3b3-4775-8ff8-03b5794f64ba';
-		var authTokenStorage = (localStorage.getItem(this.tokenName)) ? JSON.parse(localStorage.getItem(this.tokenName)) : undefined;
+		var authTokenStorage = (localStorage.getItem(domain)) ? JSON.parse(localStorage.getItem(domain)) : undefined;
 		return (authTokenStorage && authTokenStorage.access_token) ? authTokenStorage.access_token : undefined;
 	};	
 
-	private SetToken(data: any): void
+	private SetToken(domain:string, token: any): void
 	{
-		//console.log('WRITE TOKEN TO LOCAL STORAGE...', data);
-		localStorage.setItem(this.tokenName, JSON.stringify(data));
+		console.log('SET TOKEN DOMAIN:', domain);
+		console.log('SET TOKEN:', token);
+
+		localStorage.setItem(domain, JSON.stringify(token));
 	}
 
-	private DeleteToken(): void
+	private DeleteToken(domain:string): void
 	{ 
-		if (localStorage.getItem(this.tokenName))
+		console.log('DELETE TOKEN DOMAIN:', domain);
+
+		if (localStorage.getItem(domain))
 		{ 
-			localStorage.removeItem(this.tokenName);
+			localStorage.removeItem(domain);
 		}	
-	};	
-
-
-
-	//PHYSICAL HTTP GET CALL TO CLOUD CMS FOR CONTENT...	
-	private HttpGet(url: string): Observable<any>
-	{
-		let isTwitter = this.isTwitterRequest(url);
-
-		if(isTwitter)
-		{
-			let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-			let options = new RequestOptions({ headers: headers });		
-			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
-										
-			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
-			let requestModel = 
-			{
-				"UrlFragment" : urlFragment,
-				"BearerToken" : this.GetToken()
-			};
-
-			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
-		}
-		else
-		{
-			let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-			let options = new RequestOptions({ headers: headers }); 			// Create a request option
-			
-			//APPEND TO HEADER: Authorization : Bearer [token]
-			if (this.HasToken())
-			{
-				options.headers.append('Authorization', 'Bearer ' + this.GetToken());
-				options.headers.append('Access-Control-Allow-Origin', '*');
-			}
-					
-			options.body = '';
-			
-			return this.http.get(url, options).map((res: Response) => res.json());
-		}
-	};	
-
-	//PHYSICAL HTTP POST CALL TO CLOUD CMS FOR CONTENT...
-	private HttpPost(postModel: CdfPostModel): Observable<any>
-	{ 
-        let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-        let options = new RequestOptions({ headers: headers });		
-		
-		//APPEND TO HEADER: Authorization : Bearer [token]
-		if (this.HasToken())
-		{
-			options.headers.append('Authorization', 'Bearer ' + this.GetToken());
-			options.headers.append('Access-Control-Allow-Origin', '*');
-		}
-						
-		//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
-
-		return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options).map((res: Response) => res.json());
 	};	
 
 	private GetFirstUrl(requestModel: CdfRequestModel) : string
@@ -415,12 +360,101 @@ export class CdfDataService
 		return undefined;
 	};	
 
-	private isTwitterRequest(url: string) : boolean
+	//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
+	private IsTwitterRequest(url: string) : boolean
 	{
 		let twitterIndex = url.indexOf("api.twitter.com");
 		let ng2cdfIndex = url.indexOf("webapi.solutiaconsulting.com");
 		let isTwitter = ((twitterIndex > -1) || (ng2cdfIndex > -1));
 
 		return isTwitter;	
+	};
+
+	private GetDomainFromUrl(url:string) : string
+	{
+		let matches = url.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
+		let domain: string = matches && matches[ 1 ];
+		
+		return domain;
+	};
+
+
+
+
+	//PHYSICAL HTTP GET CALL TO CLOUD CMS FOR CONTENT...	
+	private HttpGet(url: string): Observable<any>
+	{
+		let domain = this.GetDomainFromUrl(url);
+		let isTwitter = this.IsTwitterRequest(url);
+		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+		let options = new RequestOptions({ headers: headers });		
+		
+		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
+		if(isTwitter)
+		{
+			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+										
+			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+			let requestModel = 
+			{
+				"BearerToken" : this.GetToken(domain)
+				"UrlFragment" : urlFragment,
+			};
+
+			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/get/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
+		}
+		else
+		{	
+			//APPEND TO HEADER: Authorization : Bearer [token]
+			if (this.HasToken(domain))
+			{
+				options.headers.append('Authorization', 'Bearer ' + this.GetToken(domain));
+				options.headers.append('Access-Control-Allow-Origin', '*');
+			}
+					
+			options.body = '';
+			
+			return this.http.get(url, options).map((res: Response) => res.json());
+		}
 	};	
+
+	//PHYSICAL HTTP POST CALL TO CLOUD CMS FOR CONTENT...
+	private HttpPost(postModel: CdfPostModel): Observable<any>
+	{ 
+		let domain = this.GetDomainFromUrl(postModel.URL);
+		let isTwitter = this.IsTwitterRequest(postModel.URL);
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+        let options = new RequestOptions({ headers: headers });		
+		
+		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
+		if(isTwitter)
+		{
+			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+										
+			console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+
+			let requestModel = 
+			{
+				"BearerToken" : this.GetToken(domain)
+				"UrlFragment" : urlFragment,
+				"PostBody" : postModel.Body
+			};
+
+			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/post/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
+			
+		}
+		else
+		{
+			//APPEND TO HEADER: Authorization : Bearer [token]
+			if (this.HasToken(domain))
+			{
+				options.headers.append('Authorization', 'Bearer ' + this.GetToken(domain));
+				options.headers.append('Access-Control-Allow-Origin', '*');
+			}
+							
+			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+
+			return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options).map((res: Response) => res.json());
+		}		
+	};			
 }
