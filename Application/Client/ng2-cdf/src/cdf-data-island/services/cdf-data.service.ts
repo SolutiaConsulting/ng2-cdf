@@ -19,6 +19,11 @@ import { CdfSettingsService }	from './cdf-settings.service';
 @Injectable()
 export class CdfDataService
 {
+	const CDF_DOMAIN : string = 'webapi.solutiaconsulting.com';
+	const CDF_WEBAPI_BASE_URL : string = 'http://ng2cdf.local.webapi.solutiaconsulting.com/api';
+	const TWITTER_DOMAIN : string = 'api.twitter.com';
+	const TWITTER_API_URL : string = 'https://api.twitter.com/1.1/';
+
 	constructor(
 		private http: Http,
 		private cacheService: CacheService,
@@ -220,7 +225,7 @@ export class CdfDataService
 
 				if(isTwitter)
 				{
-					let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName("api.twitter.com");
+					let CONNECTION_CREDENTIALS = this.cdfSettingsService.GetConfigModelByDomainName(this.TWITTER_DOMAIN);
 
 					if(CONNECTION_CREDENTIALS)
 					{
@@ -228,12 +233,15 @@ export class CdfDataService
 						let options = new RequestOptions({ headers: headers });		
 													
 						//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+
 						let requestModel = 
 						{
 							"EncodedCredentials" : CONNECTION_CREDENTIALS.EncodedCredentials
 						};						
 
-						let newTokenSubscription = this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/authenticate', JSON.stringify(requestModel), options)
+						let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/authenticate';
+
+						let newTokenSubscription = this.http.post(postUrl, JSON.stringify(requestModel), options)
 							.map(res => res.json())
 							.subscribe (
 								//SUCCESS
@@ -321,24 +329,23 @@ export class CdfDataService
 	
 	private GetToken(domain:string): string
 	{
-		console.log('GET TOKEN DOMAIN:', domain);
+		//console.log('GET TOKEN DOMAIN:', domain);
 
-		//return '9360b7c4-c3b3-4775-8ff8-03b5794f64ba';
 		var authTokenStorage = (localStorage.getItem(domain)) ? JSON.parse(localStorage.getItem(domain)) : undefined;
 		return (authTokenStorage && authTokenStorage.access_token) ? authTokenStorage.access_token : undefined;
 	};	
 
 	private SetToken(domain:string, token: any): void
 	{
-		console.log('SET TOKEN DOMAIN:', domain);
-		console.log('SET TOKEN:', token);
+		// console.log('SET TOKEN DOMAIN:', domain);
+		// console.log('SET TOKEN:', token);
 
 		localStorage.setItem(domain, JSON.stringify(token));
 	}
 
 	private DeleteToken(domain:string): void
 	{ 
-		console.log('DELETE TOKEN DOMAIN:', domain);
+		//console.log('DELETE TOKEN DOMAIN:', domain);
 
 		if (localStorage.getItem(domain))
 		{ 
@@ -363,8 +370,8 @@ export class CdfDataService
 	//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 	private IsTwitterRequest(url: string) : boolean
 	{
-		let twitterIndex = url.indexOf("api.twitter.com");
-		let ng2cdfIndex = url.indexOf("webapi.solutiaconsulting.com");
+		let twitterIndex = url.indexOf(this.TWITTER_DOMAIN);
+		let ng2cdfIndex = url.indexOf(this.CDF_DOMAIN);
 		let isTwitter = ((twitterIndex > -1) || (ng2cdfIndex > -1));
 
 		return isTwitter;	
@@ -392,16 +399,19 @@ export class CdfDataService
 		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 		if(isTwitter)
 		{
-			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+			let urlFragment = url.replace(this.TWITTER_API_URL,'');
 										
 			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+
 			let requestModel = 
 			{
-				"BearerToken" : this.GetToken(domain)
-				"UrlFragment" : urlFragment,
+				"BearerToken" : this.GetToken(domain),
+				"UrlFragment" : urlFragment
 			};
 
-			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/get/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
+			let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/request';
+
+			return this.http.post(postUrl, JSON.stringify(requestModel), options).map((res: Response) => res.json());
 		}
 		else
 		{	
@@ -429,18 +439,20 @@ export class CdfDataService
 		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 		if(isTwitter)
 		{
-			let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+			let urlFragment = postModel.URL.replace(this.this.TWITTER_API_URL,'');
 										
-			console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
 			let requestModel = 
 			{
-				"BearerToken" : this.GetToken(domain)
+				"BearerToken" : this.GetToken(domain),
 				"UrlFragment" : urlFragment,
 				"PostBody" : postModel.Body
 			};
 
-			return this.http.post('http://ng2cdf.local.webapi.solutiaconsulting.com/api/twitter/post/request', JSON.stringify(requestModel), options).map((res: Response) => res.json());
+			let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/post/request';
+
+			return this.http.post(postUrl, JSON.stringify(requestModel), options).map((res: Response) => res.json());
 			
 		}
 		else
