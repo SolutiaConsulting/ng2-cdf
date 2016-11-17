@@ -19,10 +19,10 @@ import { CdfSettingsService }	from './cdf-settings.service';
 @Injectable()
 export class CdfDataService
 {
-	const CDF_DOMAIN : string = 'webapi.solutiaconsulting.com';
-	const CDF_WEBAPI_BASE_URL : string = 'http://ng2cdf.local.webapi.solutiaconsulting.com/api';
-	const TWITTER_DOMAIN : string = 'api.twitter.com';
-	const TWITTER_API_URL : string = 'https://api.twitter.com/1.1/';
+	readonly CDF_DOMAIN = 'webapi.solutiaconsulting.com';
+	readonly CDF_WEBAPI_BASE_URL = 'http://ng2cdf.local.webapi.solutiaconsulting.com/api';
+	readonly TWITTER_DOMAIN = 'api.twitter.com';
+	readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
 
 	constructor(
 		private http: Http,
@@ -439,7 +439,7 @@ export class CdfDataService
 		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 		if(isTwitter)
 		{
-			let urlFragment = postModel.URL.replace(this.this.TWITTER_API_URL,'');
+			let urlFragment = postModel.URL.replace(this.TWITTER_API_URL,'');
 										
 			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
