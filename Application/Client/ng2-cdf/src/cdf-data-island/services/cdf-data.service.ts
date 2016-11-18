@@ -20,7 +20,7 @@ import { CdfSettingsService }	from './cdf-settings.service';
 export class CdfDataService
 {
 	readonly CDF_DOMAIN = 'webapi.solutiaconsulting.com';
-	readonly CDF_WEBAPI_BASE_URL = 'http://ng2cdf.local.webapi.solutiaconsulting.com/api';
+	readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 	readonly TWITTER_DOMAIN = 'api.twitter.com';
 	readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
 
@@ -399,19 +399,11 @@ export class CdfDataService
 		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 		if(isTwitter)
 		{
+			let bearerToken = this.GetToken(domain);
 			let urlFragment = url.replace(this.TWITTER_API_URL,'');
-										
-			//console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+			let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get?requestModel.bearerToken=' + bearerToken + '&requestModel.urlFragment=' + urlFragment;
 
-			let requestModel = 
-			{
-				"BearerToken" : this.GetToken(domain),
-				"UrlFragment" : urlFragment
-			};
-
-			let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/request';
-
-			return this.http.post(postUrl, JSON.stringify(requestModel), options).map((res: Response) => res.json());
+			return this.http.get(twitterUrl, options).map((res: Response) => res.json());
 		}
 		else
 		{	
