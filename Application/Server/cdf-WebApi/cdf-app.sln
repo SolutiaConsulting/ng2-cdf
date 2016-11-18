@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.WebApi", "ng2-cdf-app.WebApi\ng2-cdf-app.WebApi.csproj", "{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.WebApi", "cdf-app.WebApi\cdf-app.WebApi.csproj", "{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.Tests", "ng2-cdf-app.Tests\ng2-cdf-app.Tests.csproj", "{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.Tests", "cdf-app.Tests\cdf-app.Tests.csproj", "{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.DataContracts", "ng2-cdf-app.DataContracts\ng2-cdf-app.DataContracts.csproj", "{7E427412-EB6E-4C29-9381-BC96DD6A9714}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.DataContracts", "cdf-app.DataContracts\cdf-app.DataContracts.csproj", "{7E427412-EB6E-4C29-9381-BC96DD6A9714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.BusinessLibrary", "ng2-cdf-app.BusinessLibrary\ng2-cdf-app.BusinessLibrary.csproj", "{C2E64712-5684-4387-84FF-6FFFCF6C2B05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.BusinessLibrary", "cdf-app.BusinessLibrary\cdf-app.BusinessLibrary.csproj", "{C2E64712-5684-4387-84FF-6FFFCF6C2B05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.Common", "ng2-cdf-app.Common\ng2-cdf-app.Common.csproj", "{62766537-FBC3-46D3-8365-49FD9E97E37A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.Common", "cdf-app.Common\cdf-app.Common.csproj", "{62766537-FBC3-46D3-8365-49FD9E97E37A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ng2-cdf-app.Repository", "ng2-cdf-app.Repository\ng2-cdf-app.Repository.csproj", "{FBB6786C-E736-47A4-89DE-325DAF2392E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.Repository", "cdf-app.Repository\cdf-app.Repository.csproj", "{FBB6786C-E736-47A4-89DE-325DAF2392E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

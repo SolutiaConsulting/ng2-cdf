@@ -38,6 +38,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\CdfApp.WebApi.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -280,19 +281,19 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ng2-cdf-app.BusinessLibrary\ng2-cdf-app.BusinessLibrary.csproj">
+    <ProjectReference Include="..\cdf-app.BusinessLibrary\cdf-app.BusinessLibrary.csproj">
       <Project>{c2e64712-5684-4387-84ff-6fffcf6c2b05}</Project>
       <Name>MobilePatronsApp.BusinessLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ng2-cdf-app.Common\ng2-cdf-app.Common.csproj">
+    <ProjectReference Include="..\cdf-app.Common\cdf-app.Common.csproj">
       <Project>{62766537-fbc3-46d3-8365-49fd9e97e37a}</Project>
       <Name>MobilePatronsApp.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ng2-cdf-app.DataContracts\ng2-cdf-app.DataContracts.csproj">
+    <ProjectReference Include="..\cdf-app.DataContracts\cdf-app.DataContracts.csproj">
       <Project>{7e427412-eb6e-4c29-9381-bc96dd6a9714}</Project>
       <Name>MobilePatronsApp.DataContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ng2-cdf-app.Repository\ng2-cdf-app.Repository.csproj">
+    <ProjectReference Include="..\cdf-app.Repository\cdf-app.Repository.csproj">
       <Project>{fbb6786c-e736-47a4-89de-325daf2392e2}</Project>
       <Name>MobilePatronsApp.Repository</Name>
     </ProjectReference>
