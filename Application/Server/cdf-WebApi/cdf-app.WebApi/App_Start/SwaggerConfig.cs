@@ -230,8 +230,11 @@ namespace CdfApp.WebApi
 	{
 		public void Apply(Operation operation, SchemaRegistry schemaRegistry, System.Web.Http.Description.ApiDescription apiDescription)
 		{
-			//FORCE X-CdfApp-AUTH-TOKEN IN ALL CONTROLLERS EXCEPT:
-			if ((apiDescription.ActionDescriptor).ControllerDescriptor.ControllerType.Name == "TwitterController")
+			//FORCE BEARER TOKEN AND URL FRAGMENT
+			if (
+				apiDescription.ActionDescriptor.ControllerDescriptor.ControllerType.Name == "TwitterController" &&
+				apiDescription.RelativePath.Equals("api/twitter/get/{id}")
+			)
 			{
 				if (null == operation.parameters)
 				{
@@ -253,7 +256,7 @@ namespace CdfApp.WebApi
 				);
 
 
-				// TWITTER BEARER TOKEN
+				// TWITTER URL FRAGMENT
 				operation.parameters.Add
 				(
 					new Parameter()

@@ -401,6 +401,7 @@ export class CdfDataService
 		{
 			let bearerToken = this.GetToken(domain);
 			let urlFragment = url.replace(this.TWITTER_API_URL,'');
+			let urlFragmentHash = this.hashUrlFragment(urlFragment);
 			let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get?requestModel.bearerToken=' + bearerToken + '&requestModel.urlFragment=' + urlFragment;
 
 			return this.http.get(twitterUrl, options).map((res: Response) => res.json());
@@ -460,5 +461,18 @@ export class CdfDataService
 
 			return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options).map((res: Response) => res.json());
 		}		
+	};
+
+
+	private hashUrlFragment(urlFragment : string) : number
+	{
+		var hash = 5381;
+		for (i = 0; i < urlFragment.length; i++) 
+		{
+			char = urlFragment.charCodeAt(i);
+			hash = ((hash << 5) + hash) + char; /* hash * 33 + c */
+		}
+
+		return hash;		
 	};			
 }

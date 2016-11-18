@@ -79,9 +79,9 @@ namespace CdfApp.WebApi.Controllers
 		/// TWITTER GET
 		/// </summary>
 		/// <returns></returns>
-		[Route("get")]
+		[Route("get/{id}")]
 		[ResponseType(typeof(String))]
-		public HttpResponseMessage GetRequest()
+		public HttpResponseMessage GetRequest(string id)
 		{
 			//var bearerToken = "AAAAAAAAAAAAAAAAAAAAANHPxwAAAAAAm2T5L94EvS%2FrTQ1L5dWwwBQpWUI%3Dxn9u4d1vw9gqCjdyncJr6TN6bcvUHe5DK6n7IFFmIy1S0TpWkF";
 			//var urlFragment = "statuses/user_timeline.json?count=10&screen_name=dfwsportsbeat";
