@@ -1,7 +1,7 @@
 ﻿using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace Ng2CdfApp.Repository
+namespace CdfApp.Repository
 {
 	public class RepositoryRegistry : Registry
 	{

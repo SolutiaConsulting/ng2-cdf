@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ng2CdfApp.DataContracts.Interfaces
+namespace CdfApp.DataContracts.Interfaces
 {
 	public interface ITwitterPostRequestModel
 	{

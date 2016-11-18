@@ -1,7 +1,7 @@
 ﻿using System.Web.Http.Dependencies;
 using StructureMap;
 
-namespace Ng2CdfApp.WebApi.DependencyResolution
+namespace CdfApp.WebApi.DependencyResolution
 {
 	/// <summary>
 	/// The structure map dependency resolver.

@@ -9,8 +9,8 @@
     <ProjectGuid>{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ng2CdfApp.Tests</RootNamespace>
-    <AssemblyName>Ng2CdfApp.Tests</AssemblyName>
+    <RootNamespace>CdfApp.Tests</RootNamespace>
+    <AssemblyName>CdfApp.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

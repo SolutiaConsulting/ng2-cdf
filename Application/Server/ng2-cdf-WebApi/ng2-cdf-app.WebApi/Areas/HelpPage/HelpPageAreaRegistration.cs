@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage
+namespace CdfApp.WebApi.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
-using Ng2CdfApp.WebApi.DependencyResolution;
+using CdfApp.WebApi.DependencyResolution;
 
-namespace Ng2CdfApp.WebApi
+namespace CdfApp.WebApi
 {
 	public class IocConfig
 	{

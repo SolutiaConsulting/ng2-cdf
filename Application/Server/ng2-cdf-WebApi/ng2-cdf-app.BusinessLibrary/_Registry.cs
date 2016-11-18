@@ -1,7 +1,7 @@
 ﻿using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace Ng2CdfApp.BusinessLibrary
+namespace CdfApp.BusinessLibrary
 {
 	public class BusinessLibraryRegistry : Registry
 	{

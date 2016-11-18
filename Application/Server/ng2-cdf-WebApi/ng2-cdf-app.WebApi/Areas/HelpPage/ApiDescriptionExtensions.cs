@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage
+namespace CdfApp.WebApi.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

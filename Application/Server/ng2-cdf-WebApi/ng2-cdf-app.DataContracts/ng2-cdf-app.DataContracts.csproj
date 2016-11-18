@@ -7,8 +7,8 @@
     <ProjectGuid>{7E427412-EB6E-4C29-9381-BC96DD6A9714}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ng2CdfApp.DataContracts</RootNamespace>
-    <AssemblyName>Ng2CdfApp.DataContracts</AssemblyName>
+    <RootNamespace>CdfApp.DataContracts</RootNamespace>
+    <AssemblyName>CdfApp.DataContracts</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

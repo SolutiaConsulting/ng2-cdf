@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions;
-using Ng2CdfApp.WebApi.Areas.HelpPage.Models;
+using CdfApp.WebApi.Areas.HelpPage.ModelDescriptions;
+using CdfApp.WebApi.Areas.HelpPage.Models;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage.Controllers
+namespace CdfApp.WebApi.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

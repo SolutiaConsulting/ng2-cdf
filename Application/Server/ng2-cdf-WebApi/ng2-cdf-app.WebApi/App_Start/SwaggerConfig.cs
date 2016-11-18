@@ -3,12 +3,12 @@ using System.Linq;
 using System.Web.Http;
 using Swashbuckle.Swagger;
 using WebActivatorEx;
-using Ng2CdfApp.WebApi;
+using CdfApp.WebApi;
 using Swashbuckle.Application;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
-namespace Ng2CdfApp.WebApi
+namespace CdfApp.WebApi
 {
 	public class SwaggerConfig
 	{
@@ -35,7 +35,7 @@ namespace Ng2CdfApp.WebApi
 						// hold additional metadata for an API. Version and title are required but you can also provide
 						// additional fields by chaining methods off SingleApiVersion.
 						//
-						c.SingleApiVersion("v1", "Ng2CdfApp.WebApi");
+						c.SingleApiVersion("v1", "CdfApp.WebApi");
 
 						// If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
 						// In this case, you must provide a lambda that tells Swashbuckle which actions should be
@@ -221,7 +221,7 @@ namespace Ng2CdfApp.WebApi
 
 		protected static string GetXmlCommentsPath()
 		{
-			return System.String.Format(@"{0}\bin\Ng2CdfApp.WebApi.XML", System.AppDomain.CurrentDomain.BaseDirectory);
+			return System.String.Format(@"{0}\bin\CdfApp.WebApi.XML", System.AppDomain.CurrentDomain.BaseDirectory);
 		}	
 	}
 
@@ -230,16 +230,42 @@ namespace Ng2CdfApp.WebApi
 	{
 		public void Apply(Operation operation, SchemaRegistry schemaRegistry, System.Web.Http.Description.ApiDescription apiDescription)
 		{
-			//FORCE X-Ng2CdfApp-AUTH-TOKEN IN ALL CONTROLLERS EXCEPT:
-			if ((apiDescription.ActionDescriptor).ControllerDescriptor.ControllerType.Name != "TwitterController"
-				&& !apiDescription.RelativePath.Equals("Login/Post"))
+			//FORCE X-CdfApp-AUTH-TOKEN IN ALL CONTROLLERS EXCEPT:
+			if ((apiDescription.ActionDescriptor).ControllerDescriptor.ControllerType.Name == "TwitterController")
 			{
 				if (null == operation.parameters)
 				{
 					operation.parameters = new List<Parameter>();
 				}
-				// allow user auth token to be sent
-				operation.parameters.Add(new Parameter() { name = "X-PATRONS-AUTH-TOKEN", type = "string", @in = "header", required = true, description = "Identifies logged-in user.  Get this from /Account/Login result Token." });
+
+				// TWITTER BEARER TOKEN
+				operation.parameters.Add
+				(
+					new Parameter()
+					{
+						name = "BearerToken",
+						type = "string",
+						@in = "header",
+						@default = "",
+						required = true,
+						description = "TWITTER BEARER TOKEN."
+					}
+				);
+
+
+				// TWITTER BEARER TOKEN
+				operation.parameters.Add
+				(
+					new Parameter()
+					{
+						name = "UrlFragment",
+						type = "string",
+						@in = "header",
+						@default = "",
+						required = true,
+						description = "TWITTER URL FRAGMENT."
+					}
+				);
 			}
 		}
 	}

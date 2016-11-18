@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
+namespace CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

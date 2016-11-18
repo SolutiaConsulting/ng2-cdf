@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Script.Serialization;
-using Ng2CdfApp.DataContracts.Implementations;
-using Ng2CdfApp.DataContracts.Interfaces;
+using CdfApp.DataContracts.Implementations;
+using CdfApp.DataContracts.Interfaces;
 
-namespace Ng2CdfApp.WebApi.Controllers
+namespace CdfApp.WebApi.Controllers
 {
     /// <summary>
     /// TWITTER CONTROLLER
@@ -81,12 +81,21 @@ namespace Ng2CdfApp.WebApi.Controllers
 		/// <returns></returns>
 		[Route("get")]
 		[ResponseType(typeof(String))]
-		public HttpResponseMessage GetRequest([FromUri] TwitterGetRequestModel requestModel)
+		public HttpResponseMessage GetRequest()
 		{
 			//var bearerToken = "AAAAAAAAAAAAAAAAAAAAANHPxwAAAAAAm2T5L94EvS%2FrTQ1L5dWwwBQpWUI%3Dxn9u4d1vw9gqCjdyncJr6TN6bcvUHe5DK6n7IFFmIy1S0TpWkF";
 			//var urlFragment = "statuses/user_timeline.json?count=10&screen_name=dfwsportsbeat";
 
-			if (ModelState.IsValid)
+			IEnumerable<string> bearerTokenValues = Request.Headers.GetValues("BearerToken");
+			IEnumerable<string> urlFragmentValues = Request.Headers.GetValues("UrlFragment");
+			
+			var requestModel = new TwitterGetRequestModel
+			{
+				BearerToken = bearerTokenValues.FirstOrDefault(),
+				UrlFragment = urlFragmentValues.FirstOrDefault()
+			};
+
+			if (requestModel.IsValid())
 			{
 				//IF BEARER TOKEN IS MISSING, THEN BOOT
 				if (String.IsNullOrEmpty(requestModel.BearerToken))
@@ -121,7 +130,7 @@ namespace Ng2CdfApp.WebApi.Controllers
 				}
 			}
 
-			throw ThrowIfError(ERROR_MODEL_STATE, HttpStatusCode.BadRequest, errors, ModelState);
+			throw ThrowIfError(ERROR_MODEL_STATE, HttpStatusCode.BadRequest, errors);
 		}
 
 

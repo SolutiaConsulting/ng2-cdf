@@ -2,9 +2,9 @@
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Filters;
-using Ng2CdfApp.Common.Exceptions;
+using CdfApp.Common.Exceptions;
 
-namespace Ng2CdfApp.WebApi.Attributes
+namespace CdfApp.WebApi.Attributes
 {
 	public class ApiExceptionHandlingAttribute : ExceptionFilterAttribute
 	{

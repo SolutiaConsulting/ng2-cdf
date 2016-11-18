@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 
-namespace Ng2CdfApp.WebApi.Controllers
+namespace CdfApp.WebApi.Controllers
 {
 	/// <summary>
 	/// 

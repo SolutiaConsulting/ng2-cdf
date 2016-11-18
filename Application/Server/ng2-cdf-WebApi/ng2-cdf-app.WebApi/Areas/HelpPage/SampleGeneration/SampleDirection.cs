@@ -1,4 +1,4 @@
-namespace Ng2CdfApp.WebApi.Areas.HelpPage
+namespace CdfApp.WebApi.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ng2CdfApp.Common.Exceptions
+namespace CdfApp.Common.Exceptions
 {
 	public class BusinessException : Exception
 	{

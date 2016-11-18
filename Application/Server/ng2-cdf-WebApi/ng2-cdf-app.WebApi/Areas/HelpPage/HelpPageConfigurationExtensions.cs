@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions;
-using Ng2CdfApp.WebApi.Areas.HelpPage.Models;
+using CdfApp.WebApi.Areas.HelpPage.ModelDescriptions;
+using CdfApp.WebApi.Areas.HelpPage.Models;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage
+namespace CdfApp.WebApi.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

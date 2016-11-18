@@ -1,12 +1,12 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
-using Ng2CdfApp.BusinessLibrary;
-using Ng2CdfApp.Common;
-using Ng2CdfApp.DataContracts;
-using Ng2CdfApp.Repository;
+using CdfApp.BusinessLibrary;
+using CdfApp.Common;
+using CdfApp.DataContracts;
+using CdfApp.Repository;
 using StructureMap;
 
-namespace Ng2CdfApp.WebApi.DependencyResolution
+namespace CdfApp.WebApi.DependencyResolution
 {
 	public static class IoC
 	{

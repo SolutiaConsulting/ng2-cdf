@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Ng2CdfApp.Repository
+namespace CdfApp.Repository
 {
 	public static class Database
 	{

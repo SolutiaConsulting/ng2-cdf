@@ -7,8 +7,8 @@
     <ProjectGuid>{FBB6786C-E736-47A4-89DE-325DAF2392E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ng2CdfApp.Repository</RootNamespace>
-    <AssemblyName>Ng2CdfApp.Repository</AssemblyName>
+    <RootNamespace>CdfApp.Repository</RootNamespace>
+    <AssemblyName>CdfApp.Repository</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

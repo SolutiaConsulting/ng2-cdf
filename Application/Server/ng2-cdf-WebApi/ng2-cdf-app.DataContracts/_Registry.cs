@@ -1,7 +1,7 @@
 ﻿using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace Ng2CdfApp.DataContracts
+namespace CdfApp.DataContracts
 {
 	public class DataContractsRegistry : Registry
 	{

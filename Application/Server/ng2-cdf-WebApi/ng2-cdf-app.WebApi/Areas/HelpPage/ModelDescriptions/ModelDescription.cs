@@ -1,6 +1,6 @@
 using System;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
+namespace CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

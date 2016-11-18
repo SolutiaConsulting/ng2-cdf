@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Routing;
 
-namespace Ng2CdfApp.WebApi.Helpers
+namespace CdfApp.WebApi.Helpers
 {
 	public class GuidConstraint : IRouteConstraint
 	{

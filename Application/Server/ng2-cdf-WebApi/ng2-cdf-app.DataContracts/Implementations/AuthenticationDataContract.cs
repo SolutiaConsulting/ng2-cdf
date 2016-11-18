@@ -1,7 +1,7 @@
 ﻿using System;
-using Ng2CdfApp.DataContracts.Interfaces;
+using CdfApp.DataContracts.Interfaces;
 
-namespace Ng2CdfApp.DataContracts.Implementations
+namespace CdfApp.DataContracts.Implementations
 {
 	public class AuthenticationDataContract : IAuthenticationDataContract
 	{

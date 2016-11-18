@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
-using Ng2CdfApp.WebApi.Handlers;
+using CdfApp.WebApi.Handlers;
 using StructureMap;
 
-namespace Ng2CdfApp.WebApi
+namespace CdfApp.WebApi
 {
 	/// <summary>
 	/// HANDLES X-AUTHENTICATION

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
+namespace CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

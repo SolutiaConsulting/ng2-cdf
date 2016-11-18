@@ -1,6 +1,6 @@
 using System;
 
-namespace Ng2CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
+namespace CdfApp.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public class ParameterAnnotation
     {

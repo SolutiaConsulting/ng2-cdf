@@ -5,7 +5,7 @@ using System.Web.Http.Dependencies;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
-namespace Ng2CdfApp.WebApi.DependencyResolution
+namespace CdfApp.WebApi.DependencyResolution
 {
 	/// <summary>
 	/// The structure map dependency scope.

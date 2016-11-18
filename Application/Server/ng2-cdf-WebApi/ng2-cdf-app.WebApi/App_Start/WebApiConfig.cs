@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace Ng2CdfApp.WebApi
+namespace CdfApp.WebApi
 {
 	public static class WebApiConfig
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Ng2CdfApp.WebApi
+namespace CdfApp.WebApi
 {
 	public class RouteConfig
 	{
