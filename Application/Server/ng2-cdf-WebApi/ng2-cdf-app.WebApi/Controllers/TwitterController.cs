@@ -79,9 +79,9 @@ namespace Ng2CdfApp.WebApi.Controllers
 		/// TWITTER GET
 		/// </summary>
 		/// <returns></returns>
-		[Route("get/request")]
+		[Route("get")]
 		[ResponseType(typeof(String))]
-		public HttpResponseMessage PostRequest(TwitterGetRequestModel requestModel)
+		public HttpResponseMessage GetRequest([FromUri] TwitterGetRequestModel requestModel)
 		{
 			//var bearerToken = "AAAAAAAAAAAAAAAAAAAAANHPxwAAAAAAm2T5L94EvS%2FrTQ1L5dWwwBQpWUI%3Dxn9u4d1vw9gqCjdyncJr6TN6bcvUHe5DK6n7IFFmIy1S0TpWkF";
 			//var urlFragment = "statuses/user_timeline.json?count=10&screen_name=dfwsportsbeat";
@@ -129,7 +129,7 @@ namespace Ng2CdfApp.WebApi.Controllers
 		/// TWITTER POST
 		/// </summary>
 		/// <returns></returns>
-		[Route("post/request")]
+		[Route("post")]
 		[ResponseType(typeof(String))]
 		public HttpResponseMessage PostRequest(TwitterPostRequestModel requestModel)
 		{
