@@ -213,6 +213,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\CorsHandler.cs" />
+    <Compile Include="Helpers\ReponseMessageHelper.cs" />
     <Compile Include="Helpers\RouteConstraints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

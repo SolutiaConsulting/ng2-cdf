@@ -10,6 +10,7 @@ using System.Web.Http.Description;
 using System.Web.Script.Serialization;
 using CdfApp.DataContracts.Implementations;
 using CdfApp.DataContracts.Interfaces;
+using CdfApp.WebApi.Helpers;
 
 namespace CdfApp.WebApi.Controllers
 {
@@ -108,7 +109,7 @@ namespace CdfApp.WebApi.Controllers
 					var webRequest = GenerateGetWebRequest(requestModel);
 					var response = GetResponseStreamReader<object>(webRequest);
 
-					return Request.CreateResponse(HttpStatusCode.OK, response);
+					return Request.CreateResponseWithETag(HttpStatusCode.OK, response);
 				}
 				catch (WebException ex)
 				{
