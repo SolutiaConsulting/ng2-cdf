@@ -385,7 +385,18 @@ export class CdfDataService
 		return domain;
 	};
 
+	private hashUrlFragment(urlFragment : string) : number
+	{
+		let hash = 5381;
 
+		for (let i = 0; i < urlFragment.length; i++) 
+		{
+			let char = urlFragment.charCodeAt(i);
+			hash = ((hash << 5) + hash) + char; /* hash * 33 + c */
+		}
+
+		return hash;		
+	};
 
 
 	//PHYSICAL HTTP GET CALL TO CLOUD CMS FOR CONTENT...	
@@ -399,11 +410,23 @@ export class CdfDataService
 		//TWITTER DOES NOT PLAY WELL WITH CLIENT APPS, SO HAVE TO USE A PROXY FOR ALL TWITTER REQUESTS
 		if(isTwitter)
 		{
-			let bearerToken = this.GetToken(domain);
+			let token = this.GetToken(domain);
+			let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
 			let urlFragment = url.replace(this.TWITTER_API_URL,'');
 			let urlFragmentHash = this.hashUrlFragment(urlFragment);
-			let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get?requestModel.bearerToken=' + bearerToken + '&requestModel.urlFragment=' + urlFragment;
+			let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
 
+			// console.log('BEARER TOKEN:', bearerToken);   
+			// console.log('TWITTER FRAGMENT:', urlFragment);
+			// console.log('TWITTER FRAGMENT HASH:', urlFragmentHash);
+			// console.log('TWITTER URL', twitterUrl);
+			// console.log('--------------------------------------------------------------------------'); 
+
+			//APPEND TO HEADER:
+			options.headers.append('BearerToken', bearerToken);
+			options.headers.append('UrlFragment', urlFragment);					
+			options.body = '';
+			
 			return this.http.get(twitterUrl, options).map((res: Response) => res.json());
 		}
 		else
@@ -461,18 +484,5 @@ export class CdfDataService
 
 			return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options).map((res: Response) => res.json());
 		}		
-	};
-
-
-	private hashUrlFragment(urlFragment : string) : number
-	{
-		var hash = 5381;
-		for (i = 0; i < urlFragment.length; i++) 
-		{
-			char = urlFragment.charCodeAt(i);
-			hash = ((hash << 5) + hash) + char; /* hash * 33 + c */
-		}
-
-		return hash;		
 	};			
 }
