@@ -1,0 +1,24 @@
+﻿<#@ template language="C#" hostspecific="True" debug="True" #>
+<#@ assembly name="$(SolutionDir)\CdfApiApp.DataContracts\bin\Debug\CdfApiApp.DataContracts.dll" #>
+<#@ include file="C:\ProjectStoreGit\Solutia-CodeGenerator\Application\CodeGenerator2\CodeGenerator\Generators\StoredProcedureGenerator.tt" #>
+<#@ assembly name="C:\ProjectStoreGit\Solutia-CodeGenerator\Application\CodeGenerator2\CodeGenerator\bin\Debug\CodeGenerator.dll" #>
+<#@ import namespace="CodeGenerator.Generators.code" #>
+<#
+    var connectionString = @"Data Source=localhost;Initial Catalog=Intersect;Integrated Security=True";
+    var databaseName = "CdfTokenStore";
+    var nameSpace = "CdfApiApp";
+    var projectRootPath = @"C:\ProjectStoreGit\ng2-cdf\Application\Server\CdfApiApp\CdfApiApp.";
+    var projectName = "CdfApiApp";
+    var schemaName = "API";
+
+	var storedProcedureGenerator = new StoredProcedureGenerator
+    (
+        connectionString,
+        databaseName,
+        nameSpace,
+        projectRootPath,
+        projectName,
+        schemaName
+    );
+	storedProcedureGenerator.GenerateCode();
+#>
