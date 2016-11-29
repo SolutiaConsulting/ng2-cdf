@@ -49,9 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementations\AuthenticationDataContract.cs" />
+    <Compile Include="Implementations\ApplicationApiDomainCredential.cs" />
     <Compile Include="Implementations\TwitterAuthenticationRequestModel.cs" />
     <Compile Include="Implementations\TwitterPostRequestModel.cs" />
     <Compile Include="Implementations\TwitterGetRequestModel.cs" />
+    <Compile Include="Interfaces\IApplicationApiDomainCredential.cs" />
     <Compile Include="Interfaces\IAuthenticationDataContract.cs" />
     <Compile Include="Interfaces\ITwitterAuthenticationRequestModel.cs" />
     <Compile Include="Interfaces\ITwitterPostRequestModel.cs" />

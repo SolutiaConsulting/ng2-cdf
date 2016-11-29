@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C2E64712-5684-4387-84FF-6FFFCF6C2B05}</ProjectGuid>
+    <ProjectGuid>{2F764FB5-3991-4ED7-BA74-9028C8796142}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CdfApp.BusinessLibrary</RootNamespace>
-    <AssemblyName>CdfApp.BusinessLibrary</AssemblyName>
+    <RootNamespace>CodeGeneration</RootNamespace>
+    <AssemblyName>CodeGeneration</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,11 +29,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rackspace-Dev|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Rackspace-Dev\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,28 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generated\API\ApplicationApiDomainCredentialBusinessLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Registry.cs" />
+    <Compile Include="StoredProcedure-API.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoredProcedure-API.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="StoredProcedure-API.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StoredProcedure-API.cs</LastGenOutput>
+      <LastOutputs>
+..\SeedApp.BusinessLibrary\Generated\API\PersonListBusinessLibrary.cs
+..\SeedApp.DataContracts\Generated\API\ParametersDataContracts.cs
+..\SeedApp.Repository\Generated\API\PersonListRepository.cs
+</LastOutputs>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\cdf-app.Common\cdf-app.Common.csproj">
-      <Project>{62766537-fbc3-46d3-8365-49fd9e97e37a}</Project>
-      <Name>MobilePatronsApp.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\cdf-app.DataContracts\cdf-app.DataContracts.csproj">
-      <Project>{7e427412-eb6e-4c29-9381-bc96dd6a9714}</Project>
-      <Name>MobilePatronsApp.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\cdf-app.Repository\cdf-app.Repository.csproj">
-      <Project>{fbb6786c-e736-47a4-89de-325daf2392e2}</Project>
-      <Name>MobilePatronsApp.Repository</Name>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

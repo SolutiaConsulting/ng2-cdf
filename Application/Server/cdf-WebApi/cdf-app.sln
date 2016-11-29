@@ -15,38 +15,55 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.Common", "cdf-app.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdf-app.Repository", "cdf-app.Repository\cdf-app.Repository.csproj", "{FBB6786C-E736-47A4-89DE-325DAF2392E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGeneration", "CodeGeneration\CodeGeneration.csproj", "{2F764FB5-3991-4ED7-BA74-9028C8796142}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Rackspace-Dev|Any CPU = Rackspace-Dev|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A23E0151-BDC5-4C8D-BCBF-48DE128B5EF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE99FEE4-AFCB-4337-A2E1-0F28B6A45A71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E427412-EB6E-4C29-9381-BC96DD6A9714}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2E64712-5684-4387-84FF-6FFFCF6C2B05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62766537-FBC3-46D3-8365-49FD9E97E37A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Rackspace-Dev|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Rackspace-Dev|Any CPU.Build.0 = Release|Any CPU
 		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBB6786C-E736-47A4-89DE-325DAF2392E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Rackspace-Dev|Any CPU.ActiveCfg = Rackspace-Dev|Any CPU
+		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Rackspace-Dev|Any CPU.Build.0 = Rackspace-Dev|Any CPU
 		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F764FB5-3991-4ED7-BA74-9028C8796142}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

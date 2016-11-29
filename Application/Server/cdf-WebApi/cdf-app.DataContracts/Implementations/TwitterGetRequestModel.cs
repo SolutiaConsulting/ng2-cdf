@@ -1,6 +1,7 @@
 ﻿using System;
+using CdfApp.DataContracts.Interfaces;
 
-namespace CdfApp.DataContracts.Interfaces
+namespace CdfApp.DataContracts.Implementations
 {
 	public class TwitterGetRequestModel : ITwitterGetRequestModel
 	{
