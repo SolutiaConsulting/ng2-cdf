@@ -49,7 +49,8 @@ export class CdfSettingsService
 
 	ConfigList : CdfConfigModel[] = [];
 
-	constructor(
+	constructor
+	(
 		private configList: CdfConfigModel[]
 	)
 	{ 
