@@ -4,3 +4,5 @@
 export * from './cdf-config.model';
 export * from './cdf-post.model';
 export * from './cdf-request.model';
+
+export * from './domains/index';
