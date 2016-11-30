@@ -1,10 +1,13 @@
 import { Observable } 			from 'rxjs/Rx';
+import { Http } 				from '@angular/http';
 
 import { CdfPostModel }			from '../cdf-post.model';
 import { CdfSettingsService }	from '../../services/cdf-settings.service'; 
 
 export interface BaseDomainInterface 
 {
+    InjectHttp() : Http;
+    
     HasToken(domain:string): boolean;
     GetToken(domain:string): string; 
     SetToken(domain:string, token: any): void;   

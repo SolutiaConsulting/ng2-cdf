@@ -7,6 +7,7 @@ import
 import 
 { 
     ApiCloudCmsModel,
+    ApiGoogleModel,
     ApiTwitterModel,
     BaseDomainInterface
 }	                            from '../models/index'; 
@@ -26,6 +27,7 @@ export class CdfDomainService
         (
             [
                 { provide: 'api.cloudcms.com', useClass: ApiCloudCmsModel },
+                { provide: 'www.googleapis.com', useClass: ApiGoogleModel },
                 { provide: 'api.twitter.com', useClass: ApiTwitterModel }
             ]
         );                

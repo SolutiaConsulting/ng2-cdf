@@ -32,6 +32,11 @@ export class BaseDomainModel implements BaseDomainInterface
 
     constructor () 
 	{
+		this.http = this.InjectHttp();  
+    }
+
+	InjectHttp() : Http
+	{
         let injector = ReflectiveInjector.resolveAndCreate
         (
             [
@@ -46,8 +51,8 @@ export class BaseDomainModel implements BaseDomainInterface
             ]
         );                
 
-		this.http = injector.get(Http);  
-    }
+		return injector.get(Http);  		
+	};
 
     HasToken(domain:string): boolean
 	{

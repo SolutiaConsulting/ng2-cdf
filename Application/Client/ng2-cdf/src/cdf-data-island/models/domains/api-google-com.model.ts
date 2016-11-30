@@ -22,10 +22,9 @@ import
 import { BaseDomainModel }      from './base-domain.model';
 
 @Injectable()
-export class ApiTwitterModel extends BaseDomainModel
+export class ApiGoogleModel extends BaseDomainModel
 {
-    readonly TWITTER_DOMAIN = 'api.twitter.com';
-    readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
+    readonly DOMAIN_NAME = 'www.googleapis.com';
     readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 
     http: Http;
@@ -34,7 +33,7 @@ export class ApiTwitterModel extends BaseDomainModel
     { 
         super();
 
-        this.http = super.InjectHttp();       
+		this.http = super.InjectHttp();         
     }     
 
 	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
@@ -58,47 +57,56 @@ export class ApiTwitterModel extends BaseDomainModel
 			}
 			else
 			{
-                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(this.TWITTER_DOMAIN);
+				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(this.DOMAIN_NAME);
 
                 if(CONNECTION_CREDENTIALS)
                 {
-                    let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
-                    let url = CONNECTION_CREDENTIALS.OAuthURL;
-                    let body = CONNECTION_CREDENTIALS.Body;
-                    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+					let url =  this.CDF_WEBAPI_BASE_URL + "/google/generate-token";
 
-                    let newTokenSubscription = this.http.post(url, body, { headers })
-                        .map(res => res.json())
-                        .subscribe (
-                            //SUCCESS
-                            data =>
-                            {
-                                //console.log('************************ BASE DOMAIN MODEL NEW TOKEN:', data);
+					//TODO: GET BODY JSON FROM CONNECTION_CREDENTIALS...
+					let body = 
+					{
+						"ApplicationKey": "42d28aaf-0cef-4433-bb9b-0981fd06375a",
+						"ScopeList": 
+						[
+							"https://www.googleapis.com/auth/youtube"
+						]
+					};
 
-                                //SET TOKEN RECEIVED FROM API
-                                super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
+					let headers = new Headers({ 'Content-Type': 'application/json'});
 
-                                //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
-                                observer.next(data);
-                                observer.complete();
-                            },
+					let newTokenSubscription = this.http.post(url, body, { headers })
+							.map(res => res.json())
+							.subscribe (
+								//SUCCESS
+								data =>
+								{
+									console.log('************************ GOOGLE DOMAIN MODEL NEW TOKEN:', data);
 
-                            //ERROR
-                            err =>
-                            { 
-                                //console.log('authenticateObservable error smalls:', err);
-                            },
+									//SET TOKEN RECEIVED FROM API
+									super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
-                            //COMPLETE
-                            () =>
-                            { 
-                                if (newTokenSubscription)
-                                { 
-                                    newTokenSubscription.unsubscribe();
-                                }							
-                            }
-                        )							
-                }	
+									//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
+									observer.next(data);
+									observer.complete();
+								},
+
+								//ERROR
+								err =>
+								{ 
+									//console.log('authenticateObservable error smalls:', err);
+								},
+
+								//COMPLETE
+								() =>
+								{ 
+									if (newTokenSubscription)
+									{ 
+										newTokenSubscription.unsubscribe();
+									}							
+								}
+							)							
+				}								
 			}
         });
 	};
@@ -111,7 +119,7 @@ export class ApiTwitterModel extends BaseDomainModel
 		let options = new RequestOptions({ headers: headers });		
         let token = super.GetToken(domain);
         let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
-        let urlFragment = url.replace(this.TWITTER_API_URL,'');
+        let urlFragment = url.replace('https://api.twitter.com/1.1/','');
         let urlFragmentHash = super.HashUrlFragment(urlFragment);
         let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
 
@@ -135,7 +143,7 @@ export class ApiTwitterModel extends BaseDomainModel
 		let domain = CdfDomainService.GetDomainFromUrl(postModel.URL);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
         let options = new RequestOptions({ headers: headers });				
-        let urlFragment = postModel.URL.replace(this.TWITTER_API_URL,'');
+		let urlFragment = postModel.URL.replace('https://api.twitter.com/1.1/','');
                                     
         //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
