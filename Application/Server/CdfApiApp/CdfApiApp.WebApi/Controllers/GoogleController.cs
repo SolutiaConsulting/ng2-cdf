@@ -95,7 +95,18 @@ namespace CdfApiApp.WebApi.Controllers
 				}
 				catch (Exception ex)
 				{
-					throw ThrowIfError(ERROR_AUTHENTICATION, HttpStatusCode.BadRequest, errors, ex.Message);
+					var errorMessage = "";
+
+					if (ex.InnerException != null && !String.IsNullOrEmpty(ex.InnerException.Message))
+					{
+						errorMessage = ex.InnerException.Message;
+					}
+					else
+					{
+						errorMessage = ex.Message;
+					}
+
+					throw ThrowIfError(ERROR_AUTHENTICATION, HttpStatusCode.BadRequest, errors, errorMessage);
 				}
 			}
 
