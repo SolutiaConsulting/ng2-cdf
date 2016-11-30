@@ -169,18 +169,17 @@ export class BaseDomainModel implements BaseDomainInterface
 	{
 		let domain = CdfDomainService.GetDomainFromUrl(url);
 		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-		let options = new RequestOptions({ headers: headers });		
-		
-        //APPEND TO HEADER: Authorization : Bearer [token]
-        if (this.HasToken(domain))
-        {
-            options.headers.append('Authorization', 'Bearer ' + this.GetToken(domain));
-            options.headers.append('Access-Control-Allow-Origin', '*');
-        }
+		let options = new RequestOptions({ headers: headers });				
+        let token = this.GetToken(domain);
+        let bearerToken = (token) ? 'Bearer ' + token : 'TOKEN-NOT-KNOWN';
                 
+        //APPEND TO HEADER:
+        options.headers.append('Authorization', bearerToken);
         options.body = '';
         
-		//console.log('----------------------------------------------------- FUGET', url);
+        console.log('BASE DOMAIN BEARER TOKEN:', bearerToken);   
+        console.log('BASE DOMAIN URL', url);
+        console.log('--------------------------------------------------------------------------'); 		
 
         return this.http.get(url, options).map((res: Response) => res.json());
 	};	

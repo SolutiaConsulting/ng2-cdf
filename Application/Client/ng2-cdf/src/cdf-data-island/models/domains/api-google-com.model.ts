@@ -24,7 +24,6 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiGoogleModel extends BaseDomainModel
 {
-    readonly DOMAIN_NAME = 'www.googleapis.com';
     readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 
     http: Http;
@@ -57,7 +56,7 @@ export class ApiGoogleModel extends BaseDomainModel
 			}
 			else
 			{
-				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(this.DOMAIN_NAME);
+				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
 
                 if(CONNECTION_CREDENTIALS)
                 {
@@ -112,30 +111,30 @@ export class ApiGoogleModel extends BaseDomainModel
 	};
 
 	//PHYSICAL HTTP GET CALL TO DOMAIN FOR RESULT DATA...
-	HttpGet(url: string): Observable<any>
-	{
-		let domain = CdfDomainService.GetDomainFromUrl(url);
-		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-		let options = new RequestOptions({ headers: headers });		
-        let token = super.GetToken(domain);
-        let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
-        let urlFragment = url.replace('https://api.twitter.com/1.1/','');
-        let urlFragmentHash = super.HashUrlFragment(urlFragment);
-        let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
+	// HttpGet(url: string): Observable<any>
+	// {
+	// 	let domain = CdfDomainService.GetDomainFromUrl(url);
+	// 	let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+	// 	let options = new RequestOptions({ headers: headers });		
+    //     let token = super.GetToken(domain);
+    //     let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
+    //     let urlFragment = url.replace('https://api.twitter.com/1.1/','');
+    //     let urlFragmentHash = super.HashUrlFragment(urlFragment);
+    //     let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
 
-        // console.log('BEARER TOKEN:', bearerToken);   
-        // console.log('TWITTER FRAGMENT:', urlFragment);
-        // console.log('TWITTER FRAGMENT HASH:', urlFragmentHash);
-        // console.log('TWITTER URL', twitterUrl);
-        // console.log('--------------------------------------------------------------------------'); 
+    //     // console.log('BEARER TOKEN:', bearerToken);   
+    //     // console.log('GOOGLE FRAGMENT:', urlFragment);
+    //     // console.log('GOOGLE FRAGMENT HASH:', urlFragmentHash);
+    //     // console.log('GOOGLE URL', twitterUrl);
+    //     // console.log('--------------------------------------------------------------------------'); 
 
-        //APPEND TO HEADER:
-        options.headers.append('BearerToken', bearerToken);
-        options.headers.append('UrlFragment', urlFragment);					
-        options.body = '';
+    //     //APPEND TO HEADER:
+    //     options.headers.append('BearerToken', bearerToken);
+    //     options.headers.append('UrlFragment', urlFragment);					
+    //     options.body = '';
         
-        return this.http.get(twitterUrl, options).map((res: Response) => res.json());
-	};	
+    //     return this.http.get(twitterUrl, options).map((res: Response) => res.json());
+	// };	
     
 	//PHYSICAL HTTP POST CALL TO DOMAIN FOR RESULT DATA...
 	HttpPost(postModel: CdfPostModel): Observable<any>

@@ -154,33 +154,40 @@ export class CdfDataService
 								if (errorUrl)
 								{
 									let errorDomainModel = CdfDomainService.GetDomainModel(errorUrl);
-																		
-									//RETRY AUTHENTICATE OBSERVABLE FOR A NEW TOKEN		
-									let authenticateObservableSubscription = errorDomainModel.AuthenticateObservable(errorUrl, this.cdfSettingsService)
-										.subscribe(
-											//SUCCESS
-											newToken =>
-											{
-												//console.log('AUTHENTICATE OBSERVABLE DATA (NEW TOKEN):', newToken);
 
-												//THROW ERROR SO RETRY ATTEMPTS GET INITIATED  (SEE retryWhen IN CDF-DATA.COMPONENT.TS) 
-												//AT THIS POINT, WE HAVE A SHINY NEW VALID TOKEN FROM WHICH TO GET DATA...
-												observer.error(err);
-											},
-												
-											//ON ERROR
-											() => null,
-
-											//ON COMPLETE
-											() =>
-											{
-												if (authenticateObservableSubscription)
+									if(errorDomainModel)
+									{
+										//RETRY AUTHENTICATE OBSERVABLE FOR A NEW TOKEN		
+										let authenticateObservableSubscription = errorDomainModel.AuthenticateObservable(errorUrl, this.cdfSettingsService)
+											.subscribe(
+												//SUCCESS
+												newToken =>
 												{
-													authenticateObservableSubscription.unsubscribe();
+													//console.log('AUTHENTICATE OBSERVABLE DATA (NEW TOKEN):', newToken);
+
+													//THROW ERROR SO RETRY ATTEMPTS GET INITIATED  (SEE retryWhen IN CDF-DATA.COMPONENT.TS) 
+													//AT THIS POINT, WE HAVE A SHINY NEW VALID TOKEN FROM WHICH TO GET DATA...
+													observer.error(err);
+												},
+													
+												//ON ERROR
+												() => null,
+
+												//ON COMPLETE
+												() =>
+												{
+													if (authenticateObservableSubscription)
+													{
+														authenticateObservableSubscription.unsubscribe();
+													}
+													//console.log('AUTHENTICATE RETRY COMPELETED');
 												}
-												//console.log('AUTHENTICATE RETRY COMPELETED');
-											}
-										);
+											);
+									}	
+									else
+									{ 
+										observer.error(err);
+									}																									
 								}
 								else
 								{ 

@@ -24,7 +24,6 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiTwitterModel extends BaseDomainModel
 {
-    readonly TWITTER_DOMAIN = 'api.twitter.com';
     readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
     readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 
@@ -58,25 +57,32 @@ export class ApiTwitterModel extends BaseDomainModel
 			}
 			else
 			{
-                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(this.TWITTER_DOMAIN);
+                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
 
                 if(CONNECTION_CREDENTIALS)
                 {
-                    let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
-                    let url = CONNECTION_CREDENTIALS.OAuthURL;
-                    let body = CONNECTION_CREDENTIALS.Body;
-                    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+                    let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+                    let options = new RequestOptions({ headers: headers });		
+                                                
+                    //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
-                    let newTokenSubscription = this.http.post(url, body, { headers })
+                    let requestModel = 
+                    {
+                        "EncodedCredentials" : CONNECTION_CREDENTIALS.EncodedCredentials
+                    };						
+
+                    let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/authenticate';
+
+                    let newTokenSubscription = this.http.post(postUrl, JSON.stringify(requestModel), options)
                         .map(res => res.json())
                         .subscribe (
                             //SUCCESS
                             data =>
                             {
-                                //console.log('************************ BASE DOMAIN MODEL NEW TOKEN:', data);
+                                //console.log('NEW TOKEN YO YO', data);
 
                                 //SET TOKEN RECEIVED FROM API
-                                super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
+                                this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
                                 //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
                                 observer.next(data);
@@ -97,7 +103,7 @@ export class ApiTwitterModel extends BaseDomainModel
                                     newTokenSubscription.unsubscribe();
                                 }							
                             }
-                        )							
+                        )					
                 }	
 			}
         });
