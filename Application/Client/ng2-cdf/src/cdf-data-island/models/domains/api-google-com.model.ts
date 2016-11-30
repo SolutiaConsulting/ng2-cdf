@@ -80,7 +80,7 @@ export class ApiGoogleModel extends BaseDomainModel
 								//SUCCESS
 								data =>
 								{
-									console.log('************************ GOOGLE DOMAIN MODEL NEW TOKEN:', data);
+									//console.log('************************ GOOGLE DOMAIN MODEL NEW TOKEN:', data);
 
 									//SET TOKEN RECEIVED FROM API
 									super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
@@ -108,53 +108,5 @@ export class ApiGoogleModel extends BaseDomainModel
 				}								
 			}
         });
-	};
-
-	//PHYSICAL HTTP GET CALL TO DOMAIN FOR RESULT DATA...
-	// HttpGet(url: string): Observable<any>
-	// {
-	// 	let domain = CdfDomainService.GetDomainFromUrl(url);
-	// 	let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-	// 	let options = new RequestOptions({ headers: headers });		
-    //     let token = super.GetToken(domain);
-    //     let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
-    //     let urlFragment = url.replace('https://api.twitter.com/1.1/','');
-    //     let urlFragmentHash = super.HashUrlFragment(urlFragment);
-    //     let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
-
-    //     // console.log('BEARER TOKEN:', bearerToken);   
-    //     // console.log('GOOGLE FRAGMENT:', urlFragment);
-    //     // console.log('GOOGLE FRAGMENT HASH:', urlFragmentHash);
-    //     // console.log('GOOGLE URL', twitterUrl);
-    //     // console.log('--------------------------------------------------------------------------'); 
-
-    //     //APPEND TO HEADER:
-    //     options.headers.append('BearerToken', bearerToken);
-    //     options.headers.append('UrlFragment', urlFragment);					
-    //     options.body = '';
-        
-    //     return this.http.get(twitterUrl, options).map((res: Response) => res.json());
-	// };	
-    
-	//PHYSICAL HTTP POST CALL TO DOMAIN FOR RESULT DATA...
-	HttpPost(postModel: CdfPostModel): Observable<any>
-	{ 
-		let domain = CdfDomainService.GetDomainFromUrl(postModel.URL);
-        let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-        let options = new RequestOptions({ headers: headers });				
-		let urlFragment = postModel.URL.replace('https://api.twitter.com/1.1/','');
-                                    
-        //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
-
-        let requestModel = 
-        {
-            "BearerToken" : super.GetToken(domain),
-            "UrlFragment" : urlFragment,
-            "PostBody" : postModel.Body
-        };
-
-        let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/post/request';
-
-        return this.http.post(postUrl, JSON.stringify(requestModel), options).map((res: Response) => res.json());
-	};    
+	};  
 }

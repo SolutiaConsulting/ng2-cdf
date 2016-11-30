@@ -50,4 +50,10 @@ export class CdfMediaModel extends CdfRootModel
 		this.VideoList = videoList;
 		this.HasVideo = true;
 	};	
+
+	SetYouTubeId(youTubeId: string)
+	{
+		this.YouTubeId = youTubeId;
+		this.HasVideo = true;
+	};	
 }

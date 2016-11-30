@@ -57,6 +57,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 
 	ngOnInit()
 	{
+		window["jwplayer"] = jwPlayer;
 		jwPlayer.key = this.jwPlayerKey;
 
 		//console.log('****************** IS BACKGROUND: ', this.isBackground);

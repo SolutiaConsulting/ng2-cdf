@@ -71,7 +71,7 @@ export class ApiTwitterModel extends BaseDomainModel
                         "EncodedCredentials" : CONNECTION_CREDENTIALS.EncodedCredentials
                     };						
 
-                    let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/authenticate';
+                    let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/generate-token';
 
                     let newTokenSubscription = this.http.post(postUrl, JSON.stringify(requestModel), options)
                         .map(res => res.json())
