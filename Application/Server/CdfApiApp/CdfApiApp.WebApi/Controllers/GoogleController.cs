@@ -2,6 +2,7 @@
 using CdfApiApp.Common.Enums;
 using CdfApiApp.DataContracts.API;
 using CdfApiApp.DataContracts.Implementations;
+using CdfApiApp.DataContracts.Interfaces;
 using Google.Apis.Auth.OAuth2;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace CdfApiApp.WebApi.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[Route("generate-token")]
-		[ResponseType(typeof(String))]
+		[ResponseType(typeof(IAuthenticationDataContract))]
 		public HttpResponseMessage PostGenerateToken(GoogleAuthenticationRequestModel requestModel)
 		{
 			//var encodedCredentials = "V3RReEk1Q1pqZloxeHVFdFlNNkhoRmlzUjp5RU85NThFd2N2WExDems5U1h0Y0Zqbms0QUxOTmtWUmFLYzFDSmtMZ2I0SGFQSHVsMw==";
@@ -91,7 +92,11 @@ namespace CdfApiApp.WebApi.Controllers
 
 					var accessToken = task.Result;
 
-					return Request.CreateResponse(HttpStatusCode.OK, accessToken);
+					IAuthenticationDataContract authenticationDataContract = new AuthenticationDataContract();
+					authenticationDataContract.token_type = "bearer";
+					authenticationDataContract.access_token = accessToken;
+
+					return Request.CreateResponse(HttpStatusCode.OK, authenticationDataContract);
 				}
 				catch (Exception ex)
 				{

@@ -39,7 +39,7 @@ namespace CdfApiApp.WebApi.Controllers
 		/// TWITTER AUTHENTICATE
 		/// </summary>
 		/// <returns></returns>
-		[Route("authenticate")]
+		[Route("generate-token")]
 		[ResponseType(typeof(IAuthenticationDataContract))]
 		public HttpResponseMessage PostAuthenticate(TwitterAuthenticationRequestModel requestModel)
 		{
