@@ -1,7 +1,8 @@
-export class CdfConfigModel
+import { CdfConfigModelInterface }  from './cdf-config.interface';
+
+export class CdfConfigModel implements CdfConfigModelInterface
 {
 	Domain: string;
-	EncodedCredentials: string;
-	OAuthURL: string;
-	Body: string
+	ApplicationKey: string;
+	ScopeList?: string[]
 }

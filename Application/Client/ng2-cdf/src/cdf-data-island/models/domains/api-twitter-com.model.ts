@@ -68,7 +68,7 @@ export class ApiTwitterModel extends BaseDomainModel
 
                     let requestModel = 
                     {
-                        "EncodedCredentials" : CONNECTION_CREDENTIALS.EncodedCredentials
+                        "ApplicationKey" : CONNECTION_CREDENTIALS.ApplicationKey
                     };						
 
                     let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/generate-token';

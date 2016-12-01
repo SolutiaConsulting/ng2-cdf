@@ -100,68 +100,71 @@ export class BaseDomainModel implements BaseDomainInterface
 
 	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
 	{
-		//RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
-		let errorDomain = CdfDomainService.GetDomainFromUrl(errorUrl);
+		console.log('ERROR - AuthenticateObservable MUST BE IMPLEMENTED IN DOMAIN SPECIFIC MODEL THAT EXTENDS BaseDomainModel');
 
-		//DELETE TOKEN
-		this.DeleteToken(errorDomain);
+		return undefined;
+		// //RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
+		// let errorDomain = CdfDomainService.GetDomainFromUrl(errorUrl);
+
+		// //DELETE TOKEN
+		// this.DeleteToken(errorDomain);
 
 
-		return Observable.create(observer => 
-		{
-			var authToken = this.GetToken(errorDomain);		
+		// return Observable.create(observer => 
+		// {
+		// 	var authToken = this.GetToken(errorDomain);		
 			
-			if (authToken)
-			{
-				//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN
-				observer.next(authToken);
-				observer.complete();
-			}
-			else
-			{
-                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+		// 	if (authToken)
+		// 	{
+		// 		//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN
+		// 		observer.next(authToken);
+		// 		observer.complete();
+		// 	}
+		// 	else
+		// 	{
+        //         let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
 
-                if(CONNECTION_CREDENTIALS)
-                {
-                    let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
-                    let url = CONNECTION_CREDENTIALS.OAuthURL;
-                    let body = CONNECTION_CREDENTIALS.Body;
-                    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
+        //         if(CONNECTION_CREDENTIALS)
+        //         {
+        //             let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
+        //             let url = CONNECTION_CREDENTIALS.OAuthURL;
+        //             let body = CONNECTION_CREDENTIALS.Body;
+        //             let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
 
-                    let newTokenSubscription = this.http.post(url, body, { headers })
-                        .map(res => res.json())
-                        .subscribe (
-                            //SUCCESS
-                            data =>
-                            {
-                                //console.log('************************ BASE DOMAIN MODEL NEW TOKEN:', data);
+        //             let newTokenSubscription = this.http.post(url, body, { headers })
+        //                 .map(res => res.json())
+        //                 .subscribe (
+        //                     //SUCCESS
+        //                     data =>
+        //                     {
+        //                         //console.log('************************ BASE DOMAIN MODEL NEW TOKEN:', data);
 
-                                //SET TOKEN RECEIVED FROM API
-                                this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
+        //                         //SET TOKEN RECEIVED FROM API
+        //                         this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
-                                //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
-                                observer.next(data);
-                                observer.complete();
-                            },
+        //                         //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
+        //                         observer.next(data);
+        //                         observer.complete();
+        //                     },
 
-                            //ERROR
-                            err =>
-                            { 
-                                //console.log('authenticateObservable error smalls:', err);
-                            },
+        //                     //ERROR
+        //                     err =>
+        //                     { 
+        //                         //console.log('authenticateObservable error smalls:', err);
+        //                     },
 
-                            //COMPLETE
-                            () =>
-                            { 
-                                if (newTokenSubscription)
-                                { 
-                                    newTokenSubscription.unsubscribe();
-                                }							
-                            }
-                        )									
-                }
-			}
-        });
+        //                     //COMPLETE
+        //                     () =>
+        //                     { 
+        //                         if (newTokenSubscription)
+        //                         { 
+        //                             newTokenSubscription.unsubscribe();
+        //                         }							
+        //                     }
+        //                 )									
+        //         }
+		// 	}
+        // });
 	};
 
 	//PHYSICAL HTTP GET CALL TO DOMAIN FOR RESULT DATA...

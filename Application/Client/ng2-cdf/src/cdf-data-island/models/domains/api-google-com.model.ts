@@ -60,21 +60,17 @@ export class ApiGoogleModel extends BaseDomainModel
 
                 if(CONNECTION_CREDENTIALS)
                 {
-					let url =  this.CDF_WEBAPI_BASE_URL + "/google/generate-token";
+                    let requestModel = 
+                    {
+                        "ApplicationKey" : CONNECTION_CREDENTIALS.ApplicationKey,
+						"ScopeList": CONNECTION_CREDENTIALS.ScopeList
+                    };
 
-					//TODO: GET BODY JSON FROM CONNECTION_CREDENTIALS...
-					let body = 
-					{
-						"ApplicationKey": "42d28aaf-0cef-4433-bb9b-0981fd06375a",
-						"ScopeList": 
-						[
-							"https://www.googleapis.com/auth/youtube"
-						]
-					};
+					let url =  this.CDF_WEBAPI_BASE_URL + "/google/generate-token";
 
 					let headers = new Headers({ 'Content-Type': 'application/json'});
 
-					let newTokenSubscription = this.http.post(url, body, { headers })
+					let newTokenSubscription = this.http.post(url, JSON.stringify(requestModel), { headers })
 							.map(res => res.json())
 							.subscribe (
 								//SUCCESS
