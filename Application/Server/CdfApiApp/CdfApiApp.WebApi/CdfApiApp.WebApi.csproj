@@ -270,6 +270,7 @@
     <Compile Include="Attributes\ApiExceptionHandlingAttribute.cs" />
     <Compile Include="Controllers\BaseAPIController.cs" />
     <Compile Include="Controllers\Generated\API\TestAPIController.cs" />
+    <Compile Include="Controllers\CloudCMSController.cs" />
     <Compile Include="Controllers\GoogleController.cs" />
     <Compile Include="Controllers\TwitterController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -279,7 +280,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\CorsHandler.cs" />
+    <Compile Include="Helpers\WebRequestHelper.cs" />
     <Compile Include="Helpers\GoogleJsonWebToken.cs" />
+    <Compile Include="Helpers\AccessTokenHelper.cs" />
     <Compile Include="Helpers\GoogleJwtHelper.cs" />
     <Compile Include="Helpers\JsonWebToken.cs" />
     <Compile Include="Helpers\ReponseMessageHelper.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
-using CdfApiApp.DataContracts.Interfaces;
+using CdfApiApp.DataContracts.Interfaces.Twitter;
 
-namespace CdfApiApp.DataContracts.Implementations
+namespace CdfApiApp.DataContracts.Implementations.Twitter
 {
 	public class TwitterPostRequestModel : ITwitterPostRequestModel
 	{

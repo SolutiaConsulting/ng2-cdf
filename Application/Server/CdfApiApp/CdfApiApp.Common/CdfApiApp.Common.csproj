@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\CredentialTypeEnum.cs" />
     <Compile Include="Enums\AppDomainEnum.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Helpers\Generated\SqlReaderHelper.cs" />
