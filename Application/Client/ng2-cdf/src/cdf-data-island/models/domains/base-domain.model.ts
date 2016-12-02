@@ -54,34 +54,34 @@ export class BaseDomainModel implements BaseDomainInterface
 		return injector.get(Http);  		
 	};
 
-    HasToken(domain:string): boolean
+    HasToken(domainName:string): boolean
 	{
-		return (this.GetToken(domain) != undefined);
+		return (this.GetToken(domainName) != undefined);
 	};
 
-    GetToken(domain:string): string
+    GetToken(domainName:string): string
 	{
-		//console.log('GET TOKEN DOMAIN:', domain);
+		//console.log('GET TOKEN DOMAIN:', domainName);
 
-		var authTokenStorage = (localStorage.getItem(domain)) ? JSON.parse(localStorage.getItem(domain)) : undefined;
+		var authTokenStorage = (localStorage.getItem(domainName)) ? JSON.parse(localStorage.getItem(domainName)) : undefined;
 		return (authTokenStorage && authTokenStorage.access_token) ? authTokenStorage.access_token : undefined;
 	};
 
-	SetToken(domain:string, token: any): void
+	SetToken(domainName:string, token: any): void
 	{
-		// console.log('SET TOKEN DOMAIN:', domain);
+		// console.log('SET TOKEN DOMAIN:', domainName);
 		// console.log('SET TOKEN:', token);
 
-		localStorage.setItem(domain, JSON.stringify(token));
+		localStorage.setItem(domainName, JSON.stringify(token));
 	}
 
-	DeleteToken(domain:string): void
+	DeleteToken(domainName:string): void
 	{ 
-		//console.log('DELETE TOKEN DOMAIN:', domain);
+		//console.log('DELETE TOKEN DOMAIN:', domainName);
 
-		if (localStorage.getItem(domain))
+		if (localStorage.getItem(domainName))
 		{ 
-			localStorage.removeItem(domain);
+			localStorage.removeItem(domainName);
 		}	
 	};	
 
@@ -101,79 +101,16 @@ export class BaseDomainModel implements BaseDomainInterface
 	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
 	{
 		console.log('ERROR - AuthenticateObservable MUST BE IMPLEMENTED IN DOMAIN SPECIFIC MODEL THAT EXTENDS BaseDomainModel');
-
 		return undefined;
-		// //RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
-		// let errorDomain = CdfDomainService.GetDomainFromUrl(errorUrl);
-
-		// //DELETE TOKEN
-		// this.DeleteToken(errorDomain);
-
-
-		// return Observable.create(observer => 
-		// {
-		// 	var authToken = this.GetToken(errorDomain);		
-			
-		// 	if (authToken)
-		// 	{
-		// 		//COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN
-		// 		observer.next(authToken);
-		// 		observer.complete();
-		// 	}
-		// 	else
-		// 	{
-        //         let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
-
-        //         if(CONNECTION_CREDENTIALS)
-        //         {
-        //             let authorization = 'Basic ' + CONNECTION_CREDENTIALS.EncodedCredentials;
-        //             let url = CONNECTION_CREDENTIALS.OAuthURL;
-        //             let body = CONNECTION_CREDENTIALS.Body;
-        //             let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': authorization });
-
-        //             let newTokenSubscription = this.http.post(url, body, { headers })
-        //                 .map(res => res.json())
-        //                 .subscribe (
-        //                     //SUCCESS
-        //                     data =>
-        //                     {
-        //                         //console.log('************************ BASE DOMAIN MODEL NEW TOKEN:', data);
-
-        //                         //SET TOKEN RECEIVED FROM API
-        //                         this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
-
-        //                         //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
-        //                         observer.next(data);
-        //                         observer.complete();
-        //                     },
-
-        //                     //ERROR
-        //                     err =>
-        //                     { 
-        //                         //console.log('authenticateObservable error smalls:', err);
-        //                     },
-
-        //                     //COMPLETE
-        //                     () =>
-        //                     { 
-        //                         if (newTokenSubscription)
-        //                         { 
-        //                             newTokenSubscription.unsubscribe();
-        //                         }							
-        //                     }
-        //                 )									
-        //         }
-		// 	}
-        // });
 	};
 
 	//PHYSICAL HTTP GET CALL TO DOMAIN FOR RESULT DATA...
 	HttpGet(url: string): Observable<any>
 	{
-		let domain = CdfDomainService.GetDomainFromUrl(url);
+		let domainName = CdfDomainService.GetDomainNameFromUrl(url);
 		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
 		let options = new RequestOptions({ headers: headers });				
-        let token = this.GetToken(domain);
+        let token = this.GetToken(domainName);
         let bearerToken = (token) ? 'Bearer ' + token : 'TOKEN-NOT-KNOWN';
                 
         //APPEND TO HEADER:
@@ -190,14 +127,14 @@ export class BaseDomainModel implements BaseDomainInterface
 	//PHYSICAL HTTP POST CALL TO DOMAIN FOR RESULT DATA...
 	HttpPost(postModel: CdfPostModel): Observable<any>
 	{ 
-		let domain = CdfDomainService.GetDomainFromUrl(postModel.URL);
+		let domainName = CdfDomainService.GetDomainNameFromUrl(postModel.URL);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
         let options = new RequestOptions({ headers: headers });		
 		
         //APPEND TO HEADER: Authorization : Bearer [token]
-        if (this.HasToken(domain))
+        if (this.HasToken(domainName))
         {
-            options.headers.append('Authorization', 'Bearer ' + this.GetToken(domain));
+            options.headers.append('Authorization', 'Bearer ' + this.GetToken(domainName));
             options.headers.append('Access-Control-Allow-Origin', '*');
         }
                         

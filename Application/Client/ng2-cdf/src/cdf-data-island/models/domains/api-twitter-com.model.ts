@@ -39,15 +39,15 @@ export class ApiTwitterModel extends BaseDomainModel
 	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
 	{
 		//RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
-		let errorDomain = CdfDomainService.GetDomainFromUrl(errorUrl);
+		let errorDomainName = CdfDomainService.GetDomainNameFromUrl(errorUrl);
 
 		//DELETE TOKEN
-		super.DeleteToken(errorDomain);
+		super.DeleteToken(errorDomainName);
 
 
 		return Observable.create(observer => 
 		{
-			var authToken = super.GetToken(errorDomain);		
+			var authToken = super.GetToken(errorDomainName);		
 			
 			if (authToken)
 			{
@@ -57,7 +57,7 @@ export class ApiTwitterModel extends BaseDomainModel
 			}
 			else
 			{
-                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+                let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomainName);
 
                 if(CONNECTION_CREDENTIALS)
                 {
@@ -112,10 +112,10 @@ export class ApiTwitterModel extends BaseDomainModel
 	//PHYSICAL HTTP GET CALL TO DOMAIN FOR RESULT DATA...
 	HttpGet(url: string): Observable<any>
 	{
-		let domain = CdfDomainService.GetDomainFromUrl(url);
+		let domainName = CdfDomainService.GetDomainNameFromUrl(url);
 		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
 		let options = new RequestOptions({ headers: headers });		
-        let token = super.GetToken(domain);
+        let token = super.GetToken(domainName);
         let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
         let urlFragment = url.replace(this.TWITTER_API_URL,'');
         let urlFragmentHash = super.HashUrlFragment(urlFragment);
@@ -138,7 +138,7 @@ export class ApiTwitterModel extends BaseDomainModel
 	//PHYSICAL HTTP POST CALL TO DOMAIN FOR RESULT DATA...
 	HttpPost(postModel: CdfPostModel): Observable<any>
 	{ 
-		let domain = CdfDomainService.GetDomainFromUrl(postModel.URL);
+		let domainName = CdfDomainService.GetDomainNameFromUrl(postModel.URL);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
         let options = new RequestOptions({ headers: headers });				
         let urlFragment = postModel.URL.replace(this.TWITTER_API_URL,'');
@@ -147,7 +147,7 @@ export class ApiTwitterModel extends BaseDomainModel
 
         let requestModel = 
         {
-            "BearerToken" : super.GetToken(domain),
+            "BearerToken" : super.GetToken(domainName),
             "UrlFragment" : urlFragment,
             "PostBody" : postModel.Body
         };

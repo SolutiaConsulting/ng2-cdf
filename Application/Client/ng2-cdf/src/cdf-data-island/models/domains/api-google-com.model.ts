@@ -38,15 +38,15 @@ export class ApiGoogleModel extends BaseDomainModel
 	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
 	{
 		//RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
-		let errorDomain = CdfDomainService.GetDomainFromUrl(errorUrl);
+		let errorDomainName = CdfDomainService.GetDomainNameFromUrl(errorUrl);
 
 		//DELETE TOKEN
-		super.DeleteToken(errorDomain);
+		super.DeleteToken(errorDomainName);
 
 
 		return Observable.create(observer => 
 		{
-			var authToken = super.GetToken(errorDomain);		
+			var authToken = super.GetToken(errorDomainName);		
 			
 			if (authToken)
 			{
@@ -56,7 +56,7 @@ export class ApiGoogleModel extends BaseDomainModel
 			}
 			else
 			{
-				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomain);
+				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomainName);
 
                 if(CONNECTION_CREDENTIALS)
                 {

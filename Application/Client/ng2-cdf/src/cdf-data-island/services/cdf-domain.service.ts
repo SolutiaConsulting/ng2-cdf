@@ -32,10 +32,15 @@ export class CdfDomainService
 	{ 
 	}
 
-    static GetDomainModel(domainUrl: string) : BaseDomainInterface
+    static GetDomainModelFromUrl(domainUrl: string) : BaseDomainInterface
     {
-        let domain = CdfDomainService.GetDomainFromUrl(domainUrl);
-        
+        let domainName = CdfDomainService.GetDomainNameFromUrl(domainUrl);
+
+        return CdfDomainService.GetDomainModelFromDomainName(domainName);        
+    };
+
+    static GetDomainModelFromDomainName(domainName: string) : BaseDomainInterface
+    {
         let injector = ReflectiveInjector.resolveAndCreate
         (
             [
@@ -45,14 +50,15 @@ export class CdfDomainService
             ]
         );                
 
-        let domainModel = injector.get(domain);
+        let domainModel = injector.get(domainName);
 
-        //TODO:  POSSIBLE CHECK IF DOMAIN IS NOT ONE SUPPORTED BY CDF...
+        //TODO:  POSSIBLE CHECK IF DOMAIN IS NOT ONE SUPPORTED BY CDF (ie domainModel IS NOT FOUND THROUGH INJECTOR)...
 
         return domainModel;
+
     };
 
-    static GetDomainFromUrl(url:string) : string
+    static GetDomainNameFromUrl(url:string) : string
 	{
 		let matches = url.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
 		let domain: string = matches && matches[ 1 ];
@@ -80,5 +86,5 @@ export class CdfDomainService
         }
 		
 		return domain;
-	};      
+	};    
 }
