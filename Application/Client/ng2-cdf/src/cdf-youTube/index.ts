@@ -3,4 +3,4 @@
  */
 export * from './components/index';
 export * from './models/index';
-export * from './cdf-media.module';
+export * from './cdf-youTube.module';

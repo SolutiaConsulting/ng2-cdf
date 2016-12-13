@@ -11,12 +11,9 @@ import
 	CdfDataService,
 	CdfSettingsService,
 
-	//CDF-MEDIA
-	CdfImageComponent,
-	CdfMediaComponent,
-	CdfMediaSliderComponent,
-	CdfVideoBackgroundComponent,
-	CdfVideoYouTubeComponent
+	CdfMediaModule,
+	CdfTweetModule,
+	CdfYouTubeModule
 } 											from './index';
 
 
@@ -34,24 +31,21 @@ import { provideCdfVideoSettingsService } 	from './cdf-media/components/video/cd
 	declarations:
 	[
 		//CDF-DATA-ISLAND
-		CdfDataIslandComponent,
-	
-		// //CDF-MEDIA
-		CdfImageComponent,
-		CdfMediaComponent,
-		CdfMediaSliderComponent,
-		CdfVideoBackgroundComponent,
-		CdfVideoYouTubeComponent
+		CdfDataIslandComponent
 	],
 	exports:
 	[
 		// CDF-DATA-ISLAND
 		CdfDataIslandComponent,
 	
-		// CDF-MEDIA COMPONENTS TO BE USED IN CLIENT APPS...
-		CdfVideoBackgroundComponent,
-		CdfMediaComponent,
-		CdfMediaSliderComponent
+		// CDF-MEDIA
+		CdfMediaModule,
+
+		//CDF-TWEET
+		CdfTweetModule,	
+
+		//CDF-YOUTUBE
+		CdfYouTubeModule
 	],
 	providers:
 	[
