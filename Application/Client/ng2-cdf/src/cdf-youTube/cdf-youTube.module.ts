@@ -31,6 +31,10 @@ import { CdfMediaModule }					from '../cdf-media/index';
 		CdfYouTubeComponent
 
 	],
+	entryComponents:
+	[
+		CdfYouTubeComponent
+	],
 	providers:
 	[		
 	]

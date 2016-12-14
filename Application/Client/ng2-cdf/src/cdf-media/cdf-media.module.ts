@@ -35,6 +35,12 @@ import
 		CdfMediaComponent,
 		CdfMediaSliderComponent
 	],
+	entryComponents:
+	[
+		CdfVideoBackgroundComponent,
+		CdfMediaComponent,
+		CdfMediaSliderComponent
+	],
 	providers:
 	[
 	]

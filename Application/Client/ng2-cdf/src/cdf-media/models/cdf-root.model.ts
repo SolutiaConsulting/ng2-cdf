@@ -4,6 +4,7 @@ export class CdfRootModel
 	NodeId: string;
 	Title: string;
 	Description: string;
+	TimeStamp: Date;
 
 	constructor(rawJson?: any, type?: string)
 	{

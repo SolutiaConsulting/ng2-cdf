@@ -27,6 +27,10 @@ import
 		CdfTweetComponent
 
 	],
+	entryComponents:
+	[
+		CdfTweetComponent
+	],
 	providers:
 	[
 		CdfTweetService

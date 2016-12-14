@@ -2,7 +2,6 @@ import
 {
 	AfterViewInit,
 	Component,
-	ElementRef,
 	Input,
 	OnInit,
 
@@ -16,6 +15,7 @@ import
 } 								from '@angular/core';
 
 import { CdfYouTubeModel }		from '../models/index';
+import { OnlineService }		from '../../services/index';
 
 @Component({
 	selector: 'cdf-youtube',
@@ -26,7 +26,7 @@ import { CdfYouTubeModel }		from '../models/index';
 	styles: [ 
 		`		
 		` ],
-	providers: [],
+	providers: [ OnlineService ],
 	animations:
 	[
 		trigger('visibilityChangedTrigger', 
@@ -43,21 +43,32 @@ export class CdfYouTubeComponent implements OnInit, AfterViewInit
 
 	@Input() youTubeModel: CdfYouTubeModel;	
 
-	@Input()
-	set Online(isOnline: boolean) 
-	{
-		this.isOnlineConnection = isOnline;
-	}	
-
 	constructor
 	(
-		private element: ElementRef
+		private onlineService : OnlineService
 	)
 	{
 	}
 
 	ngOnInit()
 	{
+        this.onlineService.IsOnlineStream.subscribe(
+            //SUCCESS
+            data =>
+            {	
+				this.isOnlineConnection = data;				
+            },
+
+            //ERROR
+            err =>
+            { 
+            },
+
+            //COMPLETE
+            () =>
+            {                 
+            }				
+        );				
 	}
 
 	ngAfterViewInit()

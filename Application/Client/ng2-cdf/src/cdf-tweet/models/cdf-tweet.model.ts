@@ -48,6 +48,7 @@ export class CdfTweetModel extends CdfMediaModel
 			if(rawJson.created_at)
 			{
 				this.CreatedAt = rawJson.created_at;
+				this.TimeStamp = new Date(rawJson.created_at);
 			}
 		}
 	}	

@@ -45,6 +45,7 @@ export class CdfYouTubeModel extends CdfMediaModel
 				if(rawJson.snippet.publishedAt)
 				{
 					this.PublishedAt = rawJson.snippet.publishedAt;
+					this.TimeStamp = new Date(rawJson.snippet.publishedAt);
 				}
 
 				//POSTER IMAGE
