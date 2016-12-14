@@ -22,11 +22,11 @@ import { CdfTweetService }		from '../services/index';
 	selector: 'cdf-tweet',
 	template: 
 	`
-	<section class="offline" [@visibilityChangedTrigger]="isOfflineVisible">
+	<section class="offline" *ngIf="isOfflineVisible" [@visibilityChangedTrigger]="isOfflineVisible">
 		<p>{{this.tweetModel.Text}}</p>
 		<p>{{this.tweetModel.CreatedAt}}</p>		
 	</section>
-	<section id="tweetContainer" [@visibilityChangedTrigger]="isOnlineVisible"></section>			
+	<section id="tweetContainer" *ngIf="isOnlineVisible" [@visibilityChangedTrigger]="isOnlineVisible"></section>			
 	`,
 	styles: [ 
 		`
@@ -43,7 +43,8 @@ import { CdfTweetService }		from '../services/index';
 		[
 			state('true' , style({ opacity: 1 })),
 			state('false', style({ opacity: 0, display:'none' })),
-			transition('* => *', animate('.5s'))
+			transition('* => true', animate('.25s'))
+			transition('* => false', animate('.75s'))
 		])				
 	]	
 })
@@ -51,6 +52,7 @@ export class CdfTweetComponent implements OnInit, AfterViewInit
 {
 	private isOfflineVisible: boolean = true;
 	private isOnlineVisible: boolean = false;
+	private isCurrentlyOnline: boolean = false;
 
 	@Input() tweetModel: CdfTweetModel;	
 
@@ -59,7 +61,18 @@ export class CdfTweetComponent implements OnInit, AfterViewInit
 	{
 		if (isOnline === true) 
 		{
-			this.showTweetWidget();
+			if (!this.isCurrentlyOnline) 
+			{
+				this.isOnlineVisible = true;
+				this.showTweetWidget();
+			}
+		}
+		else {
+			if (!this.isCurrentlyOnline) 
+			{
+				this.isOfflineVisible = true;
+				this.isOnlineVisible = false;
+			}
 		}
 	}	
 
@@ -96,8 +109,9 @@ export class CdfTweetComponent implements OnInit, AfterViewInit
 				(
 					function success(embed) 
 					{
-						that.isOfflineVisible = false;
-						that.isOnlineVisible = true;
+						that.isOfflineVisible = false; 
+						that.isOnlineVisible = true; 	
+						that.isCurrentlyOnline = true;					
 						//console.log('Created tweet widget: ', embed);
 					} 
 				).catch
