@@ -18,7 +18,10 @@ export class CdfTweetService
 		return Observable.create(observer => 
 		{
             //START LOADING SCRIPT INTO DOM
-            that.startScriptLoad();
+            if(!window['twttr'])
+            {
+                that.startScriptLoad();
+            }                        
 
             //WHEN TWITTER WIDGETS SCRIPT IS LOADED, THEN PASS ALONG....
             window['twttr'].ready

@@ -14,6 +14,7 @@ import
 	state,
 	style	
 } 								from '@angular/core';
+import { Observable } 			from 'rxjs/Rx';
 
 import { CdfTweetModel }		from '../models/index';
 import { CdfTweetService }		from '../services/index';
@@ -23,18 +24,35 @@ import { OnlineService }		from '../../services/index';
 	selector: 'cdf-tweet',
 	template: 
 	`
-	<section class="offline" *ngIf="isOfflineVisible" [@visibilityChangedTrigger]="isOfflineVisible">
-		<p>{{this.tweetModel.Text}}</p>
-		<p>{{this.tweetModel.CreatedAt}}</p>		
+	<section class="offline" *ngIf="isOfflineState" [@visibilityChangedTrigger]="isOfflineState">
+		<p class="text">{{this.tweetModel.Text}}</p>
+		<p class="timestamp">{{this.tweetModel.CreatedAt | date:'medium'}}</p>		
 	</section>
-	<section id="tweetContainer" *ngIf="isOnlineVisible" [@visibilityChangedTrigger]="isOnlineVisible"></section>			
+	<section id="tweetContainer" *ngIf="isOnlineState" [@visibilityChangedTrigger]="isOnlineState"></section>			
 	`,
 	styles: [ 
 		`
 		section.offline
 		{
-			border-bottom: solid 1px red;
+			border: solid 1px rgb(225, 232, 237);
+			margin: 0.5rem 0;
+			padding: 20px 20px 11.6px;
+			border-radius: 0.325rem;			
 		}
+
+		p.text
+		{
+			line-height: 1.6;
+			text-rendering: optimizeLegibility;
+			color: rgb(28, 32, 34);
+			font: 16px/1.4 Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
+		}
+
+		p.timestamp
+		{
+			color: rgb(105, 120, 130);
+			font-size: 12.25px;
+		}		
 		
 		` ],
 	providers: [ OnlineService ],
@@ -51,9 +69,9 @@ import { OnlineService }		from '../../services/index';
 })
 export class CdfTweetComponent implements OnInit, AfterViewInit
 {
-	private isOfflineVisible: boolean = true;
-	private isOnlineVisible: boolean = false;
-	private isCurrentlyOnline: boolean = false;
+	private isOfflineState: boolean = true;
+	private isOnlineState: boolean = false;
+	private isTwitterWidgetDisplayed: boolean = false;
 
 	@Input() tweetModel: CdfTweetModel;	
 
@@ -68,24 +86,51 @@ export class CdfTweetComponent implements OnInit, AfterViewInit
 
 	ngOnInit()
 	{
-        this.onlineService.IsOnlineStream.subscribe(
+        this.onlineService.IsOnlineStream.subscribe
+		(
             //SUCCESS
-            data =>
+            isOnlineValue =>
             {	
-				if (data === true) 
+				if (isOnlineValue === true) 
 				{
-					if (!this.isCurrentlyOnline) 
+					//IF TWITTER WIDGET NOT DISPLAYED, THEN ATTEMPT TO RETRIEVE TWITTER WIDGET FROM TWITTER
+					if (!this.isTwitterWidgetDisplayed) 
 					{
-						this.isOnlineVisible = true;
-						this.showTweetWidget();
+						this.isTwitterWidgetDisplayed = true;
+
+						//TRIP TO TRUE SO CONTAINER IS ADDED TO DOM SO TWITTER WIDGET CAN BE INJECTED...
+						this.isOnlineState = true;
+
+						//NOW ATTEMPT TO RENDER WIDGET
+						this.renderTweetWidget().subscribe
+						(							
+							data =>
+							{
+								this.isOfflineState = false; 
+								this.isOnlineState = true; 	
+							},
+
+							//ERROR
+							err =>
+							{ 
+								this.isOfflineState = true; 
+								this.isOnlineState = false; 
+								this.isTwitterWidgetDisplayed = false;								
+							},
+
+							//COMPLETE
+							() =>
+							{                 
+							}	
+						);
 					}
 				}
-				else if (data === false) 
+				else if (isOnlineValue === false) 
 				{
-					if (!this.isCurrentlyOnline) 
+					if (!this.isTwitterWidgetDisplayed) 
 					{
-						this.isOfflineVisible = true;
-						this.isOnlineVisible = false;
+						this.isOfflineState = true;
+						this.isOnlineState = false;
 					}
 				}					
             },
@@ -106,47 +151,51 @@ export class CdfTweetComponent implements OnInit, AfterViewInit
 	{
 	}
 
-	private showTweetWidget()
+	private renderTweetWidget(): Observable<any>
 	{
-		let that = this;
+		return Observable.create(observer => 
+		{
+			//MAKE SURE TWITTER WIDGET SCRIPT IS LOADED IN HEAD...
+			this.cdfTweetService.LoadScript().subscribe 
+			(
+				//SUCCESS, WE HAVE TWITTER WIDGET JS FILE LOADED...
+				data =>
+				{
+					let nativeElement = this.element.nativeElement;
+					let target = nativeElement.querySelector('section#tweetContainer');
 
-		//MAKE SURE TWITTER WIDGET SCRIPT IS LOADED IN HEAD...
-		this.cdfTweetService.LoadScript().subscribe 
-		(
-			//SUCCESS, WE HAVE TWITTER WIDGETS JS FILE LOADED...
-			twttr =>
-			{
-				let nativeElement = this.element.nativeElement;
-				let target = nativeElement.querySelector('section#tweetContainer');
+					window['twttr'].widgets.createTweet(this.tweetModel.Id, target, {}).then
+					(
+						//WE HAVE SUCCESSFULLY EMBEDDED TWITTER TWEET INTO UI...
+						function success(embed) 
+						{
+							//console.log('Created tweet widget: ', embed);
 
-				window['twttr'].widgets.createTweet(this.tweetModel.Id, target, {}).then
-				(
-					function success(embed) 
-					{
-						that.isOfflineVisible = false; 
-						that.isOnlineVisible = true; 	
-						that.isCurrentlyOnline = true;					
-						//console.log('Created tweet widget: ', embed);
-					} 
-				).catch
-				(
-					function creationError(message) 
-					{
-						//console.log('Could not create widget: ', message);
-					}
-				);				
-			},
+							observer.next();
+							observer.complete();
+						} 
+					).catch
+					(
+						function creationError(message) 
+						{
+							//console.log('Could not create widget: ', message);
+							observer.error(message);
+						}
+					);				
+				},
 
-			//ERROR
-			err =>
-			{
-				console.log('****  ERROR LOADING TWITTER WIDGET', err);
-			},
-			
-			//COMPLETE
-			() =>
-			{
-			}			
-		);
+				//ERROR
+				err =>
+				{
+					//console.log('****  ERROR LOADING TWITTER WIDGET', err);
+					observer.error(err);					
+				},
+				
+				//COMPLETE
+				() =>
+				{
+				}			
+			);
+		});
 	}
 }
