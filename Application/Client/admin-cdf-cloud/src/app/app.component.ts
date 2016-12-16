@@ -1,10 +1,43 @@
-import { Component } from '@angular/core';
+import {
+    Component,
+    NgZone,
+    OnInit
+} 									from '@angular/core';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  title = 'app works!';
+import { OnlineService }			from './shared/services/index';
+
+@Component
+    ({
+        selector: 'cdf-app',
+        templateUrl: './app.component.html',
+        styleUrls: ['./app.component.scss']
+    })
+export class AppComponent implements OnInit
+{
+    constructor(
+        private onlineService : OnlineService
+    ) 
+	{
+    }
+
+    ngOnInit()
+    {
+        this.onlineService.IsOnlineStream.subscribe(
+            //SUCCESS
+            data =>
+            {	
+                //console.log('APP COMPONENT IS ONLINE:', data);						
+            },
+
+            //ERROR
+            err =>
+            { 
+            },
+
+            //COMPLETE
+            () =>
+            {                 
+            }				
+        );
+    }
 }

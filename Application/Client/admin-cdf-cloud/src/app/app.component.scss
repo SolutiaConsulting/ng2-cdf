@@ -1,0 +1,64 @@
+// http://ionicframework.com/docs/v2/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+
+@import '../styles/variables';
+
+
+
+
+/* SMALL - PORTRAIT */
+//20rem = 320px
+@media only screen and (max-width : $smallPortraitMaxWidth)
+{	
+}
+
+
+/* SMALL - LANDSCAPE */
+//20.0625rem = 321px	39.9999rem = 639px
+@media only screen and (min-width : $smallLandscapeMinWidth) and (max-width : $smallLandscapeMaxWidth) and (orientation : landscape)
+{	
+}
+
+
+/* MEDIUM */
+//40rem = 640px		//64rem = 1024px 
+@media only screen and (min-width : $mediumMinWidth)
+{
+}
+
+
+/* MEDIUM - PORTRAIT*/
+//40rem = 640px		//64rem = 1024px 
+@media only screen and (min-width : $mediumMinWidth) and (max-width : $mediumMaxWidth) and (orientation : portrait)
+{
+}
+
+
+/* MEDIUM - LANDSCAPE */
+//40rem = 640px		//64rem = 1024px
+@media only screen and (min-width : $mediumMinWidth) and (max-width : $mediumMaxWidth) and (orientation : landscape)
+{	
+}
+
+
+
+/* LARGE */
+//64.0625rem = 1025px
+@media only screen and (min-width: $largeMinWidth)
+{
+}
