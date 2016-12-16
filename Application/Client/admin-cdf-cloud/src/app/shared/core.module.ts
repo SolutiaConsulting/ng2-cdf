@@ -14,6 +14,7 @@ import { RouterModule } 			from '@angular/router';
 import
 {
 	//SHARED SERVICES
+	AuthService,
 	BreadcrumbService,
 	CompareService,
 	ConfigService,
@@ -64,6 +65,7 @@ export class CoreModule
 			ngModule: CoreModule,
 			providers:
 			[ 
+				AuthService,
 				BreadcrumbService,
 				CompareService,
 				OnlineService,

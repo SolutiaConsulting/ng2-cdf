@@ -1,4 +1,9 @@
 <cdf-data-island [RequestData]="RequestModel" (onContentReceived)="onContentReceived($event)" (onContentError)="onContentError($event)"></cdf-data-island>
 
+<h2>HOME BASE PAGE</h2>
 
-HOME BASE PAGE
+<div class="navbar-header">
+	<a class="navbar-brand" href="#">Auth0 - Angular 2</a>
+	<button class="btn btn-primary btn-margin" (click)="authService.login()" *ngIf="!authService.authenticated()">Log In</button>
+	<button class="btn btn-primary btn-margin" (click)="authService.logout()" *ngIf="authService.authenticated()">Log Out</button>
+</div>

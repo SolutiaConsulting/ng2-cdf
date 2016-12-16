@@ -10,7 +10,9 @@ import {
 } 									from 'ng2-cdf/lib';
 
 import { PageHomeModel } 			from '../models/page-home.model';
-import { 
+import
+{ 
+	AuthService,
 	CompareService,
 	OnlineService 
 } 									from '../../../shared/index';
@@ -30,6 +32,7 @@ export class HomeBaseComponent implements OnInit
 	PageData: PageHomeModel;
 	
 	constructor(
+		private authService: AuthService,
 		private zone: NgZone,
 		private compareService: CompareService,
 		private onlineService : OnlineService

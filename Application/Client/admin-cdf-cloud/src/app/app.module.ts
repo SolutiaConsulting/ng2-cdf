@@ -11,6 +11,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule }   	from './shared/core.module';
 import { HomeModule } 		from './pages/home/home.module';
 
+//3RD PARTY..
+import { AUTH_PROVIDERS }	from 'angular2-jwt';
+
+
 @NgModule({
 	imports:
 	[
@@ -29,7 +33,7 @@ import { HomeModule } 		from './pages/home/home.module';
 	],
 	providers:
 	[
-		
+		AUTH_PROVIDERS
 	],
 	bootstrap:
 	[

@@ -2,9 +2,13 @@ import {
     Component,
     NgZone,
     OnInit
-} 									from '@angular/core';
+} 								from '@angular/core';
 
-import { OnlineService }			from './shared/services/index';
+import
+{
+    AuthService,
+    OnlineService
+}                               from './shared/services/index';
 
 @Component
     ({
@@ -15,6 +19,7 @@ import { OnlineService }			from './shared/services/index';
 export class AppComponent implements OnInit
 {
     constructor(
+        private authService: AuthService,
         private onlineService : OnlineService
     ) 
 	{

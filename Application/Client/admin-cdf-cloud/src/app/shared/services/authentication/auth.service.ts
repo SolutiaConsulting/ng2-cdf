@@ -1,10 +1,8 @@
-// app/auth.service.ts
-
 import { Injectable } from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
 
 // Avoid name not found warnings
-declare var Auth0Lock: any;
+let Auth0Lock = require('auth0-lock').default;
 
 @Injectable()
 export class AuthService

@@ -6,7 +6,7 @@
 export const environment =
 	{
 		production: true,
-		name: 'DFW SportsBeat',
+		name: 'CDF Admin App',
 		version: '1.0.0',
 		JW_PLAYER:
 		{
