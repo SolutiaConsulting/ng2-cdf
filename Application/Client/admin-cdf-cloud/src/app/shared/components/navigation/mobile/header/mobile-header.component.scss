@@ -1,0 +1,204 @@
+@import '../../../../../../styles/variables';
+
+
+header 
+{
+	background-color: $color-primary;
+	color: $color-white;
+	padding: 4px 4px 0px 4px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+}
+
+.logo 
+{
+	font-size: 1.2em;
+	padding: 12px;
+	float: left;
+	color: $color-white;
+	text-decoration: none;
+}
+
+.btn--clear 
+{
+	color: $color-white;
+	float: left;
+	padding: 6px 0 0 0;
+	min-width: 54px;
+
+  	img 
+	{
+    	width: 34px;
+  	}
+}
+
+
+.menu-overlay 
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	width: 100%;
+	height: 100%;
+	background: $color-transparent-grey;
+	display: none;
+}
+
+.menu-btn 
+{
+	position: absolute;
+	top: 2px;
+	left: 8px;
+	padding: 7px 8px 6px 8px;
+	font-size: 1.8em;
+	background: 0 0;
+	border: 0;
+	color: $color-white;
+}
+
+.nav 
+{
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 240px;
+	height: 100%;
+	left: -300px;
+	position: fixed;
+	z-index: 4;
+	background-color: $color-white;
+	overflow: hidden;
+	-webkit-transition: left 0.3s;
+	-moz-transition: left 0.3s;
+	-o-transition: left 0.3s;
+	transition: left 0.3s;
+	will-change: left;
+
+	.nav__link 
+	{
+		display: block;
+		padding: 18px 13px 16px 26px;
+		font-size: 1em;
+		text-decoration: none;
+		font-weight: 300;
+		color: $color-grey-dark;
+		position: relative;
+		font-weight: bold;
+
+		&:hover, &:active, &:focus 
+		{
+			background: darken($color-white, 5%);
+		}
+	}
+
+	.nav__link-icon 
+	{
+		color: #747474;
+		font-size: 1.2em;
+		position: absolute;
+		top: 18px;
+		left: 22px;
+		font-weight: normal;
+	}
+
+	.close-menu-btn 
+	{
+		color: $color-primary;
+		border: 0;
+		margin-bottom: 6px;
+		padding: 10px;
+		display: block;
+		overflow: auto;
+		position: absolute;
+		font-size: 1.5em;
+		right: 0;
+
+		&:focus, &:active 
+		{
+			outline: none;
+		}
+	}
+
+	.logout-group 
+	{
+		float: left;
+		padding: 10px;
+	}
+}
+
+.open-nav 
+{
+	.nav 
+	{
+		left: 0;
+	}
+
+	.menu-overlay 
+	{
+		display: block;
+	}
+}
+
+
+main 
+{
+	padding: 4.75rem 1rem 2.75rem 1rem;
+}
+
+
+/* SMALL - PORTRAIT */
+//20rem = 320px
+@media only screen and (max-width : $smallPortraitMaxWidth)
+{
+}
+
+
+/* SMALL - LANDSCAPE */
+//20.0625rem = 321px	39.9999rem = 639px
+@media only screen and (min-width : $smallLandscapeMinWidth) and (max-width : $smallLandscapeMaxWidth) and (orientation : landscape)
+{	
+}
+
+
+/* MEDIUM */
+//40rem = 640px		//64rem = 1024px 
+@media only screen and (min-width : $mediumMinWidth)
+{
+}
+
+
+/* MEDIUM - PORTRAIT*/
+//40rem = 640px		//64rem = 1024px 
+@media only screen and (min-width : $mediumMinWidth) and (max-width : $mediumMaxWidth) and (orientation : portrait)
+{
+}
+
+
+/* MEDIUM - LANDSCAPE */
+//40rem = 640px		//64rem = 1024px
+@media only screen and (min-width : $mediumMinWidth) and (max-width : $mediumMaxWidth) and (orientation : landscape)
+{	
+}
+
+
+/* MEDIUM - MAX */
+@media only screen and (max-width : $mediumMaxWidth)
+{
+	main 
+	{
+		display: flex;
+		flex-direction: column;
+		min-height: 89vh;
+	}	
+}
+
+/* LARGE */
+//64.0625rem = 1025px
+@media only screen and (min-width: $largeMinWidth)
+{
+}
