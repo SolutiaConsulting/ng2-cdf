@@ -52,8 +52,6 @@ export class HomeBaseComponent implements OnInit
 		// 		'https://api.twitter.com/1.1/statuses/user_timeline.json?count=20&screen_name=dfwsportsbeat',
 		// 		'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCdNXQTnqhsnOa16lhbuvJ5w&order=date&maxResults=8'
 		// 	];
-		
-
 	}
 
 	onContentReceived(rawJson: any) 
