@@ -20,6 +20,16 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 	<ng-content></ng-content>	
 	`,
 	styles: [ `
+	:host 
+	{
+		height: 200px;
+	}
+
+	:host /deep/ .jwplayer
+	{
+		height: inherit !important;
+	}
+
 	:host /deep/ .jw-error .jw-preview, 
 	:host /deep/ .jw-stretch-uniform .jw-preview, 
 	:host /deep/ .jwplayer .jw-preview,
