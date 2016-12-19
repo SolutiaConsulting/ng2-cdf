@@ -47,6 +47,7 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 
 	ngOnInit()
 	{
+		window["jwplayer"] = jwPlayer;
 		jwPlayer.key = this.jwPlayerKey;
 
 		this.VideoPlayerId = 'jwp_' + this.guid();
