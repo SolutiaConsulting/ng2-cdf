@@ -16,10 +16,20 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 @Component({
 	selector: 'cdf-video-youtube',
 	template: `
-	<div [id]="VideoPlayerId"></div>
+	<div [id]="videoPlayerId"></div>
 	<ng-content></ng-content>	
 	`,
 	styles: [ `
+	:host 
+	{
+		height: 200px;
+	}
+
+	:host /deep/ .jwplayer
+	{
+		height: inherit !important;
+	}
+	
 	:host /deep/ .jw-error .jw-preview, 
 	:host /deep/ .jw-stretch-uniform .jw-preview, 
 	:host /deep/ .jwplayer .jw-preview,
@@ -34,17 +44,10 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 {
 	private videoJWPlayer: any;
 	private jwPlayerKey: string;
+	private videoPlayerId: string;
 	private youTubeUrl: string = 'http://www.youtube.com/watch?v=';
-	
-	VideoPlayerId: string;
 
-	@Input() videoModel: CdfMediaModel;	
-	@Input() isBackground: boolean = false;
-	@Input() showControls: boolean = true;
-	@Input() autoPlay: boolean = false;
-	@Input() isMute: boolean = false;
-	@Input() loopVideo: boolean = false;
-
+	@Input() media: CdfMediaModel;	
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onVideoStopPlay: EventEmitter<any> = new EventEmitter<any>();
 
@@ -60,42 +63,31 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 		window["jwplayer"] = jwPlayer;
 		jwPlayer.key = this.jwPlayerKey;
 
-		//console.log('****************** IS BACKGROUND: ', this.isBackground);
-
-		this.VideoPlayerId = 'jwp_' + this.guid();
-
-		//IF VIDEO IS BACKGROUND, THEN FORCE THE FOLLOWING SETTINGS...
-		if (this.isBackground)
-		{ 
-			this.showControls = false;
-			this.autoPlay = true;
-			this.isMute = true;
-			this.loopVideo = true;
-		}	
+		this.videoPlayerId = 'jwp_' + this.guid();
 	}
 
 	ngAfterViewInit()
 	{ 
-		this.videoJWPlayer = jwPlayer(this.VideoPlayerId);
+		this.videoJWPlayer = jwPlayer(this.videoPlayerId);
 		
-		//console.log('VideoPlayerId', this.VideoPlayerId);
+		//console.log('videoPlayerId', this.videoPlayerId);
 
 		//VIDEO URL
-		if (this.videoModel.YouTubeId)
+		if (this.media.YouTubeId)
 		{ 
-			//console.log(' *********** videoModel.ImageUri:', this.videoModel.ImageUri);
+			//console.log(' *********** media.ImageUri:', this.media.ImageUri);
 
 			let that = this;
-			let videoUri = this.youTubeUrl + '' + this.videoModel.YouTubeId
+			let videoUri = this.youTubeUrl + '' + this.media.YouTubeId
 
 			this.videoJWPlayer.setup
 				({
 					file: videoUri,
-					image: this.videoModel.ImageUri,
-					controls: this.showControls,
-					autostart: this.autoPlay,
-					mute: this.isMute,
-					repeat: this.loopVideo,
+					image: this.media.ImageUri,
+					controls: true,
+					autostart: false,
+					mute: false,
+					repeat: false,
 					mediaid: this.guid(),
 					stretching: "fill",
 					height: "100%",
@@ -149,7 +141,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 		if(this.videoJWPlayer)
 		{
 			this.videoJWPlayer.play();
-			//console.log('PLAY DAS PLAYER...', this.videoModel.Title);
+			//console.log('PLAY DAS PLAYER...', this.media.Title);
 		}		
 	};
 
@@ -157,7 +149,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 	{ 
 		if(this.videoJWPlayer)
 		{
-			//console.log('STOP DAS PLAYER...', this.videoModel.Title);
+			//console.log('STOP DAS PLAYER...', this.media.Title);
 			
 			this.videoJWPlayer.stop();
 

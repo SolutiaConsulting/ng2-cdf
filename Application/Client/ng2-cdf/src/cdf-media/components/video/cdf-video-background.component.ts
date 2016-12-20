@@ -16,7 +16,7 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 @Component({
 	selector: 'cdf-video-background',
 	template: `
-	<div [id]="VideoPlayerId"></div>
+	<div [id]="videoPlayerId"></div>
 	<ng-content></ng-content>	
 	`,
 	styles: [ `
@@ -44,7 +44,7 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 {
 	private videoJWPlayer: any;
 	private jwPlayerKey: string;
-	private VideoPlayerId: string;
+	private videoPlayerId: string;
 
 	@Input() media: CdfMediaModel;
 
@@ -60,12 +60,12 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 		window["jwplayer"] = jwPlayer;
 		jwPlayer.key = this.jwPlayerKey;
 
-		this.VideoPlayerId = 'jwp_' + this.guid();
+		this.videoPlayerId = 'jwp_' + this.guid();
 	};
 
 	ngAfterViewInit()
 	{ 
-		this.videoJWPlayer = jwPlayer(this.VideoPlayerId);
+		this.videoJWPlayer = jwPlayer(this.videoPlayerId);
 		
 		//console.log('Video Model', this.media);
 

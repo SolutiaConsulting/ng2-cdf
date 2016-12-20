@@ -29,7 +29,7 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 
 	<!--VIDEO-->
 	<cdf-video-youtube *ngIf="(media.HasVideo)" 
-				[videoModel]="media"
+				[media]="media"
 				(onVideoBeforePlay)="doOnVideoBeforePlay()"
 				(onVideoStopPlay)="doOnVideoStopPlay()"></cdf-video-youtube>
 
