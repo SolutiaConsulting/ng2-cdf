@@ -43,6 +43,12 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{media.Type | lowercase}}">{{media.Type}}</span>
 	`,
 	styles: [ `
+	:host 
+	{
+		display: inherit;
+		height: 20rem;
+	}
+
 	.cdf-media-type
 	{
 		color: #fff;
