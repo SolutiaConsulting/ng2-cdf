@@ -34,6 +34,7 @@ import { OnlineService }		from '../../services/index';
 		`
 		section.offline
 		{
+			background-color: #fff;
 			border: solid 1px rgb(225, 232, 237);
 			margin: 0.5rem 0;
 			padding: 20px 20px 11.6px;
