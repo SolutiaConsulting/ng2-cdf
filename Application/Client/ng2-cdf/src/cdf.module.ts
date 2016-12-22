@@ -3,6 +3,8 @@ import { CommonModule }						from '@angular/common';
 
 import
 {
+	CdfContactUsFormModule,
+
 	//CDF-DATA-ISLAND
 	CacheService,
 	CdfConfigModel,
@@ -10,7 +12,7 @@ import
 	CdfDataIslandComponent,
 	CdfDataService,
 	CdfSettingsService,
-
+	
 	CdfMediaModule,
 	CdfTweetModule,
 	CdfYouTubeModule
@@ -35,6 +37,9 @@ import { provideCdfVideoSettingsService } 	from './cdf-media/components/video/cd
 	],
 	exports:
 	[
+		//CONTACT US FORM
+		CdfContactUsFormModule,
+
 		// CDF-DATA-ISLAND
 		CdfDataIslandComponent,
 	

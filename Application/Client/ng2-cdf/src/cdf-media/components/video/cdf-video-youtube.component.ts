@@ -45,7 +45,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 	private videoJWPlayer: any;
 	private jwPlayerKey: string;
 	private videoPlayerId: string;
-	private youTubeUrl: string = 'http://www.youtube.com/watch?v=';
+	private youTubeUrl: string = 'https://www.youtube.com/watch?v=';
 
 	@Input() media: CdfMediaModel;	
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
