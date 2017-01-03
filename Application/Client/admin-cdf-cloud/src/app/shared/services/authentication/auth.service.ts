@@ -38,7 +38,8 @@ export class AuthService
 				localStorage.setItem('profile', JSON.stringify(profile));
 				this.userProfile = profile;				
 
-				console.log('@@@@@@@@@@@@@@@@@  AUTHENTICATED USER PROFILE: YO', profile);
+				console.log('@@@@@@@@@@@@@@@@@  AUTH RESULTS:', authResult);				
+				console.log('@@@@@@@@@@@@@@@@@  AUTHENTICATED USER PROFILE:', profile);
 			});
 		});		
 	}

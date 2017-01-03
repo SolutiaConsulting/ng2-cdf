@@ -5,18 +5,17 @@ using CdfApiApp.DataContracts.Implementations;
 using CdfApiApp.DataContracts.Implementations.AuthenticationRequestModels;
 using CdfApiApp.DataContracts.Implementations.Twitter;
 using CdfApiApp.DataContracts.Interfaces;
+using CdfApiApp.DataContracts.Interfaces.Twitter;
 using CdfApiApp.WebApi.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Script.Serialization;
-using Newtonsoft.Json;
 
 namespace CdfApiApp.WebApi.Controllers
 {
@@ -60,7 +59,7 @@ namespace CdfApiApp.WebApi.Controllers
 		/// <returns></returns>
 		[Route("generate-token")]
 		[ResponseType(typeof(IAuthenticationDataContract))]
-		public HttpResponseMessage PostAuthenticate(AuthenticationRequestTwitterModel requestModel)
+		public HttpResponseMessage PostGenerateToken(AuthenticationRequestTwitterModel requestModel)
 		{
 			if (ModelState.IsValid)
 			{
@@ -248,7 +247,7 @@ namespace CdfApiApp.WebApi.Controllers
 
 
 
-		private static WebRequest GenerateGetWebRequest(TwitterGetRequestModel requestModel)
+		private static WebRequest GenerateGetWebRequest(ITwitterGetRequestModel requestModel)
 		{
 			var url = String.Format("{0}/{1}", TWITTER_BASE_URL, requestModel.UrlFragment);
 
@@ -260,7 +259,7 @@ namespace CdfApiApp.WebApi.Controllers
 			return webRequest;
 		}
 
-		private static WebRequest GeneratePostWebRequest(TwitterPostRequestModel requestModel)
+		private static WebRequest GeneratePostWebRequest(ITwitterPostRequestModel requestModel)
 		{
 			var url = String.Format("{0}/{1}", TWITTER_BASE_URL, requestModel.UrlFragment);
 			

@@ -25,7 +25,7 @@ import { BaseDomainModel }      from './base-domain.model';
 export class ApiTwitterModel extends BaseDomainModel
 {
     readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
-    readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
+    readonly CDF_WEBAPI_BASE_URL = 'https://cdf.webapi.solutiaconsulting.com/api';
 
     http: Http;
 
