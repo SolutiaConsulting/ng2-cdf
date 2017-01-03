@@ -46,18 +46,10 @@ http://blog.rangle.io/configurable-services-in-angular-2/
 @Injectable()
 export class CdfSettingsService 
 {	
+	public ConfigList : CdfConfigModel[] = [];
 
-	ConfigList : CdfConfigModel[] = [];
-
-	constructor
-	(
-		private configList: CdfConfigModel[]
-	)
-	{ 
-		this.ConfigList = configList;
-	}
-
-
+	constructor(){}
+	
 	GetConfigModelByDomainName(domainName: string) : CdfConfigModel
 	{
 		let configModel : CdfConfigModel;
@@ -78,5 +70,8 @@ export class CdfSettingsService
 
 export function provideCdfSettingsService(configList:CdfConfigModel[]) 
 {
-	return { provide: CdfSettingsService, useFactory: () => new CdfSettingsService(configList) }
+	let settingsService = new CdfSettingsService();
+	settingsService.ConfigList = configList;
+
+	return { provide: CdfSettingsService, useFactory: () => settingsService }
 }
