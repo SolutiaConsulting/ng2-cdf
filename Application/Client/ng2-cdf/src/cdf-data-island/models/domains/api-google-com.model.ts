@@ -24,7 +24,7 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiGoogleModel extends BaseDomainModel
 {
-    readonly CDF_WEBAPI_BASE_URL = 'https://cdf.webapi.solutiaconsulting.com/api';
+    readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
 
     http: Http;
 

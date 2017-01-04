@@ -58,7 +58,7 @@ export class CdfDataService
 				let observableBatch = [];	
 
 				//ADD OBSERVABLE FOR AN ARRAY OF GET REQUESTS				
-				if (requestModel.GetList)
+				if (requestModel.GetList && requestModel.GetList.length > 0)
 				{
 					for (let urlIndex in requestModel.GetList) 
 					{						
@@ -72,7 +72,7 @@ export class CdfDataService
 				}	
 																
 				//ADD OBSERVABLE FOR AN ARRAY OF POST REQUESTS
-				if (requestModel.PostList)
+				if (requestModel.PostList && requestModel.PostList.length > 0)
 				{
 					for (let urlIndex in requestModel.PostList) 
 					{
