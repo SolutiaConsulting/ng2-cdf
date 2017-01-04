@@ -117,9 +117,9 @@ export class BaseDomainModel implements BaseDomainInterface
         options.headers.append('Authorization', bearerToken);
         options.body = '';
         
-        console.log('BASE DOMAIN BEARER TOKEN:', bearerToken);   
-        console.log('BASE DOMAIN URL', url);
-        console.log('--------------------------------------------------------------------------'); 		
+        // console.log('BASE DOMAIN BEARER TOKEN:', bearerToken);   
+        // console.log('BASE DOMAIN URL', url);
+        // console.log('--------------------------------------------------------------------------'); 		
 
         return this.http.get(url, options).map((res: Response) => res.json());
 	};	
