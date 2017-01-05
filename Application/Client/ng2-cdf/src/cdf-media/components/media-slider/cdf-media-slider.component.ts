@@ -52,6 +52,19 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 	</section>	
 	`,
 	styles: [ `
+	:host
+	{
+		display: block;
+		min-height: 10rem;
+		position: relative;
+	}
+
+	cdf-media
+	{
+		height: 100%;
+		width: 100%;
+	}
+
 	.cdf-media-pane-container
 	{
 		cursor: pointer;

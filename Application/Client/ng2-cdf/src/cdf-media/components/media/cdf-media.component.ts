@@ -33,12 +33,12 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 				(onVideoBeforePlay)="doOnVideoBeforePlay()"
 				(onVideoStopPlay)="doOnVideoStopPlay()"></cdf-video-youtube>
 
-	<div (click)="hideChildContent()" *ngIf="(showTitle)">
+	<div (click)="onMediaClick()">
 		<ng-content></ng-content>
 	</div>
 
 	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
-	<h2 class="cdf-media-title-only" *ngIf="(!media.HasImage && !media.HasVideo)">{{media.Title}}</h2>
+	<h2 *ngIf="(!media.HasImage && !media.HasVideo) || (showTitle)" class="cdf-media-title" (click)="onMediaClick()">{{media.Title}}</h2>
 
 	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{media.Type | lowercase}}">{{media.Type}}</span>
 	`,
@@ -46,7 +46,8 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	:host 
 	{
 		display: inherit;
-		height: 20rem;
+		height: 200px;
+		width: 200px;
 	}
 
 	.cdf-media-type
@@ -118,7 +119,7 @@ export class CdfMediaComponent implements OnInit
 		//console.log('STOP DAS PLAYER...', this.media.Title);
 	};		
 
-	hideChildContent()
+	onMediaClick()
 	{
 		if(this.videoComponent)
 		{

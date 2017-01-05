@@ -22,7 +22,7 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 	styles: [ `
 	:host 
 	{
-		height: 200px;
+		height: 100%;
 	}
 
 	:host /deep/ .jwplayer
