@@ -26,15 +26,14 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 	selector: 'cdf-media-slider',
 	template: `
 	<!--MEDIA PANE-->
-	<section class="cdf-media-pane-container" [@mediaStateTrigger]="mediaModel.mediaPaneState">
-		
+	<section class="cdf-media-pane-container" [@mediaStateTrigger]="mediaModel.mediaPaneState">		
 		<!--MEDIA: IMAGE OR VIDEO-->
 		<cdf-media [media]="mediaModel"
 					[showTitle]="showTitle"
 					[showType]="showType"
 					(onImageClick)="onMediaClick()"
 					(onVideoBeforePlay)="onVideoBeforePlay()">
-			<ng-content select=".cdf-media-slider-title"></ng-content>			
+			<ng-content select=".cdf-media-content"></ng-content>			
 		</cdf-media>		
 	</section>
 

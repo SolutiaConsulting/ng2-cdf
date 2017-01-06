@@ -62,10 +62,10 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	` ],
 	providers: []
 })
-export class CdfMediaComponent implements OnInit 
+export class CdfMediaComponent implements OnInit
 {
 	@Input() media: CdfMediaModel;	
-	@Input() showTitle: boolean = true;
+	@Input() showTitle: boolean = false;
 	@Input() showType: boolean = false;
 	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
