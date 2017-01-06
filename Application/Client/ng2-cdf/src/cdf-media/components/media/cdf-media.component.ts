@@ -85,21 +85,13 @@ export class CdfMediaComponent implements OnInit
 		this.showTitleOriginal = (this.showTitle) ? true : false;
 	}
 
-	doImageClick()
-	{ 
-		if (this.onImageClick)
-		{ 
-			this.onImageClick.emit();
-		}			
-	}
-
 	doOnVideoBeforePlay()
 	{ 
 		this.showTitle = false;
 
 		if (this.onVideoBeforePlay)
 		{ 
-			this.onVideoBeforePlay.emit();
+			this.onVideoBeforePlay.emit(this.media);
 		}			
 	}
 
@@ -109,7 +101,7 @@ export class CdfMediaComponent implements OnInit
 		
 		if (this.onVideoStopPlay)
 		{ 
-			this.onVideoStopPlay.emit();
+			this.onVideoStopPlay.emit(this.media);
 		}			
 	}
 
@@ -131,4 +123,13 @@ export class CdfMediaComponent implements OnInit
 			this.doImageClick();
 		}
 	};
+
+
+	private doImageClick()
+	{ 
+		if (this.onImageClick)
+		{ 
+			this.onImageClick.emit(this.media);
+		}			
+	}	
 }

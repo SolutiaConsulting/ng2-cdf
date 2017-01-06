@@ -31,7 +31,7 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 		<cdf-media [media]="mediaModel"
 					[showTitle]="showTitle"
 					[showType]="showType"
-					(onImageClick)="onMediaClick()"
+					(onImageClick)="doImageClick()"
 					(onVideoBeforePlay)="onVideoBeforePlay()">
 			<ng-content select=".cdf-media-content"></ng-content>			
 		</cdf-media>		
@@ -262,6 +262,7 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 	@Input() mediaModel: CdfMediaModel;
 	@Input() showTitle: boolean = false;
 	@Input() showType: boolean = false;
+	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onMediaSliderOpen = new EventEmitter<any>();
 	@Output() onMediaSliderClose = new EventEmitter<any>();
 	@ViewChild(CdfMediaComponent) mediaComponent: CdfMediaComponent;
@@ -283,12 +284,6 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 	{ 	
 	};	
 
-	onMediaClick()
-	{
-		//console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
-		this.mediaModel.OnClick();
-	};
-
 	onVideoBeforePlay()
 	{ 
 		if (!this.isMediaPlaying)
@@ -298,7 +293,7 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 			this.isMediaPlaying = true;
 
 			//LET PARENT KNOW SLIDER IS OPEN...
-			this.onMediaSliderOpen.emit();
+			this.onMediaSliderOpen.emit(this.mediaModel);
 
 			this.mediaModel[ 'mediaPaneState' ] = 'active';
 			this.mediaModel[ 'infoPaneExpandedState' ] = this.GetSliderDirection();
@@ -367,6 +362,15 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 			}
 		});	
 	}
+
+	private doImageClick()
+	{
+		//console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
+		if (this.onImageClick)
+		{ 
+			this.onImageClick.emit(this.mediaModel);
+		}		
+	};
 
 	private GetSliderDirection(): string
 	{ 
