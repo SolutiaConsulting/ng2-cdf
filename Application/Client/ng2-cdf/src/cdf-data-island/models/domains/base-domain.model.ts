@@ -20,11 +20,8 @@ import
 
 import { BaseDomainInterface }  from './base-domain.interface';
 import { CdfPostModel }			from '../cdf-post.model';
-import 
-{ 
-	CdfDomainService,
-	CdfSettingsService 
-}								from '../../services/index'; 
+import { CdfDomainService }		from '../../services/index'; 
+import { ClientConfigService }	from '../../../services/index';
 
 export class BaseDomainModel implements BaseDomainInterface 
 {
@@ -98,7 +95,7 @@ export class BaseDomainModel implements BaseDomainInterface
 		return hash;		
 	};
 
-	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
+	AuthenticateObservable(errorUrl: string) : Observable<any>
 	{
 		console.log('ERROR - AuthenticateObservable MUST BE IMPLEMENTED IN DOMAIN SPECIFIC MODEL THAT EXTENDS BaseDomainModel');
 		return undefined;

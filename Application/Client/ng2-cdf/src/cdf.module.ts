@@ -3,26 +3,24 @@ import { CommonModule }						from '@angular/common';
 
 import
 {
-	CdfContactUsFormModule,
-
-	//CDF-DATA-ISLAND
+	//SERVICES
 	CacheService,
-	CdfConfigModel,
 	CdfDataHelperService,
-	CdfDataIslandComponent,
 	CdfDataService,
-	CdfSettingsService,
-	
+	ClientConfigService,
+
+	//COMPONENTS
+	CdfDataIslandComponent,
+
+	//MODELS
+	CdfClientConfigModel,
+
+	//APPLICATION MODULES
+	CdfContactUsFormModule,
 	CdfMediaModule,
 	CdfTweetModule,
-	CdfYouTubeModule
+	CdfYouTubeModule,
 } 											from './index';
-
-
-//CREATE AN INSTANCE OF THE SETTINGS SERVICE BY CONSUMING A PROVIDED CONFIGURATION
-// http://blog.rangle.io/configurable-services-in-angular-2/
-import { provideCdfSettingsService } 		from './cdf-data-island/services/cdf-settings.service';
-import { provideCdfVideoSettingsService } 	from './cdf-media/components/video/cdf-video-settings.service';
 
 
 @NgModule({
@@ -56,20 +54,19 @@ import { provideCdfVideoSettingsService } 	from './cdf-media/components/video/cd
 	[
 		CacheService,
 		CdfDataHelperService,
-		CdfDataService,
-		CdfSettingsService
+		CdfDataService
 	]
 })
 export class CdfModule 
 {
-	static forRoot(cdfConfigModel: CdfConfigModel[], jwPlayerKey: string): ModuleWithProviders
+	static forRoot(clientConfigModel: CdfClientConfigModel): ModuleWithProviders
 	{
+		ClientConfigService.CdfClientConfigModel = clientConfigModel;
+
 		return {
 			ngModule: CdfModule,
 			providers:
 			[ 
-				[provideCdfSettingsService(cdfConfigModel)],
-				[provideCdfVideoSettingsService(jwPlayerKey)]
 			]
 		};
 	}	

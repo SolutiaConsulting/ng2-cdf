@@ -2,7 +2,6 @@ import { Observable } 			from 'rxjs/Rx';
 import { Http } 				from '@angular/http';
 
 import { CdfPostModel }			from '../cdf-post.model';
-import { CdfSettingsService }	from '../../services/cdf-settings.service'; 
 
 export interface BaseDomainInterface 
 {
@@ -15,7 +14,7 @@ export interface BaseDomainInterface
     
     HashUrlFragment(urlFragment : string) : number;
 
-    AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>;
+    AuthenticateObservable(errorUrl: string) : Observable<any>;
     HttpGet(url: string): Observable<any>;
     HttpPost(postModel: CdfPostModel): Observable<any>;
 }

@@ -17,7 +17,6 @@ import
 	CdfRequestModel 
 }								from '../models/index';
 import { CdfDomainService }		from './cdf-domain.service';
-import { CdfSettingsService }	from './cdf-settings.service';  
 
 @Injectable()
 export class CdfDataService
@@ -26,8 +25,7 @@ export class CdfDataService
 
 	constructor(
 		private http: Http,
-		private cacheService: CacheService,
-		private cdfSettingsService: CdfSettingsService
+		private cacheService: CacheService
 	)
 	{ 
 	}
@@ -172,7 +170,7 @@ export class CdfDataService
 										if(errorDomainModel)
 										{
 											//RETRY AUTHENTICATE OBSERVABLE FOR A NEW TOKEN		
-											let authenticateObservableSubscription = errorDomainModel.AuthenticateObservable(errorUrl, this.cdfSettingsService)
+											let authenticateObservableSubscription = errorDomainModel.AuthenticateObservable(errorUrl)
 												.subscribe(
 													//SUCCESS
 													newToken =>

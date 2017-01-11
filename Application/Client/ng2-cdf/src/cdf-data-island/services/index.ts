@@ -4,4 +4,3 @@
 export * from './cdf-data.service';
 export * from './cdf-data-helper.service';
 export * from './cdf-domain.service';
-export * from './cdf-settings.service';

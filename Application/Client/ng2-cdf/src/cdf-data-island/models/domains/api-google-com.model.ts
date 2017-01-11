@@ -9,11 +9,8 @@ import
 	Response
 } 								from '@angular/http';
 
-import 
-{ 
-	CdfDomainService,
-	CdfSettingsService 
-}								from '../../services/index'; 
+import { CdfDomainService }		from '../../services/index'; 
+import { ClientConfigService }	from '../../../services/index';
 import 
 { 
 	CdfPostModel,
@@ -35,14 +32,13 @@ export class ApiGoogleModel extends BaseDomainModel
 		this.http = super.InjectHttp();         
     }     
 
-	AuthenticateObservable(errorUrl: string, cdfSettingsService: CdfSettingsService) : Observable<any>
+	AuthenticateObservable(errorUrl: string) : Observable<any>
 	{
 		//RETRIEVE DOMAIN OF URL IN ERROR SO WE CAN RETRIEVE THE CORRECT CREDENTIALS IN ORDER TO TRY AND RE-ESTABLISH AUTHENTCATION
 		let errorDomainName = CdfDomainService.GetDomainNameFromUrl(errorUrl);
 
 		//DELETE TOKEN
 		super.DeleteToken(errorDomainName);
-
 
 		return Observable.create(observer => 
 		{
@@ -56,7 +52,7 @@ export class ApiGoogleModel extends BaseDomainModel
 			}
 			else
 			{
-				let CONNECTION_CREDENTIALS = cdfSettingsService.GetConfigModelByDomainName(errorDomainName);
+				let CONNECTION_CREDENTIALS = ClientConfigService.GetConfigModelByDomainName(errorDomainName);
 
                 if(CONNECTION_CREDENTIALS)
                 {

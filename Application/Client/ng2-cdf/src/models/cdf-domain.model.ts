@@ -1,4 +1,4 @@
-export interface CdfConfigModelInterface
+export class CdfDomainModel 
 {
 	Domain: string;
 	ApplicationKey: string;
