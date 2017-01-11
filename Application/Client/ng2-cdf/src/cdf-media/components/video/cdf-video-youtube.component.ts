@@ -47,7 +47,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 	private videoPlayerId: string;
 	private youTubeUrl: string = 'https://www.youtube.com/watch?v=';
 
-	@Input() media: CdfMediaModel;	
+	@Input() mediaModel: CdfMediaModel;	
 	@Output() onVideoBeforePlay: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onVideoStopPlay: EventEmitter<any> = new EventEmitter<any>();
 
@@ -71,17 +71,17 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 		//console.log('videoPlayerId', this.videoPlayerId);
 
 		//VIDEO URL
-		if (this.media.YouTubeId)
+		if (this.mediaModel.YouTubeId)
 		{ 
-			//console.log(' *********** media.ImageUri:', this.media.ImageUri);
+			//console.log(' *********** mediaModel.ImageUri:', this.mediaModel.ImageUri);
 
 			let that = this;
-			let videoUri = this.youTubeUrl + '' + this.media.YouTubeId
+			let videoUri = this.youTubeUrl + '' + this.mediaModel.YouTubeId
 
 			this.videoJWPlayer.setup
 				({
 					file: videoUri,
-					image: this.media.ImageUri,
+					image: this.mediaModel.ImageUri,
 					controls: true,
 					autostart: false,
 					mute: false,
@@ -139,7 +139,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 		if(this.videoJWPlayer)
 		{
 			this.videoJWPlayer.play();
-			//console.log('PLAY DAS PLAYER...', this.media.Title);
+			//console.log('PLAY DAS PLAYER...', this.mediaModel.Title);
 		}		
 	};
 
@@ -147,7 +147,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 	{ 
 		if(this.videoJWPlayer)
 		{
-			//console.log('STOP DAS PLAYER...', this.media.Title);
+			//console.log('STOP DAS PLAYER...', this.mediaModel.Title);
 			
 			this.videoJWPlayer.stop();
 

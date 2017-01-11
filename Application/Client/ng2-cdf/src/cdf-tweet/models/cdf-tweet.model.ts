@@ -36,7 +36,7 @@ export class CdfTweetModel extends CdfMediaModel
 				this.MediaUrl = rawJson.entities.media[0].media_url;
 			}
 
-			//Schedule
+			//HASHTAGS
 			if(rawJson.entities && rawJson.entities.hashtags && rawJson.entities.hashtags.length > 0)
 			{
 				for (let entry of rawJson.entities.hashtags) 

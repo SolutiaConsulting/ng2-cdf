@@ -23,13 +23,13 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	selector: 'cdf-media',
 	template: `
 	<!--IMAGE-->
-	<cdf-image *ngIf="(media.HasImage && !media.HasVideo)" 
-				[imageModel]="media" 
+	<cdf-image *ngIf="(mediaModel.HasImage && !mediaModel.HasVideo)" 
+				[imageModel]="mediaModel" 
 				(click)="doImageClick()"></cdf-image>
 
 	<!--VIDEO-->
-	<cdf-video-youtube *ngIf="(media.HasVideo)" 
-				[media]="media"
+	<cdf-video-youtube *ngIf="(mediaModel.HasVideo)" 
+				[mediaModel]="mediaModel"
 				(onVideoBeforePlay)="doOnVideoBeforePlay()"
 				(onVideoStopPlay)="doOnVideoStopPlay()"></cdf-video-youtube>
 
@@ -38,9 +38,9 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	</div>
 
 	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
-	<h2 *ngIf="(!media.HasImage && !media.HasVideo) || (showTitle)" class="cdf-media-title" (click)="onMediaClick()">{{media.Title}}</h2>
+	<h2 *ngIf="(!mediaModel.HasImage && !mediaModel.HasVideo) || (showTitle)" class="cdf-media-title" (click)="onMediaClick()">{{mediaModel.Title}}</h2>
 
-	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{media.Type | lowercase}}">{{media.Type}}</span>
+	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{mediaModel.Type | lowercase}}">{{mediaModel.Type}}</span>
 	`,
 	styles: [ `
 	:host 
@@ -50,8 +50,19 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 		width: 200px;
 	}
 
+	.cdf-media-title
+	{
+		height: 100%;
+		line-height: 9;
+		margin: auto;		
+		text-align: center;
+		vertical-align: middle;
+		width: 100%;
+	}	
+
 	.cdf-media-type
 	{
+		background-color: #ccc;
 		color: #fff;
 		left: 0.75rem;
 		padding: 0.25rem 0.5rem;
@@ -64,7 +75,7 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 })
 export class CdfMediaComponent implements OnInit
 {
-	@Input() media: CdfMediaModel;	
+	@Input() mediaModel: CdfMediaModel;	
 	@Input() showTitle: boolean = false;
 	@Input() showType: boolean = false;
 	@Output() onImageClick: EventEmitter<any> = new EventEmitter<any>();
@@ -91,7 +102,7 @@ export class CdfMediaComponent implements OnInit
 
 		if (this.onVideoBeforePlay)
 		{ 
-			this.onVideoBeforePlay.emit(this.media);
+			this.onVideoBeforePlay.emit(this.mediaModel);
 		}			
 	}
 
@@ -101,14 +112,14 @@ export class CdfMediaComponent implements OnInit
 		
 		if (this.onVideoStopPlay)
 		{ 
-			this.onVideoStopPlay.emit(this.media);
+			this.onVideoStopPlay.emit(this.mediaModel);
 		}			
 	}
 
 	stop()
 	{		
 		this.videoComponent.stop();
-		//console.log('STOP DAS PLAYER...', this.media.Title);
+		//console.log('STOP DAS PLAYER...', this.mediaModel.Title);
 	};		
 
 	onMediaClick()
@@ -129,7 +140,7 @@ export class CdfMediaComponent implements OnInit
 	{ 
 		if (this.onImageClick)
 		{ 
-			this.onImageClick.emit(this.media);
+			this.onImageClick.emit(this.mediaModel);
 		}			
 	}	
 }

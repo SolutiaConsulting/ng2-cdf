@@ -46,7 +46,7 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 	private jwPlayerKey: string;
 	private videoPlayerId: string;
 
-	@Input() media: CdfMediaModel;
+	@Input() mediaModel: CdfMediaModel;
 
 	constructor()
 	{
@@ -65,15 +65,15 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 	{ 
 		this.videoJWPlayer = jwPlayer(this.videoPlayerId);
 		
-		//console.log('Video Model', this.media);
+		//console.log('Video Model', this.mediaModel);
 
 		//VIDEO URL
-		if (this.media.HasVideo)
+		if (this.mediaModel.HasVideo)
 		{
 			let playListSourceArray: Object[] = [];
 
 			//add video from array of types to play list			
-			for (var item of this.media.VideoList) 
+			for (var item of this.mediaModel.VideoList) 
 			{
 				playListSourceArray.push(
 					{

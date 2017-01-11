@@ -28,7 +28,7 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 	<!--MEDIA PANE-->
 	<section class="cdf-media-pane-container" [@mediaStateTrigger]="mediaModel.mediaPaneState">		
 		<!--MEDIA: IMAGE OR VIDEO-->
-		<cdf-media [media]="mediaModel"
+		<cdf-media [mediaModel]="mediaModel"
 					[showTitle]="showTitle"
 					[showType]="showType"
 					(onImageClick)="doImageClick()"
