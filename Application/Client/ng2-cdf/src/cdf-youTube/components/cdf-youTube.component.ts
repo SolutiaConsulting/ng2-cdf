@@ -21,7 +21,7 @@ import { OnlineService }		from '../../services/index';
 	selector: 'cdf-youtube',
 	template: 
 	`	
-	<cdf-media [media]="youTubeModel" [showTitle]="false" [showType]="false" *ngIf="isOnlineConnection" [@visibilityChangedTrigger]="isOnlineVisible"></cdf-media>
+	<cdf-media [mediaModel]="youTubeModel" [showTitle]="false" [showType]="false" *ngIf="isOnlineConnection" [@visibilityChangedTrigger]="isOnlineVisible"></cdf-media>
 	`,
 	styles: [ 
 		`		
