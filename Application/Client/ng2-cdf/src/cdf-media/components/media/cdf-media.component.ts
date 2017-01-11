@@ -133,6 +133,11 @@ export class CdfMediaComponent implements OnInit
 		{
 			this.doImageClick();
 		}
+
+		if(!this.imageComponent && !this.videoComponent)
+		{
+			this.doImageClick();
+		}
 	};
 
 
