@@ -38,28 +38,32 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 		<ng-content></ng-content>
 	</div>
 
-	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
-	<h2 *ngIf="(!mediaModel.HasImage && !mediaModel.HasVideo) || (showTitle)" class="cdf-media-title" (click)="onMediaClick()">{{mediaModel.Title}}</h2>
-
 	<span *ngIf="(showType && mediaModel.Type && mediaModel.Type.length > 0)" class="cdf-media-type cdf-media-type-{{getCleanType()}}">{{mediaModel.Type}}</span>
+
+	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
+	<section class="cdf-media-title-container" *ngIf="(!mediaModel.HasImage && !mediaModel.HasVideo) || (showTitle)">
+		<a (click)="onMediaClick()">
+			<section class="cdf-media-title-wrapper">
+				<h2 class="cdf-media-title">{{mediaModel.Title}}</h2>
+			</section>
+		</a>
+	</section>
 	`,
 	styles: [ `
 	:host 
 	{
 		display: inherit;
 		height: 200px;
+		overflow: hidden;
 		width: 200px;
 	}
 
-	.cdf-media-title
+	a
 	{
+		display: block;
 		height: 100%;
-		line-height: 9;
-		margin: auto;		
-		text-align: center;
-		vertical-align: middle;
-		width: 100%;
-	}	
+		width: 100%;		
+	}
 
 	.cdf-media-type
 	{
@@ -70,7 +74,33 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 		position: absolute;
 		top: 0.75rem;	
 		z-index: 100;
-	}	
+	}
+
+	.cdf-media-title-container
+	{
+		bottom: 0;
+		background-color: rgba(0,0,0,0.15);
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.cdf-media-title-wrapper
+	{
+		bottom: 0;
+		left: 0;
+		padding: 10%;
+		position: absolute;
+		right: 0;
+	}
+
+	.cdf-media-title
+	{
+		line-height: 1;
+		position: relative;
+		width: 100%;
+	}
 	` ],
 	host: 
 	{

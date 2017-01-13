@@ -38,6 +38,11 @@ const jwPlayer = require('ng2-cdf/src/assets/lib/jwplayer-7.6.1/jwplayer.js');
 		background-position: top center !important;
 		background-size: cover !important;
 	}	
+
+	:host /deep/ .jw-preview
+	{
+		transition: all 0.3s ease 0s;
+	}
 	`]
 })
 export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit

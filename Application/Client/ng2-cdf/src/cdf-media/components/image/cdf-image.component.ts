@@ -21,8 +21,9 @@ import { CdfMediaModel }				from '../../models/index';
 	{
 		background-repeat:no-repeat;
 		background-size: cover;
-		background-position:top center;	
+		background-position:center center;	
 		height: 100%;
+		transition: all 0.3s ease 0s;
 		width:100%;
 	}`]
 })
