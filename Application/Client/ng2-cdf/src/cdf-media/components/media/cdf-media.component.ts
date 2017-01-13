@@ -1,18 +1,19 @@
 import
 {
+	animate,
 	Component,
 	OnInit,
 	Input,
 	Output,
 	EventEmitter,
-	ViewChild,
+	HostBinding,
+	keyframes,
 	QueryList,
+	state,
+	style,
 	trigger,
 	transition,
-	keyframes,
-	animate,
-	state,
-	style	
+	ViewChild
 } 										from '@angular/core';
 
 import { CdfMediaModel } 				from '../../models/index';
@@ -40,7 +41,7 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	<!--NO MEDIA ASSETS (NO IMAGE OR VIDEO)-->
 	<h2 *ngIf="(!mediaModel.HasImage && !mediaModel.HasVideo) || (showTitle)" class="cdf-media-title" (click)="onMediaClick()">{{mediaModel.Title}}</h2>
 
-	<span *ngIf="(showType)" class="cdf-media-type cdf-media-type__{{mediaModel.Type | lowercase}}">{{mediaModel.Type}}</span>
+	<span *ngIf="(showType && mediaModel.Type && mediaModel.Type.length > 0)" class="cdf-media-type cdf-media-type-{{getCleanType()}}">{{mediaModel.Type}}</span>
 	`,
 	styles: [ `
 	:host 
@@ -71,6 +72,10 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 		z-index: 100;
 	}	
 	` ],
+	host: 
+	{
+		'[class]' : 'classNames' 
+	},
 	providers: []
 })
 export class CdfMediaComponent implements OnInit
@@ -85,7 +90,11 @@ export class CdfMediaComponent implements OnInit
 	@ViewChild(CdfVideoYouTubeComponent) videoComponent: CdfVideoYouTubeComponent;
 	@ViewChild(CdfImageComponent) imageComponent: CdfImageComponent;
 
+	@HostBinding('class.media-is-video') IsMediaVideo: boolean = false;
+	@HostBinding('class.media-is-image') IsMediaImage: boolean = false;
+
 	showTitleOriginal: boolean = false;
+	classNames: string;
 
 	constructor()
 	{
@@ -94,7 +103,11 @@ export class CdfMediaComponent implements OnInit
 	ngOnInit()
 	{
 		this.showTitleOriginal = (this.showTitle) ? true : false;
-	}
+
+		this.IsMediaVideo = this.mediaModel.HasVideo;
+		this.IsMediaImage = (this.mediaModel.HasImage && !this.mediaModel.HasVideo);
+		this.classNames = (this.mediaModel.Type && this.mediaModel.Type.length > 0) ? 'type-' +  this.getCleanType() : 'type-not-supplied';
+	};
 
 	doOnVideoBeforePlay()
 	{ 
@@ -104,7 +117,7 @@ export class CdfMediaComponent implements OnInit
 		{ 
 			this.onVideoBeforePlay.emit(this.mediaModel);
 		}			
-	}
+	};
 
 	doOnVideoStopPlay()
 	{ 
@@ -114,7 +127,7 @@ export class CdfMediaComponent implements OnInit
 		{ 
 			this.onVideoStopPlay.emit(this.mediaModel);
 		}			
-	}
+	};
 
 	stop()
 	{		
@@ -147,5 +160,10 @@ export class CdfMediaComponent implements OnInit
 		{ 
 			this.onImageClick.emit(this.mediaModel);
 		}			
-	}	
+	}	;
+
+	private getCleanType()
+	{
+		return this.mediaModel.Type.replace(/ /g,'').toLowerCase();
+	};
 }

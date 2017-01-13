@@ -8,8 +8,8 @@ export class CdfMediaModel extends CdfRootModel
 	ImageUri: string;
 	VideoList: CdfVideoModel[] = [];
 	YouTubeId: string;
-	HasImage: boolean;
-	HasVideo: boolean;
+	HasImage: boolean = false;
+	HasVideo: boolean = false;
 
 	constructor(rawJson?: any, type?: string)
 	{

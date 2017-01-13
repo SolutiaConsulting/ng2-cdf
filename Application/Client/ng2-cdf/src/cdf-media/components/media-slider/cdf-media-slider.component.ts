@@ -37,7 +37,6 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 		</cdf-media>		
 	</section>
 
-
 	<!--INFO PANE-->
 	<section class="cdf-info-pane-container" *ngIf="mediaModel.IsInfoPaneExpanded" [@infoPaneSlideTrigger]="mediaModel.infoPaneExpandedState">
 		<section class="cdf-info-pane-container__wrapper">
@@ -45,7 +44,10 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 			<!--CLOSE BUTTON-->
 			<a class="close-button" (click)="onStopVideoClick()">×</a>
 
-			<ng-content></ng-content>
+			<section class="info-pane-container">
+				<h2 class="info-pane-container__title">{{mediaModel.Title}}</h2>
+				<button class="button radius small hollow info-pane-container__button" (click)="doImageClick(entry)">Learn More</button>	
+			</section>	
 
 		</section>
 	</section>	
