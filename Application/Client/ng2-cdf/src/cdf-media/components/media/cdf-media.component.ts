@@ -52,10 +52,20 @@ import { CdfVideoYouTubeComponent } 	from '../video/index';
 	styles: [ `
 	:host 
 	{
+		cursor: pointer;
 		display: inherit;
 		height: 200px;
 		overflow: hidden;
 		width: 200px;
+	}
+
+	:host:hover /deep/ .cdf-background-image,
+	:host:hover /deep/ .jw-preview
+	{
+		height: 110%;
+		margin: -5%;
+		overflow: hidden;
+		width: 110%;
 	}
 
 	a
