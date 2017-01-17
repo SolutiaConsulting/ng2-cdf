@@ -45,6 +45,7 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 	private videoJWPlayer: any;
 	private jwPlayerKey: string;
 	private videoPlayerId: string;
+	private youTubeUrl: string = 'https://www.youtube.com/watch?v=';
 
 	@Input() mediaModel: CdfMediaModel;
 
@@ -68,7 +69,7 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 		//console.log('Video Model', this.mediaModel);
 
 		//VIDEO URL
-		if (this.mediaModel.HasVideo)
+		if (this.mediaModel.HasVideo && this.mediaModel.VideoList && this.mediaModel.VideoList.length > 0)
 		{
 			let playListSourceArray: Object[] = [];
 
@@ -105,6 +106,29 @@ export class CdfVideoBackgroundComponent implements OnInit, AfterViewInit
 					]
 				});	
 		}	
+		else if (this.mediaModel.YouTubeId)
+		{
+			let videoUri = this.youTubeUrl + '' + this.mediaModel.YouTubeId
+
+			this.videoJWPlayer.setup
+				({
+					file: videoUri,
+					controls: false,
+					autostart: true,
+					mute: true,
+					repeat: true,
+					mediaid: this.guid(),
+					stretching: "fill",
+					height: "100%",
+					width: "100%"
+				});				
+
+
+			this.videoJWPlayer.on('play', function (e) 
+			{
+				jwPlayer().setVolume(0);				
+			});				
+		}
 	};
 
 	private guid() 

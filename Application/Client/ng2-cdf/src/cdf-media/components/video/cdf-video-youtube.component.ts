@@ -119,7 +119,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 			
 			this.videoJWPlayer.on('pause', function (e) 
 			{
-				console.log('videoJWPlayer pause...');
+				//console.log('videoJWPlayer pause...');
 
 				if (that.onVideoStopPlay)
 				{ 
@@ -129,7 +129,7 @@ export class CdfVideoYouTubeComponent implements OnInit, AfterViewInit
 
 			this.videoJWPlayer.on('beforeComplete', function (e) 
 			{
-				console.log('videoJWPlayer stop...');
+				//console.log('videoJWPlayer stop...');
 
 				if (that.onVideoStopPlay)
 				{ 
