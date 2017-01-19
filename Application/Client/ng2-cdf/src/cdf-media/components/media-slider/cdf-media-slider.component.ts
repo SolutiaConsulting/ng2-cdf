@@ -32,7 +32,8 @@ import { SliderDirectionEnum } 	from './cdf-media-slider.enum';
 					[showTitle]="showTitle"
 					[showType]="showType"
 					(onImageClick)="doImageClick()"
-					(onVideoBeforePlay)="onVideoBeforePlay()">
+					(onVideoBeforePlay)="onVideoBeforePlay()"
+					(onVideoStopPlay)="onVideoAfterStopPlay()">
 			<ng-content select=".cdf-media-content"></ng-content>			
 		</cdf-media>		
 	</section>
@@ -292,24 +293,41 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 		{
 			//console.log('cdf-media-slider onVideoBeforePlay', this.mediaModel);
 
-			this.isMediaPlaying = true;
-
 			//LET PARENT KNOW SLIDER IS OPEN...
-			this.onMediaSliderOpen.emit(this.mediaModel);
+			if (this.onMediaSliderOpen)
+			{ 
+				this.onMediaSliderOpen.emit(this.mediaModel);
+			}						
 
+			this.isMediaPlaying = true;
 			this.mediaModel[ 'mediaPaneState' ] = 'active';
-			this.mediaModel[ 'infoPaneExpandedState' ] = this.GetSliderDirection();
-			this.mediaModel[ 'IsInfoPaneExpanded' ] = true;
+
+			if(this.mediaModel.ShowExpandedInfoPaneInSlider)
+			{
+				this.mediaModel[ 'infoPaneExpandedState' ] = this.GetSliderDirection();
+				this.mediaModel[ 'IsInfoPaneExpanded' ] = true;
+			}
 		}
 	};
 
-	resetPanes()
-	{ 
-		this.mediaModel[ 'mediaPaneState' ] = 'inactive';
-		this.mediaModel[ 'infoPaneExpandedState' ] = 'collapsed';
-		this.mediaModel[ 'IsInfoPaneExpanded' ] = false;
-		this.isMediaPlaying = false;
-	};	
+	onVideoAfterStopPlay()
+	{
+		if(this.isMediaPlaying)
+		{
+			let that = this;
+
+			setTimeout(function () 
+			{
+				that.resetPanes();
+
+				//LET PARENT KNOW SLIDER IS CLOSED...
+				if (that.onMediaSliderClose)
+				{ 
+					that.onMediaSliderClose.emit(that.mediaModel);
+				}								
+			}, 400);		
+		}
+	}
 
 	onStopVideoClick()
 	{ 
@@ -339,7 +357,7 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 			// console.log('mediaModel video to stop:', this.mediaModel.Title);
 			// console.log('mediaComponent:', this.mediaComponent);		
 
-			if (this.mediaComponent)
+			if (this.mediaComponent && this.isMediaPlaying)
 			{
 				this.mediaComponent.stop();
 
@@ -350,8 +368,11 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 				{
 					this.resetPanes();
 
-					//LET PARENT KNOW SLIDER IS CLOSED...
-					this.onMediaSliderClose.emit(this.mediaModel);
+					//LET PARENT KNOW SLIDER IS OPEN...
+					if (this.onMediaSliderClose)
+					{ 
+						this.onMediaSliderClose.emit(this.mediaModel);
+					}					
 					
 					observer.next();
 					observer.complete();
@@ -365,13 +386,26 @@ export class CdfMediaSliderComponent implements OnInit, AfterViewInit
 		});	
 	}
 
+
+	private resetPanes()
+	{ 
+		this.isMediaPlaying = false;
+		this.mediaModel[ 'mediaPaneState' ] = 'inactive';
+
+		if(this.mediaModel.ShowExpandedInfoPaneInSlider)
+		{
+			this.mediaModel[ 'infoPaneExpandedState' ] = 'collapsed';
+			this.mediaModel[ 'IsInfoPaneExpanded' ] = false;
+		}		
+	};	
+
 	private doImageClick()
 	{
 		//console.log('CDF MEDIA SLIDER CLICK:', this.mediaModel.Title);
 		if (this.onImageClick)
 		{ 
 			this.onImageClick.emit(this.mediaModel);
-		}		
+		}								
 	};
 
 	private GetSliderDirection(): string

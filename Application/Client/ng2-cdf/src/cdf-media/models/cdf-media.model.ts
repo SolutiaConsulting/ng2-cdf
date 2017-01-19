@@ -10,6 +10,7 @@ export class CdfMediaModel extends CdfRootModel
 	YouTubeId: string;
 	HasImage: boolean = false;
 	HasVideo: boolean = false;
+	ShowExpandedInfoPaneInSlider: boolean = true;
 
 	constructor(rawJson?: any, type?: string)
 	{

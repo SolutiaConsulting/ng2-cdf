@@ -40,7 +40,11 @@ export class CdfRootModel
 	OnClick()
 	{ 
 		let message = 'OnClick METHOD MUST BE IMPLEMENTED BY CHILD COMPONENT TO CdfMediaModel';
-		alert(message);
 		console.log('ERROR:', message);
+	};	
+
+	GetRouteUrl()
+	{ 
+		return undefined;
 	};
 }
