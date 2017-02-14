@@ -9,6 +9,7 @@ import
     ApiCloudCmsModel,
     ApiGoogleModel,
     ApiTwitterModel,
+    BaseDomainModel,
     BaseDomainInterface
 }	                            from '../models/index'; 
 
@@ -19,12 +20,22 @@ export class CdfDomainService
     static readonly CDF_DOMAIN_PROXY_LIST = 
     [
         {
+            name : 'cloudcms',
+            domain : 'api.cloudcms.com',
+            provide: 'api.cloudcms.com',
+            useClass: ApiCloudCmsModel
+        },        
+        {
             name : 'twitter',
-            domain : 'api.twitter.com'
+            domain : 'api.twitter.com',
+            provide: 'api.twitter.com',
+            useClass: ApiTwitterModel
         },
         {
             name : 'google',
-            domain : 'googleapis.com'
+            domain : 'googleapis.com',
+            provide: 'googleapis.com',
+            useClass: ApiGoogleModel
         }
     ];
 
@@ -41,21 +52,28 @@ export class CdfDomainService
 
     static GetDomainModelFromDomainName(domainName: string) : BaseDomainInterface
     {
-        let injector = ReflectiveInjector.resolveAndCreate
-        (
-            [
-                { provide: 'api.cloudcms.com', useClass: ApiCloudCmsModel },
-                { provide: 'googleapis.com', useClass: ApiGoogleModel },
-                { provide: 'api.twitter.com', useClass: ApiTwitterModel }
-            ]
-        );                
+        let isDomainKnown = CdfDomainService.CDF_DOMAIN_PROXY_LIST.some(function (providerItem) 
+        {
+            let providerIndex = domainName.indexOf(providerItem.domain);
 
-        let domainModel = injector.get(domainName);
+            // console.log('**************** providerItem:', providerItem);
+            // console.log('**************** providerIndex:', providerIndex);
+        
+            return (providerIndex > -1);
+        }); 
 
-        //TODO:  POSSIBLE CHECK IF DOMAIN IS NOT ONE SUPPORTED BY CDF (ie domainModel IS NOT FOUND THROUGH INJECTOR)...
+        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  DOMAIN:', domainName); 
+        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  IS DOMAIN KNOWN:', isDomainKnown);        
 
-        return domainModel;
-
+        if (isDomainKnown)
+        {
+            let injector = ReflectiveInjector.resolveAndCreate( CdfDomainService.CDF_DOMAIN_PROXY_LIST );
+            return injector.get(domainName);                        
+        }
+        else
+        { 
+            return new BaseDomainModel();
+        }
     };
 
     static GetDomainNameFromUrl(url:string) : string
@@ -69,7 +87,6 @@ export class CdfDomainService
         //LOOK TO PATH OF CDF WEB API FOR CLUES (TWITTER, GOOGLE, ETC)
         if(cdfDomainIndex > -1)
         {
-
             CdfDomainService.CDF_DOMAIN_PROXY_LIST.some
             (
                 function(proxy) 
