@@ -63,6 +63,12 @@ export class CdfDataService
 						let url = requestModel.GetList[ urlIndex ];
 						let domainModel = CdfDomainService.GetDomainModelFromUrl(url);
 
+						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS						
+						if (requestModel.AuthorizationModel && requestModel.AuthorizationModel.HasAuthorizationToken)
+						{ 
+							domainModel.SetAuthorizationModel(requestModel.AuthorizationModel);
+						}	
+						
 						//console.log('*****************  DOMAIN MODEL:', domainModel);
 
 						observableBatch.push(domainModel.HttpGet(url));
@@ -77,6 +83,12 @@ export class CdfDataService
 						let cdfPostModel = requestModel.PostList[ urlIndex ];
 						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfPostModel.URL);
 
+						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS	
+						if (requestModel.AuthorizationModel && requestModel.AuthorizationModel.HasAuthorizationToken)
+						{ 
+							domainModel.SetAuthorizationModel(requestModel.AuthorizationModel);
+						}	
+						
 						//console.log('*****************  DOMAIN MODEL:', domainModel);
 
 						observableBatch.push(domainModel.HttpPost(cdfPostModel));

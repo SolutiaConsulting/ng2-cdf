@@ -1,13 +1,18 @@
-import { Observable } 			from 'rxjs/Rx';
-import { Http } 				from '@angular/http';
+import { Observable } 			    from 'rxjs/Rx';
+import { Http } 				    from '@angular/http';
 
-import { CdfPostModel }			from '../cdf-post.model';
+import { CdfPostModel }			    from '../cdf-post.model';
+import { CdfAuthorizationModel }    from '../cdf-authorization.model';
 
 export interface BaseDomainInterface 
 {
+    AuthorizationModel: CdfAuthorizationModel
     InjectHttp() : Http;
     
-    HasToken(domain:string): boolean;
+    SetAuthorizationModel(authorizationModel: CdfAuthorizationModel): void;
+
+    HasToken(domain: string): boolean;
+    GetTokenValueFromStorage(domainName: string): string;
     GetToken(domain:string): string; 
     SetToken(domain:string, token: any): void;   
     DeleteToken(domain:string): void;    

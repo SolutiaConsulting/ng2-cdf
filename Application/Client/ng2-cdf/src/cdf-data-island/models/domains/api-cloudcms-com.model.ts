@@ -21,8 +21,6 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiCloudCmsModel extends BaseDomainModel
 {
-    readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
-
     http: Http;
 
     constructor () 
@@ -42,7 +40,7 @@ export class ApiCloudCmsModel extends BaseDomainModel
 
 		return Observable.create(observer => 
 		{
-			var authToken = super.GetToken(errorDomainName);		
+			var authToken = (super.HasToken(errorDomainName)) ? super.GetTokenValueFromStorage(errorDomainName) : undefined;		
 			
 			if (authToken)
 			{
@@ -66,7 +64,7 @@ export class ApiCloudCmsModel extends BaseDomainModel
                         "ApplicationKey" : CONNECTION_CREDENTIALS.ApplicationKey
                     };						
 
-                    let postUrl = this.CDF_WEBAPI_BASE_URL + '/cloudcms/generate-token';
+                    let postUrl = ClientConfigService.CDF_WEBAPI_BASE_URL + '/cloudcms/generate-token';
 
                     let newTokenSubscription = this.http.post(postUrl, JSON.stringify(requestModel), options)
                         .map(res => res.json())
@@ -77,7 +75,7 @@ export class ApiCloudCmsModel extends BaseDomainModel
                                 //console.log('NEW TOKEN YO YO', data);
 
                                 //SET TOKEN RECEIVED FROM API
-                                this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
+                                super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
                                 //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
                                 observer.next(data);

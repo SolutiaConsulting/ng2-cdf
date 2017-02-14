@@ -7,6 +7,7 @@ export class ClientConfigService
 {
 	static CdfClientConfigModel: CdfClientConfigModel;
 
+	static readonly CDF_WEBAPI_BASE_URL = 'http://webapi.cdf.cloud/api/';
 
 	//BUILD MEDIA URL FOR CLOUD CMS NODE ID
 	static BuildCloudCmsMediaUrl(nodeId: string) : string

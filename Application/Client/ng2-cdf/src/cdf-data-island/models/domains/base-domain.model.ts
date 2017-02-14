@@ -18,13 +18,15 @@ import
 	XSRFStrategy
 } 								from '@angular/http';
 
-import { BaseDomainInterface }  from './base-domain.interface';
-import { CdfPostModel }			from '../cdf-post.model';
-import { CdfDomainService }		from '../../services/index'; 
-import { ClientConfigService }	from '../../../services/index';
+import { BaseDomainInterface }  	from './base-domain.interface';
+import { CdfPostModel }				from '../cdf-post.model';
+import { CdfDomainService }			from '../../services/index'; 
+import { ClientConfigService }		from '../../../services/index';
+import { CdfAuthorizationModel }	from '../cdf-authorization.model';
 
 export class BaseDomainModel implements BaseDomainInterface 
 {
+	AuthorizationModel: CdfAuthorizationModel
 	http: Http;
 
     constructor () 
@@ -51,17 +53,48 @@ export class BaseDomainModel implements BaseDomainInterface
 		return injector.get(Http);  		
 	};
 
+	SetAuthorizationModel(authorizationModel: CdfAuthorizationModel): void
+	{ 
+		this.AuthorizationModel = authorizationModel;
+	}
+
     HasToken(domainName:string): boolean
 	{
-		return (this.GetToken(domainName) != undefined);
+		if (this.AuthorizationModel.HasAuthorizationToken)
+		{ 
+			return true;
+		}
+
+		let authTokenValue = this.GetTokenValueFromStorage(domainName);	
+
+		return (authTokenValue != undefined);
 	};
+
+	GetTokenValueFromStorage(domainName:string)
+	{ 
+		if (this.AuthorizationModel.HasAuthorizationToken)
+		{ 
+			return this.AuthorizationModel.AuthorizationToken;
+		}
+		
+		let authTokenStorage = (localStorage.getItem(domainName)) ? JSON.parse(localStorage.getItem(domainName)) : undefined;
+		let authTokenValue = (authTokenStorage && authTokenStorage.access_token) ? authTokenStorage.access_token : undefined;
+		
+		return authTokenValue;
+	}
 
     GetToken(domainName:string): string
 	{
 		//console.log('GET TOKEN DOMAIN:', domainName);
 
-		var authTokenStorage = (localStorage.getItem(domainName)) ? JSON.parse(localStorage.getItem(domainName)) : undefined;
-		return (authTokenStorage && authTokenStorage.access_token) ? authTokenStorage.access_token : undefined;
+		if (this.AuthorizationModel.HasAuthorizationToken)
+		{ 
+			return this.AuthorizationModel.GetAuthorization();
+		}	
+
+		let authTokenValue = this.GetTokenValueFromStorage(domainName);			
+		
+		return (authTokenValue) ? 'Bearer ' + authTokenValue : undefined;
 	};
 
 	SetToken(domainName:string, token: any): void
@@ -107,8 +140,7 @@ export class BaseDomainModel implements BaseDomainInterface
 		let domainName = CdfDomainService.GetDomainNameFromUrl(url);
 		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
 		let options = new RequestOptions({ headers: headers });				
-        let token = this.GetToken(domainName);
-        let bearerToken = (token) ? 'Bearer ' + token : 'TOKEN-NOT-KNOWN';
+        let bearerToken = (this.HasToken(domainName)) ? this.GetToken(domainName) : 'TOKEN-NOT-KNOWN';
                 
         //APPEND TO HEADER:
         options.headers.append('Authorization', bearerToken);
@@ -126,12 +158,14 @@ export class BaseDomainModel implements BaseDomainInterface
 	{ 
 		let domainName = CdfDomainService.GetDomainNameFromUrl(postModel.URL);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
-        let options = new RequestOptions({ headers: headers });		
+		let options = new RequestOptions({ headers: headers });	
 		
         //APPEND TO HEADER: Authorization : Bearer [token]
         if (this.HasToken(domainName))
-        {
-            options.headers.append('Authorization', 'Bearer ' + this.GetToken(domainName));
+		{
+			let bearerToken = this.GetToken(domainName);
+
+            options.headers.append('Authorization', bearerToken);
             options.headers.append('Access-Control-Allow-Origin', '*');
         }
                         

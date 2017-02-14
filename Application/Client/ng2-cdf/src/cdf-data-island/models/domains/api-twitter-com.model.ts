@@ -21,8 +21,7 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiTwitterModel extends BaseDomainModel
 {
-    readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';
-    readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
+    readonly TWITTER_API_URL = 'https://api.twitter.com/1.1/';    
 
     http: Http;
 
@@ -43,7 +42,7 @@ export class ApiTwitterModel extends BaseDomainModel
 
 		return Observable.create(observer => 
 		{
-			var authToken = super.GetToken(errorDomainName);		
+            var authToken = (super.HasToken(errorDomainName)) ? super.GetTokenValueFromStorage(errorDomainName) : undefined;
 			
 			if (authToken)
 			{
@@ -67,7 +66,7 @@ export class ApiTwitterModel extends BaseDomainModel
                         "ApplicationKey" : CONNECTION_CREDENTIALS.ApplicationKey
                     };						
 
-                    let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/generate-token';
+                    let postUrl = ClientConfigService.CDF_WEBAPI_BASE_URL + '/twitter/generate-token';
 
                     let newTokenSubscription = this.http.post(postUrl, JSON.stringify(requestModel), options)
                         .map(res => res.json())
@@ -78,7 +77,7 @@ export class ApiTwitterModel extends BaseDomainModel
                                 //console.log('NEW TOKEN YO YO', data);
 
                                 //SET TOKEN RECEIVED FROM API
-                                this.SetToken(CONNECTION_CREDENTIALS.Domain, data);
+                                super.SetToken(CONNECTION_CREDENTIALS.Domain, data);
 
                                 //COMPLETE THIS LEG OF OBSERVER, RETURN TOKEN 
                                 observer.next(data);
@@ -111,11 +110,10 @@ export class ApiTwitterModel extends BaseDomainModel
 		let domainName = CdfDomainService.GetDomainNameFromUrl(url);
 		let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
 		let options = new RequestOptions({ headers: headers });		
-        let token = super.GetToken(domainName);
-        let bearerToken = (token) ? token : 'TOKEN-NOT-KNOWN';
+        let bearerToken = (super.HasToken(domainName)) ? super.GetToken(domainName) : 'TOKEN-NOT-KNOWN';
         let urlFragment = url.replace(this.TWITTER_API_URL,'');
         let urlFragmentHash = super.HashUrlFragment(urlFragment);
-        let twitterUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
+        let twitterUrl = ClientConfigService.CDF_WEBAPI_BASE_URL + '/twitter/get/' + urlFragmentHash;
 
         // console.log('BEARER TOKEN:', bearerToken);   
         // console.log('TWITTER FRAGMENT:', urlFragment);
@@ -137,18 +135,18 @@ export class ApiTwitterModel extends BaseDomainModel
 		let domainName = CdfDomainService.GetDomainNameFromUrl(postModel.URL);
         let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
         let options = new RequestOptions({ headers: headers });				
-        let urlFragment = postModel.URL.replace(this.TWITTER_API_URL,'');
-                                    
+        let urlFragment = postModel.URL.replace(this.TWITTER_API_URL, '');
+                                            
         //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
         let requestModel = 
         {
-            "BearerToken" : super.GetToken(domainName),
+            "BearerToken" : super.GetTokenValueFromStorage(domainName),
             "UrlFragment" : urlFragment,
             "PostBody" : postModel.Body
         };
 
-        let postUrl = this.CDF_WEBAPI_BASE_URL + '/twitter/post/request';
+        let postUrl = ClientConfigService.CDF_WEBAPI_BASE_URL + '/twitter/post/request';
 
         return this.http.post(postUrl, JSON.stringify(requestModel), options).map((res: Response) => res.json());
 	};    

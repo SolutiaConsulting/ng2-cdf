@@ -21,8 +21,6 @@ import { BaseDomainModel }      from './base-domain.model';
 @Injectable()
 export class ApiGoogleModel extends BaseDomainModel
 {
-    readonly CDF_WEBAPI_BASE_URL = 'http://cdf.webapi.solutiaconsulting.com/api';
-
     http: Http;
 
     constructor () 
@@ -42,7 +40,7 @@ export class ApiGoogleModel extends BaseDomainModel
 
 		return Observable.create(observer => 
 		{
-			var authToken = super.GetToken(errorDomainName);		
+			var authToken = (super.HasToken(errorDomainName)) ? super.GetTokenValueFromStorage(errorDomainName) : undefined;
 			
 			if (authToken)
 			{
@@ -62,7 +60,7 @@ export class ApiGoogleModel extends BaseDomainModel
 						"ScopeList": CONNECTION_CREDENTIALS.ScopeList
                     };
 
-					let url =  this.CDF_WEBAPI_BASE_URL + "/google/generate-token";
+					let url =  ClientConfigService.CDF_WEBAPI_BASE_URL + "/google/generate-token";
 
 					let headers = new Headers({ 'Content-Type': 'application/json'});
 
