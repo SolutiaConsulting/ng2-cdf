@@ -6,7 +6,6 @@ import
 	Request,
 	RequestOptions,
 	RequestOptionsArgs,
-	Headers,
 	Response
 } 								from '@angular/http';
 
@@ -22,8 +21,6 @@ import { CdfDomainService }		from './cdf-domain.service';
 @Injectable()
 export class CdfDataService
 {
-	ErrorDomainNamesBeingReAuthorized : string[] = [];
-
 	constructor(
 		private http: Http,
 		private cacheService: CacheService
@@ -34,6 +31,11 @@ export class CdfDataService
 	requestData(requestModel: CdfRequestModel, options?: RequestOptionsArgs): Observable<any> 
 	{
 		let cacheKey = (requestModel.CacheKey) ? requestModel.CacheKey : undefined;
+
+		if (!requestModel.ApplicationKey || requestModel.ApplicationKey.length === 0)
+		{ 
+			Observable.throw('Application Key Not Provided in Request Model');
+		}	
 
 		// console.log('CDF SERVICE DATA ISLAND REQUEST...', requestModel);
 		// console.log('CDF SERVICE DATA ISLAND cacheKey...', cacheKey);
@@ -54,7 +56,7 @@ export class CdfDataService
 			return Observable.create(observer => 
 			{
 				//JOIN ALL REQUESTS TOGETHER INTO A BATCH TO BE FORKED....
-				let observableBatch = [];	
+				let observableBatch: Observable<any>[] = [];	
 
 				//ADD OBSERVABLE FOR AN ARRAY OF GET REQUESTS				
 				if (requestModel.GetList && requestModel.GetList.length > 0)
@@ -62,7 +64,7 @@ export class CdfDataService
 					for (let urlIndex in requestModel.GetList) 
 					{						
 						let cdfGetModel = requestModel.GetList[ urlIndex ];
-						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfGetModel.URL);
+						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfGetModel.URL, requestModel.ApplicationKey);
 
 						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS						
 						if (cdfGetModel.AuthorizationModel && cdfGetModel.AuthorizationModel.HasAuthorizationToken)
@@ -82,7 +84,7 @@ export class CdfDataService
 					for (let urlIndex in requestModel.PostList) 
 					{
 						let cdfPostModel = requestModel.PostList[ urlIndex ];
-						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfPostModel.URL);
+						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfPostModel.URL, requestModel.ApplicationKey);
 
 						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS	
 						if (cdfPostModel.AuthorizationModel && cdfPostModel.AuthorizationModel.HasAuthorizationToken)
@@ -157,85 +159,7 @@ export class CdfDataService
 						err =>
 						{
 							//console.log('FORK JOIN ERROR...', err);
-							
-							//THIS HAPPENS WHEN TOKEN HAS EXPIRED
-							//SO, NEED TO RE-ESTABLISH A NEW TOKEN...
-							if (err.status === 401) 
-							{
-								let errorUrl = (err.url) ? err.url : this.GetFirstUrl(requestModel);
-
-								if (errorUrl)
-								{
-									let errorDomainName = CdfDomainService.GetDomainNameFromUrl(errorUrl);
-									let isErrorDomainBeingReAuthorized = this.IsErrorDomainBeingReAuthorized(errorDomainName);
-
-									//ONLY PROCESS AN ERROR DONAIN FOR RE-AUTHORIZATION 1 TIME...
-									if(!isErrorDomainBeingReAuthorized)
-									{
-										this.AddErrorDomainNameToListBeingReAuthorized(errorDomainName);
-
-									
-										//console.log('++++++++++++++++++++++++++++ ERROR DOMAIN RE AUTHORIZED LIST:', this.ErrorDomainNamesBeingReAuthorized);
-
-
-										let errorDomainModel = CdfDomainService.GetDomainModelFromDomainName(errorDomainName);
-
-										if(errorDomainModel)
-										{
-											//RETRY AUTHENTICATE OBSERVABLE FOR A NEW TOKEN		
-											let authenticateObservableSubscription = errorDomainModel.AuthenticateObservable(errorUrl)
-												.subscribe(
-													//SUCCESS
-													newToken =>
-													{
-														//console.log('AUTHENTICATE OBSERVABLE DATA (NEW TOKEN):', newToken);
-
-														//REMOVE ERROR DOMAIN FROM LIST OF DOMAINS BEING RE-AUTHORIZED...
-														this.RemoveErrorDomainNameToListBeingReAuthorized(errorDomainName);
-
-														//THROW ERROR SO RETRY ATTEMPT OF CdfRequestModel GETS INITIATED NOW THAT WE HAVE AN ACCESS TOKEN  
-														//(SEE retryWhen IN CDF-DATA.COMPONENT.TS) 
-														//AT THIS POINT, WE HAVE A SHINY NEW VALID TOKEN FROM WHICH TO GET DATA...
-														observer.error(err);
-													},
-														
-													//ON ERROR
-													(autherror) =>
-													{ 
-														observer.error(autherror);	
-													},
-
-													//ON COMPLETE
-													() =>
-													{
-														if (authenticateObservableSubscription)
-														{
-															authenticateObservableSubscription.unsubscribe();
-														}
-														//console.log('AUTHENTICATE RETRY COMPELETED');
-													}
-												);
-										}	
-										else
-										{ 
-											observer.error(err);
-										}	
-									}		
-									else
-									{ 
-										observer.error(err);
-									}																															
-								}
-								else
-								{ 
-									observer.error(err);
-								}
-							}
-							else
-							{
-								//this.errorService.notifyError(err);
-								observer.error(err);
-							}
+							observer.error(err);
 						},
 
 						//COMPLETE
@@ -251,48 +175,5 @@ export class CdfDataService
 				);			
 			});
 		}
-	}
-	
-	//STAYS...
-	private GetFirstUrl(requestModel: CdfRequestModel) : string
-	{ 
-		if (requestModel.GetList && requestModel.GetList.length > 0)
-		{
-			return requestModel.GetList[ 0 ].URL;
-		}		
-		else if (requestModel.PostList && requestModel.PostList.length > 0)
-		{ 
-			return requestModel.PostList[ 0 ].URL;
-		}
-		
-		return undefined;
-	};	
-
-	//ADD ERROR DOMAIN NAME TO ARRAY TRACKING WHAT DOMAINS ARE ATTEMPTING TO BE RE-AUTHORIZED... 	
-	private AddErrorDomainNameToListBeingReAuthorized(errorDomainName: string) : void
-	{
-		//IF ERROR DOMAIN IS NOT BEING RE-AUTHORIZED...
-		if(this.ErrorDomainNamesBeingReAuthorized.indexOf(errorDomainName) === -1)
-		{
-			this.ErrorDomainNamesBeingReAuthorized.push(errorDomainName);
-		}		
-	};
-
-	//REMOVE ERROR DOMAIN NAME FROM ARRAY TRACKING WHAT DOMAINS ARE ATTEMPTING TO BE RE-AUTHORIZED... 	
-	private RemoveErrorDomainNameToListBeingReAuthorized(errorDomainName: string) : void
-	{
-		let errorDomainIndex = this.ErrorDomainNamesBeingReAuthorized.indexOf(errorDomainName);
-
-		if(errorDomainIndex > -1)
-		{
-			this.ErrorDomainNamesBeingReAuthorized.splice(errorDomainIndex, 1);
-		}		
-	};	
-
-	private IsErrorDomainBeingReAuthorized(errorDomainName: string) : boolean
-	{
-		let errorDomainIndex = this.ErrorDomainNamesBeingReAuthorized.indexOf(errorDomainName);
-
-		return (errorDomainIndex > -1);
 	};
 }

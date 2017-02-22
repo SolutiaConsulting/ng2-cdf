@@ -238,12 +238,12 @@ cdf-settings.service's constructor accepts an array of CdfConfigModel.  The call
 				//FIND CONFIG IN LIST WITH SAME DOMAIN NAME
 				for (let entry of environment.Domain_Credentials) 
 				{
-					let domainName = (entry.domain) ? entry.domain : undefined;
+					let domainRootUrl = (entry.domain) ? entry.domain : undefined;
 
-					if (domainName)
+					if (domainRootUrl)
 					{ 
 						let domainModel = new CdfConfigModel();
-						domainModel.Domain = domainName;
+						domainModel.Domain = domainRootUrl;
 						domainModel.EncodedCredentials = (entry.encodedCredentials) ? entry.encodedCredentials : undefined;
 						domainModel.OAuthURL = (entry.oAuthURL) ? entry.oAuthURL : undefined;
 						domainModel.Body = (entry.body) ? entry.body : undefined;

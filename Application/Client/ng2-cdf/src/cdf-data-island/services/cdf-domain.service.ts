@@ -6,8 +6,6 @@ import
 
 import 
 { 
-    ApiCloudCmsModel,
-    ApiGoogleModel,
     ApiTwitterModel,
     BaseDomainModel,
     BaseDomainInterface
@@ -20,22 +18,10 @@ export class CdfDomainService
     static readonly CDF_DOMAIN_PROXY_LIST = 
     [
         {
-            name : 'cloudcms',
-            domain : 'api.cloudcms.com',
-            provide: 'api.cloudcms.com',
-            useClass: ApiCloudCmsModel
-        },        
-        {
             name : 'twitter',
             domain : 'api.twitter.com',
             provide: 'api.twitter.com',
             useClass: ApiTwitterModel
-        },
-        {
-            name : 'google',
-            domain : 'googleapis.com',
-            provide: 'googleapis.com',
-            useClass: ApiGoogleModel
         }
     ];
 
@@ -43,18 +29,18 @@ export class CdfDomainService
 	{ 
 	}
 
-    static GetDomainModelFromUrl(domainUrl: string) : BaseDomainInterface
+    static GetDomainModelFromUrl(domainUrl: string, applicationKey: string) : BaseDomainInterface
     {
-        let domainName = CdfDomainService.GetDomainNameFromUrl(domainUrl);
+        let domainRootUrl = CdfDomainService.GetDomainRootFromUrl(domainUrl);
 
-        return CdfDomainService.GetDomainModelFromDomainName(domainName);        
+        return CdfDomainService.GetDomainModel(domainRootUrl, applicationKey);        
     };
 
-    static GetDomainModelFromDomainName(domainName: string) : BaseDomainInterface
+    static GetDomainModel(domainRootUrl: string, applicationKey: string) : BaseDomainInterface
     {
         let isDomainKnown = CdfDomainService.CDF_DOMAIN_PROXY_LIST.some(function (providerItem) 
         {
-            let providerIndex = domainName.indexOf(providerItem.domain);
+            let providerIndex = domainRootUrl.indexOf(providerItem.domain);
 
             // console.log('**************** providerItem:', providerItem);
             // console.log('**************** providerIndex:', providerIndex);
@@ -62,25 +48,33 @@ export class CdfDomainService
             return (providerIndex > -1);
         }); 
 
-        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  DOMAIN:', domainName); 
+        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  DOMAIN:', domainRootUrl); 
         // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  IS DOMAIN KNOWN:', isDomainKnown);        
 
         if (isDomainKnown)
         {
-            let injector = ReflectiveInjector.resolveAndCreate( CdfDomainService.CDF_DOMAIN_PROXY_LIST );
-            return injector.get(domainName);                        
+            let injector = ReflectiveInjector.resolveAndCreate(CdfDomainService.CDF_DOMAIN_PROXY_LIST);
+            let domainModel:BaseDomainInterface = injector.get(domainRootUrl);
+            domainModel.ApplicationKey = applicationKey;
+            domainModel.DomainRootUrl = domainRootUrl;
+
+            return domainModel;                        
         }
         else
         { 
-            return new BaseDomainModel();
+            let domainModel:BaseDomainInterface = new BaseDomainModel();
+            domainModel.ApplicationKey = applicationKey;
+            domainModel.DomainRootUrl = domainRootUrl;
+
+            return domainModel;
         }
     };
 
-    static GetDomainNameFromUrl(url:string) : string
+    static GetDomainRootFromUrl(url:string) : string
 	{
 		let matches = url.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
-		let domain: string = matches && matches[ 1 ];
-        let cdfDomainIndex = domain.indexOf(ClientConfigService.CDF_WEBAPI_BASE_URL);
+		let domainRoot: string = matches && matches[ 1 ];
+        let cdfDomainIndex = domainRoot.indexOf(ClientConfigService.CDF_WEBAPI_BASE_URL);
 
         //IF URL IS ACTUALL CDF WEB API, THEN DIG DEEPER TO SEE IF URL CONTAINS
         //CLUES AS TO WHAT DOMAIN CDF WEB API IS ACTING UPON
@@ -95,13 +89,13 @@ export class CdfDomainService
 
                     if(proxyIndex > -1)
                     {
-                        domain = proxy.domain;
+                        domainRoot = proxy.domain;
                         return true;
                     }                
                 }
             );
         }
 		
-		return domain;
+		return domainRoot;
 	};    
 }
