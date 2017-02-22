@@ -60,7 +60,7 @@ export class BaseDomainModel implements BaseDomainInterface
 
     HasToken(domainName:string): boolean
 	{
-		if (this.AuthorizationModel.HasAuthorizationToken)
+		if (this.AuthorizationModel && this.AuthorizationModel.HasAuthorizationToken)
 		{ 
 			return true;
 		}
@@ -72,7 +72,7 @@ export class BaseDomainModel implements BaseDomainInterface
 
 	GetTokenValueFromStorage(domainName:string)
 	{ 
-		if (this.AuthorizationModel.HasAuthorizationToken)
+		if (this.AuthorizationModel && this.AuthorizationModel.HasAuthorizationToken)
 		{ 
 			return this.AuthorizationModel.AuthorizationToken;
 		}
@@ -87,7 +87,7 @@ export class BaseDomainModel implements BaseDomainInterface
 	{
 		//console.log('GET TOKEN DOMAIN:', domainName);
 
-		if (this.AuthorizationModel.HasAuthorizationToken)
+		if (this.AuthorizationModel && this.AuthorizationModel.HasAuthorizationToken)
 		{ 
 			return this.AuthorizationModel.GetAuthorization();
 		}	

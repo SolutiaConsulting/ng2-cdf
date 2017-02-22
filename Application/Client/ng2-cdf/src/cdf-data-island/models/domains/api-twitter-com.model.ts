@@ -11,11 +11,7 @@ import
 
 import { CdfDomainService }		from '../../services/index'; 
 import { ClientConfigService }	from '../../../services/index';
-import 
-{ 
-	CdfPostModel,
-	CdfRequestModel 
-}								from '../index';
+import { CdfPostModel }			from '../index';
 import { BaseDomainModel }      from './base-domain.model';
 
 @Injectable()
@@ -99,7 +95,11 @@ export class ApiTwitterModel extends BaseDomainModel
                                 }							
                             }
                         )					
-                }	
+                }
+				else
+				{ 
+					observer.error(new Error('NO CONNECTION CREDENTIALS ENTERED FOR TWITTER DOMAIN'));
+				}	
 			}
         });
 	};

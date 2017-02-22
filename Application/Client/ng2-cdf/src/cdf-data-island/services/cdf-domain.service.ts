@@ -12,11 +12,11 @@ import
     BaseDomainModel,
     BaseDomainInterface
 }	                            from '../models/index'; 
+import { ClientConfigService }  from '../../services/index';
 
 @Injectable()
 export class CdfDomainService 
-{	
-    static readonly CDF_DOMAIN = 'cdf.webapi.solutiaconsulting.com';
+{	    
     static readonly CDF_DOMAIN_PROXY_LIST = 
     [
         {
@@ -80,7 +80,7 @@ export class CdfDomainService
 	{
 		let matches = url.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
 		let domain: string = matches && matches[ 1 ];
-        let cdfDomainIndex = domain.indexOf(CdfDomainService.CDF_DOMAIN);
+        let cdfDomainIndex = domain.indexOf(ClientConfigService.CDF_WEBAPI_BASE_URL);
 
         //IF URL IS ACTUALL CDF WEB API, THEN DIG DEEPER TO SEE IF URL CONTAINS
         //CLUES AS TO WHAT DOMAIN CDF WEB API IS ACTING UPON

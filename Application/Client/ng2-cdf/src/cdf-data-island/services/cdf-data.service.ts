@@ -13,6 +13,7 @@ import
 import { CacheService }			from '../storage/cache.service';
 import 
 { 
+	CdfGetModel,
 	CdfPostModel,
 	CdfRequestModel 
 }								from '../models/index';
@@ -60,18 +61,18 @@ export class CdfDataService
 				{
 					for (let urlIndex in requestModel.GetList) 
 					{						
-						let url = requestModel.GetList[ urlIndex ];
-						let domainModel = CdfDomainService.GetDomainModelFromUrl(url);
+						let cdfGetModel = requestModel.GetList[ urlIndex ];
+						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfGetModel.URL);
 
 						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS						
-						if (requestModel.AuthorizationModel && requestModel.AuthorizationModel.HasAuthorizationToken)
+						if (cdfGetModel.AuthorizationModel && cdfGetModel.AuthorizationModel.HasAuthorizationToken)
 						{ 
-							domainModel.SetAuthorizationModel(requestModel.AuthorizationModel);
+							domainModel.SetAuthorizationModel(cdfGetModel.AuthorizationModel);
 						}	
 						
 						//console.log('*****************  DOMAIN MODEL:', domainModel);
 
-						observableBatch.push(domainModel.HttpGet(url));
+						observableBatch.push(domainModel.HttpGet(cdfGetModel.URL));
 					}
 				}	
 																
@@ -84,9 +85,9 @@ export class CdfDataService
 						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfPostModel.URL);
 
 						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS	
-						if (requestModel.AuthorizationModel && requestModel.AuthorizationModel.HasAuthorizationToken)
+						if (cdfPostModel.AuthorizationModel && cdfPostModel.AuthorizationModel.HasAuthorizationToken)
 						{ 
-							domainModel.SetAuthorizationModel(requestModel.AuthorizationModel);
+							domainModel.SetAuthorizationModel(cdfPostModel.AuthorizationModel);
 						}	
 						
 						//console.log('*****************  DOMAIN MODEL:', domainModel);
@@ -199,7 +200,10 @@ export class CdfDataService
 													},
 														
 													//ON ERROR
-													() => null,
+													(autherror) =>
+													{ 
+														observer.error(autherror);	
+													},
 
 													//ON COMPLETE
 													() =>
@@ -254,7 +258,7 @@ export class CdfDataService
 	{ 
 		if (requestModel.GetList && requestModel.GetList.length > 0)
 		{
-			return requestModel.GetList[ 0 ];
+			return requestModel.GetList[ 0 ].URL;
 		}		
 		else if (requestModel.PostList && requestModel.PostList.length > 0)
 		{ 

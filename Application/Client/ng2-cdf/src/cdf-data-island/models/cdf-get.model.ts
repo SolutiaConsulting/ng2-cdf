@@ -1,14 +1,12 @@
 import { CdfAuthorizationModel } from './cdf-authorization.model';
 
-export class CdfPostModel
+export class CdfGetModel
 {
 	URL: string;
-	Body: Object;
 	AuthorizationModel: CdfAuthorizationModel = new CdfAuthorizationModel();
-
-	constructor(url: string, body: Object)
+	
+	constructor(url: string)
 	{
 		this.URL = url;
-		this.Body = body;
 	}
 }

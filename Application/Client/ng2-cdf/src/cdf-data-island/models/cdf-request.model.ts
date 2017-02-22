@@ -1,11 +1,11 @@
-import { CdfAuthorizationModel } 	from './cdf-authorization.model';
-import { CdfPostModel } 			from './cdf-post.model';
+import { CdfGetModel } 		from './cdf-get.model';
+import { CdfPostModel } 	from './cdf-post.model';
+
 
 export class CdfRequestModel
 {
-	CacheKey?: string;
-	AuthorizationModel: CdfAuthorizationModel = undefined;
-	GetList: string[] = []; 
+	CacheKey?: string;	
+	GetList: CdfGetModel[] = []; 
 	PostList: CdfPostModel[] = [];
 
 	constructor()
