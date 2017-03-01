@@ -5,7 +5,6 @@ import
 {
 	//SERVICES
 	CacheService,
-	CdfDataHelperService,
 	CdfDataService,
 	ClientConfigService,
 
@@ -53,7 +52,6 @@ import
 	providers:
 	[
 		CacheService,
-		CdfDataHelperService,
 		CdfDataService
 	]
 })

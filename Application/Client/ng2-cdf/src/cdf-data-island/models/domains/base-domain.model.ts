@@ -212,7 +212,7 @@ export class BaseDomainModel implements BaseDomainInterface
         // console.log('--------------------------------------------------------------------------'); 		
 
 		return this.http.get(url, options)
-			.map((res: Response) => res.json())
+			.map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
 			.catch((err) => this.HandleError(err, url))
 			.finally(() =>
 			{ 
@@ -238,7 +238,7 @@ export class BaseDomainModel implements BaseDomainInterface
         //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
 
 		return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options)
-			.map((res: Response) => res.json())
+			.map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
 			.catch((err) => this.HandleError(err, postModel.URL))
 			.finally(() =>
 			{ 
@@ -289,7 +289,15 @@ export class BaseDomainModel implements BaseDomainInterface
 			});
 		}
 
-		return Observable.throw(err);
+        let errorObject =
+            {
+                error: err,
+                errorUrl: url,
+				errorObject: (err[ '_body' ] && err[ '_body' ].length) ? err.json() : {},
+                status: err.status
+            }
+		
+		return Observable.throw(errorObject);
 	}
 
 	

@@ -6,7 +6,7 @@ import {
 	OnInit } 					from '@angular/core';
 import { Observable } 			from 'rxjs/Rx';
 
-import { CdfDataHelperService }	from '../services/index';
+import { CdfDataService }	from '../services/index';
 import { CdfRequestModel }		from '../models/index';
 
 @Component({
@@ -20,7 +20,7 @@ export class CdfDataIslandComponent implements OnInit
 	@Output() onContentError = new EventEmitter<any>();
 	
 	constructor(
-		private cdfDataHelperService: CdfDataHelperService
+		private cdfDataService: CdfDataService
 	)
 	{
 
@@ -30,7 +30,7 @@ export class CdfDataIslandComponent implements OnInit
 	{
 		//console.log('RequestData INPUT:', this.RequestData);
 
-		this.cdfDataHelperService.requestData(this.RequestData)
+		this.cdfDataService.requestData(this.RequestData)
 			.subscribe
 			(
 				//SUCCESS - SEND RAW JSON BACK TO PARENT VIA EVENT EMITTER

@@ -50,7 +50,7 @@ export class ApiTwitterModel extends BaseDomainModel
         options.body = '';
         
         return this.http.get(twitterUrl, options)
-            .map((res: Response) => res.json())
+            .map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
             .catch((err) => super.HandleError(err, url))
 			.finally(() =>
 			{ 
@@ -77,7 +77,7 @@ export class ApiTwitterModel extends BaseDomainModel
         let postUrl = ClientConfigService.CDF_WEBAPI_BASE_URL + '/twitter/post/request';
 
         return this.http.post(postUrl, JSON.stringify(requestModel), options)
-            .map((res: Response) => res.json())
+           .map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
             .catch((err) => super.HandleError(err, postUrl))
 			.finally(() =>
 			{ 

@@ -21,7 +21,8 @@ import { CdfDomainService }		from './cdf-domain.service';
 @Injectable()
 export class CdfDataService
 {
-	constructor(
+	constructor
+	(
 		private http: Http,
 		private cacheService: CacheService
 	)
@@ -173,7 +174,31 @@ export class CdfDataService
 							//console.log('FORK JOIN COMPELETED');
 						}
 				);			
-			});
+			})
+			//
+			//	*********************************************************************************** 
+			// 	** THIS WILL RETRY THE OBSERVABLE BATCH 3 TIMES BEFORE GIVING UP
+			// 	***********************************************************************************
+			//	
+			//	An incrememntal back-off strategy for handling errors:
+			//	https://xgrommx.github.io/rx-book/content/observable/observable_instance_methods/retrywhen.html	
+			//				
+			.retryWhen(attempts => attempts
+				.zip(Observable.range(1, 4))
+				.flatMap(
+					([ error, i ]) => 
+					{
+						if (i > 3) 
+						{
+							return Observable.throw(error);
+						}
+
+						console.log('delay retry by ' + i + ' second(s)');
+
+						return Observable.timer(i * 750);
+					}
+				)
+			);
 		}
 	};
 }
