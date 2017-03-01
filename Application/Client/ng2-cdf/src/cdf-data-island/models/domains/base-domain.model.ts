@@ -18,7 +18,8 @@ import
 	XSRFStrategy
 } 								from '@angular/http';
 
-import { BaseDomainInterface }  	from './base-domain.interface';
+import { BaseDomainInterface } 		from './base-domain.interface';
+import { CdfDeleteModel }	        from '../cdf-delete.model';
 import { CdfPostModel }				from '../cdf-post.model';
 import { CdfDomainService }			from '../../services/index'; 
 import { ClientConfigService }		from '../../../services/index';
@@ -240,6 +241,34 @@ export class BaseDomainModel implements BaseDomainInterface
 		return this.http.post(postModel.URL, JSON.stringify(postModel.Body), options)
 			.map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
 			.catch((err) => this.HandleError(err, postModel.URL))
+			.finally(() =>
+			{ 
+
+			});
+	};	
+    
+	//PHYSICAL HTTP DELETE CALL TO DOMAIN FOR RESULT DATA...
+	HttpDelete(deleteModel: CdfDeleteModel): Observable<any>
+	{ 
+        let headers = new Headers({ 'Content-Type': 'application/json' }); 	// ... Set content type to JSON
+		let options = new RequestOptions({ headers: headers });	
+		
+        //APPEND TO HEADER: Authorization : Bearer [token]
+        if (this.HasToken())
+		{
+			let bearerToken = this.GetToken();
+
+            options.headers.append('Authorization', bearerToken);
+            options.headers.append('Access-Control-Allow-Origin', '*');
+        }
+                        
+        //console.log('************* POST BODY *************:', JSON.stringify(postModel.Body));
+
+		return this.http.delete(deleteModel.URL, new RequestOptions({
+			headers: headers,
+			body: deleteModel.Body
+		})).map((res: Response) => (res['_body'] && res['_body'].length) ? res.json() : {})
+			.catch((err) => this.HandleError(err, deleteModel.URL))
 			.finally(() =>
 			{ 
 

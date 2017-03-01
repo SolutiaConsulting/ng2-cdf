@@ -98,6 +98,26 @@ export class CdfDataService
 						observableBatch.push(domainModel.HttpPost(cdfPostModel));
 					}					
 				}	
+																
+				//ADD OBSERVABLE FOR AN ARRAY OF DELETE REQUESTS
+				if (requestModel.DeleteList && requestModel.DeleteList.length > 0)
+				{
+					for (let urlIndex in requestModel.DeleteList) 
+					{
+						let cdfDeleteModel = requestModel.DeleteList[ urlIndex ];
+						let domainModel = CdfDomainService.GetDomainModelFromUrl(cdfDeleteModel.URL, requestModel.ApplicationKey);
+
+						//SET AUTHORIZATION MODEL.  AUTHORIZATION MODEL MAY HAVE ACCESS TOKEN TO BE USED IN HTTP REQUESTS	
+						if (cdfDeleteModel.AuthorizationModel && cdfDeleteModel.AuthorizationModel.HasAuthorizationToken)
+						{ 
+							domainModel.SetAuthorizationModel(cdfDeleteModel.AuthorizationModel);
+						}	
+						
+						//console.log('*****************  DOMAIN MODEL:', domainModel);
+
+						observableBatch.push(domainModel.HttpDelete(cdfDeleteModel));
+					}					
+				}	
 
 				//console.log('**************** observableBatch:', observableBatch);
 				
